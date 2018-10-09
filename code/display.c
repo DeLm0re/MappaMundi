@@ -1,6 +1,25 @@
+/**
+ * \file display.c
+ * \brief Display of project
+ * \author Romain Jacquiez
+ * \version 0.1
+ * \date 09/10/2018
+ *
+ * Module that contain all the functions making the display of the project
+ *
+ */
+
 //Header file containing the prototypes
 #include "display.h"
 
+/**
+ * \fn int drawField(SDL_Renderer *renderer, field oneField)
+ * \brief function that draw our field in a graphical display
+ *
+ * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
+ * \param oneField : A field, which is a tydef declared in core.h (2D array)
+ * \return int, can return an error during the drawing
+ */
 int drawField(SDL_Renderer *renderer, field oneField)
 {
     int i;
@@ -15,28 +34,26 @@ int drawField(SDL_Renderer *renderer, field oneField)
     if(SDL_RenderClear(renderer) < 0)
         return -1;
 
-    puts("back");
-
     //Set black color
     if(SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a) < 0)
     {
         return -1;
     }
 
-    puts("setcolor");
-
-    for(i = 0; i < 50; i++)
+    for(i = 1; i < 51; i++)
     {
-        for(j = 0; j < 50; j++)
+        for(j = 1; j < 51; j++)
         {
             if(oneField[i][j] == 1)
             {
-                obstacle.x = 20*i;
-                obstacle.y = 20*j;
+                obstacle.x = 20*(i-1);
+                obstacle.y = 20*(j-1);
                 obstacle.h = 20;
                 obstacle.w = 20;
-                //We draw a black square at the same position
-                if(SDL_RenderDrawRect(renderer, &obstacle) < 0)
+                /*We draw a black square at the same position.
+                Our field is an 50x50 array and our graphical display is an 1000x1000 window,
+                so 1 data in 'oneField' is a rectangle of 20x20 pixels in the graphical display */
+                if(SDL_RenderFillRect(renderer, &obstacle) < 0)
                 {
 		            return -1;
                 }
@@ -47,6 +64,13 @@ int drawField(SDL_Renderer *renderer, field oneField)
     return 0;
 }
 
+/**
+ * \fn int draw(SDL_Renderer *renderer)
+ * \brief function that make a drawing test
+ *
+ * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
+ * \return int, can return an error during the drawing
+ */
 int draw(SDL_Renderer *renderer)
 {
     SDL_Color noir = {0, 0, 0, 255}; 
