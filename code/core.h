@@ -5,3 +5,5 @@
 typedef int field[50][50];
 
 void initialiseField(field unField);
+
+void generateEnv(field unField);

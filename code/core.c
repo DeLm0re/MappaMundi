@@ -1,7 +1,11 @@
-//Header file containing the prototypes
-#include "core.h" 
+//Header files
+#include <time.h>
+#include <math.h>
 
-void initialiseField(field unField){
+//Header file containing the prototypes
+#include "core.h"
+
+void initialiseField(field oneField){
 
     int i;
     int j;
@@ -10,8 +14,28 @@ void initialiseField(field unField){
     {
         for(j = 0; j < 50; j++)
         {
-            unField[i][j] = 0;
+            oneField[i][j] = 0;
         }
     }
+}
 
+void generateEnv(field oneField) {
+
+    int i;
+    int j;
+    srand(time(NULL));
+    int monRand;
+
+    for(i = 0; i < 50; i++)
+    {
+        for(j = 0; j < 50; j++)
+        {
+            monRand = rand()%10 + 1;
+
+            if(monRand < 5)
+            {
+                oneField[i][j] = 1;
+            }
+        }
+    }
 }

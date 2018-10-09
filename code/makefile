@@ -1,5 +1,4 @@
 WARNING_FLAGS = -Wall -Wextra -Werror -pedantic -Wformat\
-				-fstrict-overflow -Wstrict-overflow=5\
 				-Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes\
 				-Wmissing-prototypes -Wcast-align -pedantic-errors
 

@@ -1,12 +1,8 @@
-//Header file for graphical display
-#include <SDL2/SDL.h>
-
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
 
 //Header file
-#include "core.h"
 #include "display.h"
 
 //Constants
@@ -47,8 +43,13 @@ int main(void)
     //Initialisation of the field
     initialiseField(leField);
 
-    //Draw function
-	draw(renderer);
+    //Generate env
+    generateEnv(leField);
+
+    puts("Draw");
+
+    //Draw field
+    drawField(renderer, leField);
 
     SDL_Delay(500);
     SDL_RenderPresent(renderer);
