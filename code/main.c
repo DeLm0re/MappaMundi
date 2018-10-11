@@ -1,17 +1,24 @@
-//Header file for graphical display
-#include <SDL2/SDL.h>
+/**
+ * \file main.c
+ * \brief main of the project
+ * \author Théo Hipault
+ * \version 0.2
+ * \date 01/10/2018
+ *
+ * Module that contain the main of the project
+ *
+ */
 
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
 
 //Header file
-#include "core.h"
 #include "display.h"
 
 //Constants
-#define HEIGHT (550)
-#define WIDTH (800)
+#define HEIGHT (1000)
+#define WIDTH (1000)
 
 int main(void)
 {
@@ -22,7 +29,7 @@ int main(void)
     int statut = EXIT_FAILURE;
 
     //Declaration of the field
-    field leField;
+    field theField;
 
     //Initialisation and creation of the window and renderer
     if(0 != SDL_Init(SDL_INIT_VIDEO))
@@ -45,10 +52,13 @@ int main(void)
     }
 
     //Initialisation of the field
-    initialiseField(leField);
+    initialiseField(theField);
 
-    //Draw function
-	draw(renderer);
+    //Generate the environment
+    generateEnv(theField);
+
+    //Draw the field
+    drawField(renderer, theField);
 
     SDL_Delay(500);
     SDL_RenderPresent(renderer);
