@@ -49,6 +49,19 @@ void destructNodes(node** frontNode)
 }
 
 /**
+ * \fn void setHeuristic(node* nodeToSet, node* endNode)
+ * \brief function which is used to set the heuristic of a node
+ * 
+ * \param nodeToSet : the node you want the heuristic to be set correctly
+ * endNode : the end node of the A* algorithme
+ * \return int
+ */
+void setHeuristic(node* nodeToSet, node* endNode)
+{
+	nodeToSet->heuristic = nodeToSet->cost + distNodes(endNode, nodeToSet);
+}
+
+/**
  * \fn node* popNode(node** frontNode)
  * \brief function which pop the top node out of a chain list of node and returns it
  *
@@ -101,6 +114,19 @@ void rmvNode(node** frontNode, node* nodeToRemove)
 }
 
 /**
+ * \fn node* cpyNode(node* nodeToCpy)
+ * \brief function which initialize and return a copy of the given node
+ *
+ * \param nodeToCpy : the node wich will be copied
+ * \return node*
+ */
+node* cpyNode(node* nodeToCpy)
+{
+	node* newNode = initNode(nodeToCpy->x, nodeToCpy->y, nodeToCpy->cost, nodeToCpy->heuristic);
+	return newNode;
+}
+
+/**
  * \fn void insertEndNode(node** frontNode, node* newNode)
  * \brief function which add a node at the bottom of a chain list of node
  *
@@ -123,6 +149,23 @@ void insertEndNode(node** frontNode, node* newNode)
 			temp = temp->linkedNode;
 		}
 		temp->linkedNode = newNode;
+	}
+}
+
+/**
+ * \fn void insertFrontNode(node** frontNode, node* newNode)
+ * \brief function which add a node at the top of a chain list of node
+ *
+ * \param frontNode : the top node of a chain list of node
+ * newNode : the node that you want to add
+ * \return void
+ */
+void insertFrontNode(node** frontNode, node* newNode)
+{
+	if(newNode != NULL)
+	{
+		newNode->linkedNode = *frontNode;
+		*frontNode = newNode;
 	}
 }
 
@@ -183,19 +226,6 @@ int distNodes(node* n1, node* n2)
 }
 
 /**
- * \fn void setHeuristic(node* nodeToSet, node* endNode)
- * \brief function which is used to set the heuristic of a node
- * 
- * \param nodeToSet : the node you want the heuristic to be set correctly
- * endNode : the end node of the A* algorithme
- * \return int
- */
-void setHeuristic(node* nodeToSet, node* endNode)
-{
-	nodeToSet->heuristic = nodeToSet->cost + distNodes(endNode, nodeToSet);
-}
-
-/**
  * \fn node* getLowestNode(node** openSet)
  * \brief function which returns the node with the best heuristic (the lowest)
  * 
@@ -238,6 +268,63 @@ bool isInSet(node** frontNode, int x, int y)
 		temp = temp->linkedNode;
 	}
 	return false;
+}
+
+/**
+ * \fn bool isNextTo(node* nodeToCheck, int x, int y)
+ * \brief function which check if the given node is next to the given coordinate
+ * 
+ * \param nodeToCheck : the node which will be checked
+ * x, y : the reference coordinate
+ * \return bool
+ */
+bool isNextTo(node* nodeToCheck, int x, int y)
+{
+	int xdist = abs(nodeToCheck->x - x);
+	int ydist = abs(nodeToCheck->y - y);
+	if (xdist + ydist == 1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+ * \fn node* getPath(node** closedSet)
+ * \brief function which create a chain list of nodes which represent the obtimised path
+ * using the closedSet of a A* algorithme
+ * 
+ * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
+ * \return node*
+ */
+node* getPath(node** closedSet)
+{
+	node* path = NULL;
+	//Find the highest cost node in closedSet
+	//Keep this cost in memory
+	node* cursor = *closedSet;
+	node* temp = *closedSet;
+	int currentCost = temp->cost;
+	// get the node just before the end, probleme, the end node must be included in the closedList
+	while(cursor != NULL)
+	{
+		if(cursor->cost > currentCost && isNextTo(cursor, temp->x, temp->y))
+		{
+			temp = cursor;
+			currentCost = temp->cost;
+		}
+		cursor = cursor->linkedNode;
+	}
+	insertFrontNode(&path, cpyNode(temp));
+
+	//	Copy it in path with the correct coordinates
+	//	Find the node that cost one less than the previous one and that is next to it
+	//	Add it on top of path
+	//	Repeat until the cost reach 0;
+	return path;
 }
 
 /**
@@ -289,7 +376,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 /**
  * \fn int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth)
  * \brief function which do one step of the A* algorithme
- * returns 1 if a path has been find, -1 if their is no beginning node in the openSet, 0 otherwise
+ * once the path has been found, returns the complete path. OtherWise return NULL
  * 
  * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
  * closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
@@ -299,7 +386,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * mapWidth : the total number of columns of the map we use
  * \return int
  */
-int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth)
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth)
 {
 	node* lowestNode = NULL;
 	if (*openSet != NULL)
@@ -309,14 +396,14 @@ int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int 
 		if (lowestNode->x == endNode->x && lowestNode->y == endNode->y)
 		{
 			printf("Done !\n Start node = %p\n End node = %p\n", (void*) startNode, (void*) endNode);
-			return 1;
+			return getPath(closedSet);
 		}
 		addNeighbors(openSet, closedSet, lowestNode, endNode, mapHeight, mapWidth);
 		rmvNode(openSet, lowestNode);
 		insertEndNode(closedSet, lowestNode);
 	}
 	else{
-		return -1;
+		return NULL;
 	}
-	return 0;
+	return NULL;
 }

@@ -63,9 +63,9 @@ int main(void)
 	//insertEndNode(&closedSet, initNode(1, 2, 0, 0));
 	//addNeighbors(&openSet, &closedSet, startNode, startNode, endNode, mapHeight, mapWidth);
 
-	int endAStar = 0;
+	node* path = NULL;
 
-	while (endAStar != 1)
+	while (path == NULL)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
@@ -76,12 +76,14 @@ int main(void)
 		viewNodes(&openSet, renderer, openSetCol);
 		viewNodes(&closedSet, renderer, closedSetCol);
 
-		endAStar = AStar(&openSet, &closedSet, startNode, endNode, mapHeight, mapWidth);
+		path = AStar(&openSet, &closedSet, startNode, endNode, mapHeight, mapWidth);
 
 		// Rafraichissement de la fenêtre
 		SDL_RenderPresent(renderer);
 		//sleep(1);
 	}
+	printf("path : %p, x : %d, y : %d\n", (void*) path, path->x, path->y);
+
 	// Tant que le flag pour quitter est faux
 	while(!quit)
 	{
@@ -94,6 +96,7 @@ int main(void)
         }
 	}   
 
+	destructNodes(&path);
 	destructNodes(&openSet);
 	destructNodes(&closedSet);
 	destructNodes(&startNode);

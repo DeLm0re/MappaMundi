@@ -29,18 +29,29 @@ typedef struct node
 	struct node* linkedNode;
 }node;
 
+//Initialisation and destruction function
 node* initNode(int x, int y, int cost, int heuristic);
 void destructNodes(node** frontNode);
+void setHeuristic(node* nodeToSet, node* endNode);
+
+//Manipulation function
 node* popNode(node** frontNode);
 void rmvNode(node** frontNode, node* nodeToRemove);
+node* cpyNode(node* nodeToCpy);
 void insertEndNode(node** frontNode, node* newNode);
+void insertFrontNode(node** frontNode, node* newNode);
+
+//Display function
 void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col);
+
+//Information function
 int nodeCmp(node* n1, node* n2);
 int distNodes(node* n1, node* n2);
-void setHeuristic(node* nodeToSet, node* endNode);
 node* getLowestNode(node** openSet);
 bool isInSet(node** frontNode, int x, int y);
+bool isNextTo(node* nodeToCheck, int x, int y);
+node* getPath(node** closedSet);
 
+//A* algorithme function
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int mapHeight, int mapWidth);
-
-int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth);
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth);
