@@ -2,7 +2,7 @@
  * \file display.c
  * \brief Display of project
  * \author Romain Jacquiez
- * \version 0.1
+ * \version 0.3
  * \date 09/10/2018
  *
  * Module that contain all the functions making the display of the project
@@ -18,9 +18,12 @@
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
+ * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
-int drawField(SDL_Renderer *renderer, field oneField)
+int drawField(SDL_Renderer *renderer, field oneField, int height, int width, int size)
 {
     int i;
     int j;
@@ -40,16 +43,16 @@ int drawField(SDL_Renderer *renderer, field oneField)
         return -1;
     }
 
-    for(i = 1; i < 51; i++)
+    for(i = 1; i < (height-1); i++)
     {
-        for(j = 1; j < 51; j++)
+        for(j = 1; j < (width-1); j++)
         {
             if(oneField[i][j] == 1)
             {
-                obstacle.x = 20*(i-1);
-                obstacle.y = 20*(j-1);
-                obstacle.h = 20;
-                obstacle.w = 20;
+                obstacle.x = taille*(i-1);
+                obstacle.y = taille*(j-1);
+                obstacle.h = taille;
+                obstacle.w = taile;
                 /*We draw a black square at the same position.
                 Our field is an 50x50 array and our graphical display is an 1000x1000 window,
                 so 1 data in 'oneField' is a rectangle of 20x20 pixels in the graphical display */

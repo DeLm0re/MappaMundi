@@ -2,7 +2,7 @@
  * \file main.c
  * \brief main of the project
  * \author Théo Hipault
- * \version 0.2
+ * \version 0.3
  * \date 01/10/2018
  *
  * Module that contain the main of the project
@@ -19,6 +19,13 @@
 //Constants
 #define HEIGHT (1000)
 #define WIDTH (1000)
+
+//Arguments of the file
+#define HEIGHT_FIELD (52)
+#define WIDTH_FIELD (52)
+
+//Arguments size of the obstacle
+#define SIZE_OBSTACLE (20)
 
 int main(void)
 {
@@ -52,13 +59,13 @@ int main(void)
     }
 
     //Initialisation of the field
-    initialiseField(theField);
+    initialiseField(theField, HEIGHT_FIELD, WIDTH_FIELD);
 
     //Generate the environment
     generateEnv(theField);
 
     //Draw the field
-    drawField(renderer, theField);
+    drawField(renderer, theField, HEIGHT_FIELD, WIDTH_FIELD, SIZE_OBSTACLE);
 
     SDL_Delay(500);
     SDL_RenderPresent(renderer);
