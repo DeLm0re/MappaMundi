@@ -1,3 +1,14 @@
+/**
+ * \file main.c
+ * \brief main of the project
+ * \author Théo Hipault
+ * \version 0.4
+ * \date 12/10/2018
+ *
+ * Module that contain the main of the project
+ *
+ */
+
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,39 +60,45 @@ int main(void)
         goto Quit;
     }
 
-	
-	int mapHeight = 20;
-	int mapWidth = 20;
-	int tileSize = 20;
-	//char** map = initMap(mapHeight, mapWidth);
-	//fillMap(map, mapHeight, mapWidth);
+	//Declaration of basic constants
+	const int heightField = 40;
+	const int widthField = 40;
+	const int tileSize = 10;
+	//Declaration and initialization of the field
+    Field theField = initialiseField(heightField, widthField);
+    //Generate the environment
+    generateEnv(theField, heightField, widthField);
 
-	node* startNode = initNode(0, 0, 0, 0);
-	node* endNode = initNode(mapWidth-1, mapHeight-1, 0, 0);
+	node* startNode = initNode(1, 1, 0, 0);
+	node* endNode = initNode(widthField-2, heightField-2, 0, 0);
 	node* openSet = NULL;
 	node* closedSet = NULL;
-
 	node* path = NULL;
 
+	insertFrontNode(&openSet, cpyNode(startNode));
 	while (path == NULL)
 	{
+		//Do one step of A* algorithme
+		path = AStar(&openSet, &closedSet, startNode, endNode, theField, heightField, widthField);
+
+		//Clear the screen
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
-
-		path = AStar(&openSet, &closedSet, startNode, endNode, mapHeight, mapWidth);
-
-		//showMap(map, mapHeight, mapWidth, renderer);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, mapWidth*tileSize, mapHeight*tileSize}));
+		//Draw the field
+    	drawField(renderer, theField, heightField, widthField, tileSize);
+		//Draw a box around the field
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, widthField*tileSize, heightField*tileSize}));
+		//Draw the openSet and the closedSet of the A* algorithme
 		viewNodes(&openSet, renderer, openSetCol, tileSize);
 		viewNodes(&closedSet, renderer, closedSetCol, tileSize);
 
-		// Rafraichissement de la fenêtre
+		//Refresh the window
 		SDL_RenderPresent(renderer);
 	}
-
+	//Draw the final path
 	viewNodes(&path, renderer, pathCol, tileSize);	
-	// Rafraichissement de la fenêtre
+	//Refresh the window
 	SDL_RenderPresent(renderer);
 
 	// Tant que le flag pour quitter est faux
@@ -96,12 +113,14 @@ int main(void)
         }
 	}   
 
+	//Free the memory of all the nodes
 	destructNodes(&path);
 	destructNodes(&openSet);
 	destructNodes(&closedSet);
 	destructNodes(&startNode);
 	destructNodes(&endNode);
-	//destructMap(map, mapHeight);
+	//Free the memory of the field
+	destructField(theField, heightField);
 
 	// Procédure de fermeture de la fenêtre
 Quit:
