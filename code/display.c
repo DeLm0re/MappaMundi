@@ -49,10 +49,10 @@ int drawField(SDL_Renderer *renderer, field oneField, int height, int width, int
         {
             if(oneField[i][j] == 1)
             {
-                obstacle.x = taille*(i-1);
-                obstacle.y = taille*(j-1);
-                obstacle.h = taille;
-                obstacle.w = taile;
+                obstacle.x = size*(i-1);
+                obstacle.y = size*(j-1);
+                obstacle.h = size;
+                obstacle.w = size;
                 /*We draw a black square at the same position.
                 Our field is an 50x50 array and our graphical display is an 1000x1000 window,
                 so 1 data in 'oneField' is a rectangle of 20x20 pixels in the graphical display */

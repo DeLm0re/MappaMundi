@@ -21,11 +21,11 @@
 #define WIDTH (1000)
 
 //Arguments of the file
-#define HEIGHT_FIELD (52)
-#define WIDTH_FIELD (52)
+#define HEIGHT_FIELD (22)
+#define WIDTH_FIELD (22)
 
 //Arguments size of the obstacle
-#define SIZE_OBSTACLE (20)
+#define SIZE_OBSTACLE (5)
 
 int main(void)
 {
@@ -62,7 +62,7 @@ int main(void)
     initialiseField(theField, HEIGHT_FIELD, WIDTH_FIELD);
 
     //Generate the environment
-    generateEnv(theField);
+    generateEnv(theField, HEIGHT_FIELD, WIDTH_FIELD);
 
     //Draw the field
     drawField(renderer, theField, HEIGHT_FIELD, WIDTH_FIELD, SIZE_OBSTACLE);
