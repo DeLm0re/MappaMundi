@@ -52,6 +52,7 @@ int main(void)
 	
 	int mapHeight = 20;
 	int mapWidth = 20;
+	int tileSize = 20;
 	//char** map = initMap(mapHeight, mapWidth);
 	//fillMap(map, mapHeight, mapWidth);
 
@@ -59,10 +60,6 @@ int main(void)
 	node* endNode = initNode(mapWidth-1, mapHeight-1, 0, 0);
 	node* openSet = NULL;
 	node* closedSet = NULL;
-
-	insertEndNode(&openSet, initNode(0, 0, 0, 0));
-	//insertEndNode(&closedSet, initNode(1, 2, 0, 0));
-	//addNeighbors(&openSet, &closedSet, startNode, startNode, endNode, mapHeight, mapWidth);
 
 	node* path = NULL;
 
@@ -75,16 +72,15 @@ int main(void)
 
 		//showMap(map, mapHeight, mapWidth, renderer);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, mapWidth*10, mapHeight*10}));
-		viewNodes(&openSet, renderer, openSetCol);
-		viewNodes(&closedSet, renderer, closedSetCol);
+        SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, mapWidth*tileSize, mapHeight*tileSize}));
+		viewNodes(&openSet, renderer, openSetCol, tileSize);
+		viewNodes(&closedSet, renderer, closedSetCol, tileSize);
 
 		// Rafraichissement de la fenêtre
 		SDL_RenderPresent(renderer);
-		//sleep(1);
 	}
 
-	viewNodes(&path, renderer, pathCol);	
+	viewNodes(&path, renderer, pathCol, tileSize);	
 	// Rafraichissement de la fenêtre
 	SDL_RenderPresent(renderer);
 
@@ -92,7 +88,7 @@ int main(void)
 	while(!quit)
 	{
 		SDL_WaitEvent(&event);
-        // On attend l'arriver de l'event de fermeture (la croix ?)
+        // On attend l'arriver de l'event de fermeture (la croix)
 		if(event.type == SDL_QUIT)
         {
 			quit = SDL_TRUE;

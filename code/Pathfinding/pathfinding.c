@@ -127,32 +127,6 @@ node* cpyNode(node* nodeToCpy)
 }
 
 /**
- * \fn void insertEndNode(node** frontNode, node* newNode)
- * \brief function which add a node at the bottom of a chain list of node
- *
- * \param frontNode : the top node of a chain list of node
- * newNode : the node that you want to add
- * \return void
- */
-void insertEndNode(node** frontNode, node* newNode)
-{
-	//frontNode = newNode;
-	if(*frontNode == NULL)
-	{
-		*frontNode = newNode;
-	}
-	else
-	{
-		node* temp = *frontNode;
-		while(temp->linkedNode != NULL)
-		{
-			temp = temp->linkedNode;
-		}
-		temp->linkedNode = newNode;
-	}
-}
-
-/**
  * \fn void insertFrontNode(node** frontNode, node* newNode)
  * \brief function which add a node at the top of a chain list of node
  *
@@ -178,14 +152,21 @@ void insertFrontNode(node** frontNode, node* newNode)
  * col : the color which will be used to display the nodes
  * \return void
  */
-void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col)
+void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col, int tileSize)
 {
-	node* temp = *frontNode;
-	SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
-	while(temp != NULL)
+	if (tileSize > 2)
 	{
-		SDL_RenderFillRect(renderer, &((SDL_Rect) {temp->x*10 + 1, temp->y*10 + 1, 8, 8}));
-		temp = temp->linkedNode;
+		node* temp = *frontNode;
+		SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
+		while(temp != NULL)
+		{
+			SDL_RenderFillRect(renderer, &((SDL_Rect) {
+				temp->x*tileSize + 1, 
+				temp->y*tileSize + 1, 
+				tileSize-2, 
+				tileSize-2}));
+			temp = temp->linkedNode;
+	}
 	}
 }
 
@@ -223,28 +204,6 @@ int nodeCmp(node* n1, node* n2)
 int distNodes(node* n1, node* n2)
 {
 	return pow((n1->x - n2->x), 2) + pow((n1->y - n2->y), 2);
-}
-
-/**
- * \fn node* getLowestNode(node** openSet)
- * \brief function which returns the node with the best heuristic (the lowest)
- * 
- * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
- * \return node*
- */
-node* getLowestNode(node** openSet)
-{
-	node* lowestNode = *openSet;
-	node* temp = *openSet;
-	while(temp != NULL)
-	{
-		if(temp->heuristic < lowestNode->heuristic)
-		{
-			lowestNode = temp;
-		}
-		temp = temp->linkedNode;
-	}
-	return lowestNode;
 }
 
 /**
@@ -293,6 +252,28 @@ bool isNextTo(node* nodeToCheck, int x, int y)
 }
 
 /**
+ * \fn node* getLowestNode(node** openSet)
+ * \brief function which returns the node with the best heuristic (the lowest)
+ * 
+ * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
+ * \return node*
+ */
+node* getLowestNode(node** openSet)
+{
+	node* lowestNode = *openSet;
+	node* temp = *openSet;
+	while(temp != NULL)
+	{
+		if(temp->heuristic < lowestNode->heuristic)
+		{
+			lowestNode = temp;
+		}
+		temp = temp->linkedNode;
+	}
+	return lowestNode;
+}
+
+/**
  * \fn node* getPath(node** closedSet)
  * \brief function which create a chain list of nodes which represent the obtimised path
  * using the closedSet of a A* algorithme
@@ -304,8 +285,6 @@ bool isNextTo(node* nodeToCheck, int x, int y)
 node* getPath(node** closedSet, node* endNode)
 {
 	node* path = NULL;
-	//Find the highest cost node in closedSet
-	//Keep this cost in memory
 	node* cursor = *closedSet;
 	node* temp = endNode;
 	int currentCost = 0;
@@ -320,7 +299,6 @@ node* getPath(node** closedSet, node* endNode)
 		cursor = cursor->linkedNode;
 	}
 	insertFrontNode(&path, cpyNode(temp));
-	printf("temp : %d %d\n", temp->x, temp->y);
 
 	while(currentCost > 0)
 	{
@@ -337,10 +315,6 @@ node* getPath(node** closedSet, node* endNode)
 		}
 		insertFrontNode(&path, cpyNode(temp));
 	}
-	//	Copy it in path with the correct coordinates
-	//	Find the node that cost one less than the previous one and that is next to it
-	//	Add it on top of path
-	//	Repeat until the cost reach 0;
 	return path;
 }
 
@@ -368,25 +342,25 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 	{
 		temp = initNode(x-1, y, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
-		insertEndNode(openSet, temp);
+		insertFrontNode(openSet, temp);
 	}
 	if (x+1 < mapWidth && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y))
 	{
 		temp = initNode(x+1, y, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
-		insertEndNode(openSet, temp);
+		insertFrontNode(openSet, temp);
 	}
 	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1))
 	{
 		temp = initNode(x, y-1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
-		insertEndNode(openSet, temp);
+		insertFrontNode(openSet, temp);
 	}
 	if (y+1 < mapHeight && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1))
 	{
 		temp = initNode(x, y+1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
-		insertEndNode(openSet, temp);
+		insertFrontNode(openSet, temp);
 	}
 }
 
@@ -405,24 +379,21 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  */
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth)
 {
-	node* lowestNode = NULL;
-	if (*openSet != NULL)
+	if(*openSet == NULL)
 	{
-		lowestNode = getLowestNode(openSet);
-
-		if (lowestNode->x == endNode->x && lowestNode->y == endNode->y)
-		{
-			rmvNode(openSet, lowestNode);
-			insertEndNode(closedSet, lowestNode);
-			printf("Done !\n Start node = %p\n End node = %p\n", (void*) startNode, (void*) endNode);
-			return getPath(closedSet, endNode);
-		}
-		addNeighbors(openSet, closedSet, lowestNode, endNode, mapHeight, mapWidth);
-		rmvNode(openSet, lowestNode);
-		insertEndNode(closedSet, lowestNode);
+		insertFrontNode(openSet, cpyNode(startNode));
 	}
-	else{
+
+	node* lowestNode = getLowestNode(openSet);
+	rmvNode(openSet, lowestNode);
+	insertFrontNode(closedSet, lowestNode);
+	if (lowestNode->x == endNode->x && lowestNode->y == endNode->y)
+	{
+		return getPath(closedSet, endNode);
+	}
+	else
+	{
+		addNeighbors(openSet, closedSet, lowestNode, endNode, mapHeight, mapWidth);
 		return NULL;
 	}
-	return NULL;
 }

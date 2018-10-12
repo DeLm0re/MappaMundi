@@ -38,20 +38,19 @@ void setHeuristic(node* nodeToSet, node* endNode);
 node* popNode(node** frontNode);
 void rmvNode(node** frontNode, node* nodeToRemove);
 node* cpyNode(node* nodeToCpy);
-void insertEndNode(node** frontNode, node* newNode);
 void insertFrontNode(node** frontNode, node* newNode);
 
 //Display function
-void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col);
+void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col, int tileSize);
 
 //Information function
 int nodeCmp(node* n1, node* n2);
 int distNodes(node* n1, node* n2);
-node* getLowestNode(node** openSet);
 bool isInSet(node** frontNode, int x, int y);
 bool isNextTo(node* nodeToCheck, int x, int y);
-node* getPath(node** closedSet, node* endNode);
 
 //A* algorithme function
+node* getLowestNode(node** openSet);
+node* getPath(node** closedSet, node* endNode);
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int mapHeight, int mapWidth);
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth);
