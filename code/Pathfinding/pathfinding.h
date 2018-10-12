@@ -50,7 +50,7 @@ int distNodes(node* n1, node* n2);
 node* getLowestNode(node** openSet);
 bool isInSet(node** frontNode, int x, int y);
 bool isNextTo(node* nodeToCheck, int x, int y);
-node* getPath(node** closedSet);
+node* getPath(node** closedSet, node* endNode);
 
 //A* algorithme function
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int mapHeight, int mapWidth);

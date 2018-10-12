@@ -298,28 +298,45 @@ bool isNextTo(node* nodeToCheck, int x, int y)
  * using the closedSet of a A* algorithme
  * 
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
+ * endNode : the end node of the A* algorithme
  * \return node*
  */
-node* getPath(node** closedSet)
+node* getPath(node** closedSet, node* endNode)
 {
 	node* path = NULL;
 	//Find the highest cost node in closedSet
 	//Keep this cost in memory
 	node* cursor = *closedSet;
-	node* temp = *closedSet;
-	int currentCost = temp->cost;
-	// get the node just before the end, probleme, the end node must be included in the closedList
+	node* temp = endNode;
+	int currentCost = 0;
 	while(cursor != NULL)
 	{
-		if(cursor->cost > currentCost && isNextTo(cursor, temp->x, temp->y))
+		if(cursor->x == temp->x && cursor->y == temp->y)
 		{
 			temp = cursor;
 			currentCost = temp->cost;
+			break;
 		}
 		cursor = cursor->linkedNode;
 	}
 	insertFrontNode(&path, cpyNode(temp));
+	printf("temp : %d %d\n", temp->x, temp->y);
 
+	while(currentCost > 0)
+	{
+		cursor = *closedSet;
+		while(cursor != NULL)
+		{
+			if(cursor->cost == currentCost - 1 && isNextTo(cursor, temp->x, temp->y))
+			{
+				temp = cursor;
+				currentCost--;
+				break;
+			}
+			cursor = cursor->linkedNode;
+		}
+		insertFrontNode(&path, cpyNode(temp));
+	}
 	//	Copy it in path with the correct coordinates
 	//	Find the node that cost one less than the previous one and that is next to it
 	//	Add it on top of path
@@ -395,8 +412,10 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, in
 
 		if (lowestNode->x == endNode->x && lowestNode->y == endNode->y)
 		{
+			rmvNode(openSet, lowestNode);
+			insertEndNode(closedSet, lowestNode);
 			printf("Done !\n Start node = %p\n End node = %p\n", (void*) startNode, (void*) endNode);
-			return getPath(closedSet);
+			return getPath(closedSet, endNode);
 		}
 		addNeighbors(openSet, closedSet, lowestNode, endNode, mapHeight, mapWidth);
 		rmvNode(openSet, lowestNode);

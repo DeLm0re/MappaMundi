@@ -17,6 +17,7 @@ int main(void)
 {
 	SDL_Color openSetCol = {80, 160, 80, 255};
 	SDL_Color closedSetCol = {160, 80, 80, 255};
+	SDL_Color pathCol = {80, 80, 160, 255};
 
 	int wwidth = 640;
 	int wheight = 480;
@@ -70,19 +71,22 @@ int main(void)
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
+		path = AStar(&openSet, &closedSet, startNode, endNode, mapHeight, mapWidth);
+
 		//showMap(map, mapHeight, mapWidth, renderer);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, mapWidth*10, mapHeight*10}));
 		viewNodes(&openSet, renderer, openSetCol);
 		viewNodes(&closedSet, renderer, closedSetCol);
 
-		path = AStar(&openSet, &closedSet, startNode, endNode, mapHeight, mapWidth);
-
 		// Rafraichissement de la fenêtre
 		SDL_RenderPresent(renderer);
 		//sleep(1);
 	}
-	printf("path : %p, x : %d, y : %d\n", (void*) path, path->x, path->y);
+
+	viewNodes(&path, renderer, pathCol);	
+	// Rafraichissement de la fenêtre
+	SDL_RenderPresent(renderer);
 
 	// Tant que le flag pour quitter est faux
 	while(!quit)
