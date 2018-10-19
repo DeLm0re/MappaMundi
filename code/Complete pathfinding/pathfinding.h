@@ -44,7 +44,7 @@ node* cpyNode(node* nodeToCpy);
 void insertFrontNode(node** frontNode, node* newNode);
 
 //Display function
-void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col, int tileSize);
+void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize);
 
 //Information function
 int nodeCmp(node* n1, node* n2);
@@ -55,5 +55,5 @@ bool isNextTo(node* nodeToCheck, int x, int y);
 //A* algorithme function
 node* getLowestNode(node** openSet);
 node* getPath(node** closedSet, node* endNode);
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int mapHeight, int mapWidth);
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int mapHeight, int mapWidth);
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
