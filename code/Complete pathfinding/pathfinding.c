@@ -33,6 +33,47 @@ node* initNode(int x, int y, int cost, int heuristic)
 	return newNode;
 }
 
+node* nearestNode(Field oneField, int height, int width, int x, int y)
+{
+	int xNode = x;
+	int yNode = y;
+	int i;
+	int j;
+	int neighboursOrder = 1;
+	bool findNode = false;
+
+	if((x >= 0) && (x < width) && (y >= 0) && (y <  height))
+	{
+		if(oneField[x][y] == EMPTY)
+		{
+			return initNode(x, y, 0, 0);
+		}
+	}
+
+	while(findNode == false)
+	{
+		for(i = (x-neighboursOrder); i <= (x+neighboursOrder); i++)
+		{
+			for(j = (y-neighboursOrder); j <= (y+neighboursOrder); j++)
+			{
+				if((i >= 0) && (i < width) && (j >= 0) && (j <  height))
+				{
+					if(oneField[i][j] == EMPTY)
+					{
+						xNode = i;
+						yNode = j;
+						findNode = true;
+					}
+				}
+			}
+		}
+
+		neighboursOrder++;
+	}	
+
+	return initNode(xNode, yNode, 0, 0);
+}
+
 /**
  * \fn void destructNodes(node** frontNode)
  * \brief function used to free all the nodes in a chain list of nodes

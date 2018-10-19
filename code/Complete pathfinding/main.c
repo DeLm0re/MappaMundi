@@ -30,8 +30,8 @@ int main(void)
 	SDL_Color closedSetColor = {160, 80, 80, 255};
 	SDL_Color pathColor = {80, 80, 160, 255};
 
-	int windowWidth = 640;
-	int windowHeight = 480;
+	int windowWidth = 1000;
+	int windowHeight = 1000;
 	SDL_Event event;
     SDL_bool quit = SDL_FALSE;
     SDL_Window *window = NULL;
@@ -61,16 +61,16 @@ int main(void)
     }
 
 	//Declaration of basic constants
-	const int fieldHeight = 40;
-	const int fieldWidth = 40;
-	const int tileSize = 10;
+	const int fieldHeight = 50;
+	const int fieldWidth = 50;
+	const int tileSize = 20;
 	//Declaration and initialization of the field
     Field theField = initialiseField(fieldHeight, fieldWidth);
     //Generate the environment
     generateEnv(theField, fieldHeight, fieldWidth);
 
-	node* startNode = initNode(1, 1, 0, 0);
-	node* endNode = initNode(fieldWidth-2, fieldHeight-2, 0, 0);
+	node* startNode = nearestNode(theField, fieldHeight, fieldWidth, 0, 0);
+	node* endNode = nearestNode(theField, fieldHeight, fieldWidth, fieldWidth, fieldHeight);
 	node* openSet = NULL;
 	node* closedSet = NULL;
 	node* path = NULL;
