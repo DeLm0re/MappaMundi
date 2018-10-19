@@ -42,8 +42,10 @@ node* initNode(int x, int y, int cost, int heuristic)
  */
 void destructNodes(node** frontNode)
 {
+	//While their is still node in the chakn list
 	while((*frontNode)->linkedNode != NULL)
 	{
+		//Extract the top node from the chain list and free it
 		free(popNode(frontNode));
 	}
 }
@@ -58,6 +60,7 @@ void destructNodes(node** frontNode)
  */
 void setHeuristic(node* nodeToSet, node* endNode)
 {
+	//The formula to calculate the heuristic of a node is : his cost + distance to the end
 	nodeToSet->heuristic = nodeToSet->cost + distNodes(endNode, nodeToSet);
 }
 
@@ -70,13 +73,19 @@ void setHeuristic(node* nodeToSet, node* endNode)
  */
 node* popNode(node** frontNode)
 {
+	//The node that will be extract is the top node of the chain list
 	node* popedNode = *frontNode;
+	//If the list isn't empty
 	if(frontNode != NULL)
 	{
+		//We change the frontNode by the next node
 		*frontNode = (*frontNode)->linkedNode;
 	}
+	//Then we delink the poped node before returning it
 	popedNode->linkedNode = NULL;
 	return popedNode;
+	/*If at any moment their is a NULL pointer their is no problem. The poped node could be NULL (no node is poped)
+	And the chain list could become NULL after the node was extract*/ 
 }
 
 /**
@@ -89,21 +98,31 @@ node* popNode(node** frontNode)
  */
 void rmvNode(node** frontNode, node* nodeToRemove)
 {
+	//If the chain list is not NULL (understand : if a node could be remove)
 	if(frontNode != NULL)
 	{
 		node* cursor = *frontNode;
+		//We check independently if the fisrt node is the node to remove because we will not check it later
 		if(cursor == nodeToRemove)
 		{
+			//If the first node is the node to remove we basicly pop it
 			*frontNode = cursor->linkedNode;
+			/*We delink it from the chain list. We can do it on nodeToRemove because we are checking the pointer
+			So the cursor is the nodeToRemove. We could have used the cursor insted*/
 			nodeToRemove->linkedNode = NULL;
 		}
 		else
 		{
+			/*If the front node is not the node to remove, we check all the chain list and so all the linked node
+			that is why we needed to checj the first node independently, because it is linked to zero node*/
 			while(cursor->linkedNode != NULL)
 			{
+				//If the node pointed by the cursor is the node to remove
 				if(cursor->linkedNode == nodeToRemove)
 				{
+					//We change the link (basicly we jump to the next linked node)
 					cursor->linkedNode = cursor->linkedNode->linkedNode;
+					//We delink it from the chain list
 					nodeToRemove->linkedNode = NULL;
 					break;
 				}
@@ -111,6 +130,9 @@ void rmvNode(node** frontNode, node* nodeToRemove)
 			}
 		}
 	}
+	/*We do not return the removed node because we theoricaly already have its pointer via "nodeToRemove"
+	In our case it is not usefull because the removed not is move to an other chain list, so it will be correctly free
+	However it could be something usefull to add for other uses*/
 }
 
 /**
@@ -122,6 +144,7 @@ void rmvNode(node** frontNode, node* nodeToRemove)
  */
 node* cpyNode(node* nodeToCpy)
 {
+	//We simply initialise a node with the same parametre of the given node and return it
 	node* newNode = initNode(nodeToCpy->x, nodeToCpy->y, nodeToCpy->cost, nodeToCpy->heuristic);
 	return newNode;
 }
@@ -136,9 +159,12 @@ node* cpyNode(node* nodeToCpy)
  */
 void insertFrontNode(node** frontNode, node* newNode)
 {
+	//If we have a node to insert
 	if(newNode != NULL)
 	{
+		//We link the top node of the chain list to the new node we want to insert on top
 		newNode->linkedNode = *frontNode;
+		//We change the front node of the chain list by our new one
 		*frontNode = newNode;
 	}
 }
@@ -154,19 +180,23 @@ void insertFrontNode(node** frontNode, node* newNode)
  */
 void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize)
 {
+	//If the size of the tile is large enought to draw a rectangle
 	if (tileSize > 2)
 	{
 		node* cursor = *frontNode;
+		//We set the drawing color
 		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+		//For each node in the chain list
 		while(cursor != NULL)
 		{
+			//We draw a rectangle at the correct coordiante
 			SDL_RenderFillRect(renderer, &((SDL_Rect) {
 				cursor->x*tileSize + 1, 
 				cursor->y*tileSize + 1, 
 				tileSize-2, 
 				tileSize-2}));
 			cursor = cursor->linkedNode;
-	}
+		}
 	}
 }
 
@@ -180,6 +210,7 @@ void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int ti
  */
 int nodeCmp(node* n1, node* n2)
 {
+	//Simple comparison between the heuristics of the two nodes
 	if (n1->heuristic < n2->heuristic)
 	{
 		return 1;
@@ -203,6 +234,7 @@ int nodeCmp(node* n1, node* n2)
  */
 int distNodes(node* n1, node* n2)
 {
+	//Using Pythagor's theorem we calculate the square of the distance between the two nodes
 	return pow((n1->x - n2->x), 2) + pow((n1->y - n2->y), 2);
 }
 
@@ -217,15 +249,19 @@ int distNodes(node* n1, node* n2)
  */
 bool isInSet(node** frontNode, int x, int y)
 {
-	node* temp = *frontNode;
-	while(temp != NULL)
+	node* cursor = *frontNode;
+	//For each node in the chain list
+	while(cursor != NULL)
 	{
-		if(temp->x == x && temp->y == y)
+		//We check if their is a node with the given coordinates
+		if(cursor->x == x && cursor->y == y)
 		{
+			//We return true
 			return true;
 		}
-		temp = temp->linkedNode;
+		cursor = cursor->linkedNode;
 	}
+	//If we find nothing, we return false;
 	return false;
 }
 
@@ -239,8 +275,11 @@ bool isInSet(node** frontNode, int x, int y)
  */
 bool isNextTo(node* nodeToCheck, int x, int y)
 {
+	//We walculate the distance between the given node and the given coordinate in the x and y axis
 	int xdist = abs(nodeToCheck->x - x);
 	int ydist = abs(nodeToCheck->y - y);
+	//The node is next to this coordinate if one of the distances is equal to 1 (up, down, right and left)
+	//If both are equals to 1, that means we're next to it diagonaly, not usefull in our case but it could be
 	if (xdist + ydist == 1)
 	{
 		return true;
@@ -260,16 +299,21 @@ bool isNextTo(node* nodeToCheck, int x, int y)
  */
 node* getLowestNode(node** openSet)
 {
+	//This pointer is use to keep in memory the node with the lowest heuristic, by default it is the first node of the set
 	node* lowestNode = *openSet;
-	node* temp = *openSet;
-	while(temp != NULL)
+	node* cursor = *openSet;
+	//For each node in the set
+	while(cursor != NULL)
 	{
-		if(temp->heuristic < lowestNode->heuristic)
+		//We check if its heuristic is lower than the current lowest node
+		if(cursor->heuristic < lowestNode->heuristic)
 		{
-			lowestNode = temp;
+			//If it is, we update it
+			lowestNode = cursor;
 		}
-		temp = temp->linkedNode;
+		cursor = cursor->linkedNode;
 	}
+	//Once everything is checked, we return the lowest ndoe found
 	return lowestNode;
 }
 
@@ -284,38 +328,61 @@ node* getLowestNode(node** openSet)
  */
 node* getPath(node** closedSet, node* endNode)
 {
+	//First we create a chain list wich will contain the path
 	node* path = NULL;
 	node* cursor = *closedSet;
 	node* temp = endNode;
+	//This variable is used to keep track of the current cost we are searching
 	int currentCost = 0;
+
+	//We begin by searching in the closedSet the node which is at the end poitn coordinate
 	while(cursor != NULL)
 	{
 		if(cursor->x == temp->x && cursor->y == temp->y)
 		{
+			//Once find, we save this node for later
 			temp = cursor;
+			//And we update the current cost
 			currentCost = temp->cost;
 			break;
 		}
 		cursor = cursor->linkedNode;
 	}
+	//We insert a copy of this node to our path
 	insertFrontNode(&path, cpyNode(temp));
 
+	//Then, while the cost as still not reach 0 (understand : we didn't backtrack to the starting point yet)
 	while(currentCost > 0)
 	{
+		//We check in all the chain list for a node with a cost directly inferior to the current cost
+		//And next to the last node added to the path
 		cursor = *closedSet;
 		while(cursor != NULL)
 		{
 			if(cursor->cost == currentCost - 1 && isNextTo(cursor, temp->x, temp->y))
 			{
+				//Once find we save the node for later
 				temp = cursor;
+				//And we update the cost
 				currentCost--;
+				/*And most importantly, we stop the loop
+				Their is usually different nodes who correspond to this description and we want only one of them
+				All these nodes are equivalent if we want the most optimize path*/
 				break;
 			}
 			cursor = cursor->linkedNode;
 		}
+		//Then we insert the node into the path
 		insertFrontNode(&path, cpyNode(temp));
 	}
+	//Finaly we return the path
 	return path;
+	/*the logic behind the reconstruction of the path is simple : 
+	-we start with the last node of the path
+	-we find a neighbour with a cost directly inferior of the last added node
+	-we add it
+	-repeat until the cost reaches 0
+	*/
 }
 
 /**
@@ -337,11 +404,18 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 	int y = currentNode->y;
 	node* temp;
 	
-	// Ajouter des collisions ici
+	/*For each neighbors we check if :
+	-It is inside of the field
+	-It is not in the closed or open set
+	-It is in an empty tile
+	*/
 	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && theField[x-1][y] == EMPTY)
 	{
+		//If everything is verify we create it
 		temp = initNode(x-1, y, currentNode->cost + 1, 0);
+		//We set his heuristic
 		setHeuristic(temp, endNode);
+		//We insert it in the openSet
 		insertFrontNode(openSet, temp);
 	}
 	if (x+1 < fieldWidth && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField[x+1][y] == EMPTY)
@@ -379,20 +453,28 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  */
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
 {
+	//If their is no nodes left in the openSet
 	if(*openSet == NULL)
 	{
+		//We return just the starting node, which means their is no path
 		return startNode;
 	}
 
+	//We get the lowest heuristic node in the open set
 	node* lowestNode = getLowestNode(openSet);
+	//We remove it from the open set
 	rmvNode(openSet, lowestNode);
+	//We insert it in the closed set
 	insertFrontNode(closedSet, lowestNode);
+	//If it's in the end node coordinate
 	if (lowestNode->x == endNode->x && lowestNode->y == endNode->y)
 	{
+		//We return the reconstructed path
 		return getPath(closedSet, endNode);
 	}
 	else
 	{
+		//Otherwise, we add the neighbors into the open set
 		addNeighbors(openSet, closedSet, lowestNode, endNode, theField, fieldHeight, fieldWidth);
 		return NULL;
 	}
