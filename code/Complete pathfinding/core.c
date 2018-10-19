@@ -69,7 +69,7 @@ void generateEnv(Field oneField, int height, int width)
 
     int i;
     int j;
-    srand(1234567);
+    srand(time(0));
     int monRand;
     int sum_neigh;
 
