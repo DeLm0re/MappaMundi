@@ -26,12 +26,12 @@
 
 int main(void)
 {
-	SDL_Color openSetCol = {80, 160, 80, 255};
-	SDL_Color closedSetCol = {160, 80, 80, 255};
-	SDL_Color pathCol = {80, 80, 160, 255};
+	SDL_Color openSetColor = {80, 160, 80, 255};
+	SDL_Color closedSetColor = {160, 80, 80, 255};
+	SDL_Color pathColor = {80, 80, 160, 255};
 
-	int wwidth = 640;
-	int wheight = 480;
+	int windowWidth = 640;
+	int windowHeight = 480;
 	SDL_Event event;
     SDL_bool quit = SDL_FALSE;
     SDL_Window *window = NULL;
@@ -46,7 +46,7 @@ int main(void)
     }
     // Initialisation de la fenêtre
     window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              wwidth, wheight, SDL_WINDOW_SHOWN);
+                              windowWidth, windowHeight, SDL_WINDOW_SHOWN);
     if(window == NULL)
     {
         fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
@@ -61,16 +61,16 @@ int main(void)
     }
 
 	//Declaration of basic constants
-	const int heightField = 40;
-	const int widthField = 40;
+	const int fieldHeight = 40;
+	const int fieldWidth = 40;
 	const int tileSize = 10;
 	//Declaration and initialization of the field
-    Field theField = initialiseField(heightField, widthField);
+    Field theField = initialiseField(fieldHeight, fieldWidth);
     //Generate the environment
-    generateEnv(theField, heightField, widthField);
+    generateEnv(theField, fieldHeight, fieldWidth);
 
 	node* startNode = initNode(1, 1, 0, 0);
-	node* endNode = initNode(widthField-2, heightField-2, 0, 0);
+	node* endNode = initNode(fieldWidth-2, fieldHeight-2, 0, 0);
 	node* openSet = NULL;
 	node* closedSet = NULL;
 	node* path = NULL;
@@ -79,25 +79,25 @@ int main(void)
 	while (path == NULL)
 	{
 		//Do one step of A* algorithme
-		path = AStar(&openSet, &closedSet, startNode, endNode, theField, heightField, widthField);
+		path = AStar(&openSet, &closedSet, startNode, endNode, theField, fieldHeight, fieldWidth);
 
 		//Clear the screen
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 		//Draw the field
-    	drawField(renderer, theField, heightField, widthField, tileSize);
+    	drawField(renderer, theField, fieldHeight, fieldWidth, tileSize);
 		//Draw a box around the field
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, widthField*tileSize, heightField*tileSize}));
+        SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, fieldWidth*tileSize, fieldHeight*tileSize}));
 		//Draw the openSet and the closedSet of the A* algorithme
-		viewNodes(&openSet, renderer, openSetCol, tileSize);
-		viewNodes(&closedSet, renderer, closedSetCol, tileSize);
+		viewNodes(&openSet, renderer, openSetColor, tileSize);
+		viewNodes(&closedSet, renderer, closedSetColor, tileSize);
 
 		//Refresh the window
 		SDL_RenderPresent(renderer);
 	}
 	//Draw the final path
-	viewNodes(&path, renderer, pathCol, tileSize);	
+	viewNodes(&path, renderer, pathColor, tileSize);	
 	//Refresh the window
 	SDL_RenderPresent(renderer);
 
@@ -120,7 +120,7 @@ int main(void)
 	destructNodes(&startNode);
 	destructNodes(&endNode);
 	//Free the memory of the field
-	destructField(theField, heightField);
+	destructField(theField, fieldHeight);
 
 	// Procédure de fermeture de la fenêtre
 Quit:
