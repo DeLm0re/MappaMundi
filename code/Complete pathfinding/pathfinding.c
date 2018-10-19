@@ -33,6 +33,17 @@ node* initNode(int x, int y, int cost, int heuristic)
 	return newNode;
 }
 
+/**
+ * \fn node* nearestNode(Field oneField, int height, int width, int x, int y)
+ * \brief function that return the nearest and safest node around the node which is used as a starting point for the pathfinding
+ * But this node can be a WALL. A node is a structure used in the A* algorithme
+ * A node can be used to create a chain list of node
+ *
+ * \param x, y : the coordinate of the node used as a starting point for the pathfinding
+ * \param oneField : the field in which we search a safe node
+ * \param height, width : the height and the width of this specific field
+ * \return node*
+ */
 node* nearestNode(Field oneField, int height, int width, int x, int y)
 {
 	int xNode = x;
