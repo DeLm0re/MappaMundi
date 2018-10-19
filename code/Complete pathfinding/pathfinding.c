@@ -152,20 +152,20 @@ void insertFrontNode(node** frontNode, node* newNode)
  * \param col : the color which will be used to display the nodes
  * \return void
  */
-void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col, int tileSize)
+void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize)
 {
 	if (tileSize > 2)
 	{
-		node* temp = *frontNode;
-		SDL_SetRenderDrawColor(renderer, col.r, col.g, col.b, col.a);
-		while(temp != NULL)
+		node* cursor = *frontNode;
+		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+		while(cursor != NULL)
 		{
 			SDL_RenderFillRect(renderer, &((SDL_Rect) {
-				temp->x*tileSize + 1, 
-				temp->y*tileSize + 1, 
+				cursor->x*tileSize + 1, 
+				cursor->y*tileSize + 1, 
 				tileSize-2, 
 				tileSize-2}));
-			temp = temp->linkedNode;
+			cursor = cursor->linkedNode;
 	}
 	}
 }
@@ -319,7 +319,7 @@ node* getPath(node** closedSet, node* endNode)
 }
 
 /**
- * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int mapHeight, int mapWidth)
+ * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int fieldHeight, int fieldWidth)
  * \brief function which adds and create the neighboors of a given node in the openSet of the A* algorithme
  * It adds neighbors only if they are not in the closedSet or the openSet
  * 
@@ -327,11 +327,11 @@ node* getPath(node** closedSet, node* endNode)
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
- * \param mapHeight : the total number of rows of the map we use
- * \param mapWidth : the total number of columns of the map we use
+ * \param fieldHeight : the total number of rows of the map we use
+ * \param fieldWidth : the total number of columns of the map we use
  * \return bool
  */
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int mapHeight, int mapWidth)
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
 {
 	int x = currentNode->x;
 	int y = currentNode->y;
@@ -344,7 +344,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (x+1 < mapWidth && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField[x+1][y] == EMPTY)
+	if (x+1 < fieldWidth && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField[x+1][y] == EMPTY)
 	{
 		temp = initNode(x+1, y, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
@@ -356,7 +356,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y+1 < mapHeight && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField[x][y+1] == EMPTY)
+	if (y+1 < fieldHeight && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField[x][y+1] == EMPTY)
 	{
 		temp = initNode(x, y+1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
@@ -365,7 +365,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 }
 
 /**
- * \fn int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int mapHeight, int mapWidth)
+ * \fn int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int fieldHeight, int fieldWidth)
  * \brief function which do one step of the A* algorithme
  * once the path has been found, returns the complete path. OtherWise return NULL
  * 
@@ -373,11 +373,11 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param mapHeight : the total number of rows of the map we use
- * \param mapWidth : the total number of columns of the map we use
+ * \param fieldHeight : the total number of rows of the map we use
+ * \param fieldWidth : the total number of columns of the map we use
  * \return int
  */
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int mapHeight, int mapWidth)
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
 {
 	if(*openSet == NULL)
 	{
@@ -393,7 +393,7 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
 	}
 	else
 	{
-		addNeighbors(openSet, closedSet, lowestNode, endNode, theField, mapHeight, mapWidth);
+		addNeighbors(openSet, closedSet, lowestNode, endNode, theField, fieldHeight, fieldWidth);
 		return NULL;
 	}
 }
