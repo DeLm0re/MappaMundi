@@ -34,6 +34,7 @@ typedef struct node
 
 //Initialisation and destruction function
 node* initNode(int x, int y, int cost, int heuristic);
+node* nearestNode(Field oneField, int height, int width, int x, int y);
 void destructNodes(node** frontNode);
 void setHeuristic(node* nodeToSet, node* endNode);
 

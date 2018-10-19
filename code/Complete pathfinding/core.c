@@ -31,10 +31,10 @@ Field initialiseField(int height, int width)
     int i;
     int j;
 
-    Field oneField = malloc(sizeof(int*) * height);
-    for(i = 0; i < height; i++)
+    Field oneField = malloc(sizeof(int*) * width);
+    for(i = 0; i < width; i++)
     {
-        oneField[i] = malloc(sizeof(int) * width);
+        oneField[i] = malloc(sizeof(int) * height);
     }
 
     for(i = 1; i < (height-1); i++)
@@ -69,7 +69,7 @@ void generateEnv(Field oneField, int height, int width)
 
     int i;
     int j;
-    srand(time(NULL));
+    srand(1234567);
     int monRand;
     int sum_neigh;
 
