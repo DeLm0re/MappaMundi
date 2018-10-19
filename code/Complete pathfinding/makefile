@@ -4,11 +4,11 @@ WARNING_FLAGS = -Wall -Wextra -Werror -pedantic -Wformat\
 
 CFLAGS = -std=c99 -m64 -O3 $(WARNING_FLAGS)
 
-CLIBS = `sdl2-config --cflags --libs`
+CLIBS = -lpthread `sdl2-config --cflags --libs`
 
-main: main.o pathfinding.o core.o display.o
+main: main.o pathfinding.o core.o display.o eventhandler.o
 	@echo "Links edition :"
-	gcc -o main main.o pathfinding.o core.o display.o $(CLIBS)
+	gcc -o main main.o pathfinding.o core.o display.o eventhandler.o $(CLIBS)
 	rm -f *~ *.o
 	@echo ""
 
@@ -20,6 +20,11 @@ main.o:	main.c pathfinding.h core.h display.h
 pathfinding.o : pathfinding.c pathfinding.h
 	@echo "Compilation core :"
 	gcc $(CFLAGS) -c pathfinding.c $(CLIBS)
+	@echo ""
+
+eventhandler.o : eventhandler.c eventhandler.h
+	@echo "Compilation core :"
+	gcc $(CFLAGS) -c eventhandler.c $(CLIBS)
 	@echo ""
 
 core.o : core.c core.h
