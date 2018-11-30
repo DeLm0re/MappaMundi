@@ -13,13 +13,12 @@
 #include "core.h"
 
 /**
- * \fn int** initialiseField(int height, int width)
+ * \fn Field initialiseField(int height, int width)
  * \brief function that initialise our field to make our environment
  *
- * \param oneField : A field, which is a tydef declared in core.h (2D array)
  * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \return int**
+ * \return Field : A field, which is a tydef declared in core.h (2D array)
  */
 Field initialiseField(int height, int width)
 {
