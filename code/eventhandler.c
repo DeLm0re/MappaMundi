@@ -14,7 +14,7 @@ void* eventHandlerFunction(void* data)
 
 dataType* initData(SDL_Event* event)
 {
-	dataType* data = malloc(sizeof(dataType));
+    dataType* data = malloc(sizeof(dataType));
     data->event = event;
     data->endEvent = false;
     return data;

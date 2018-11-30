@@ -12,16 +12,31 @@
 //Header file
 #include "core.h"
 
+
+//The structure node used in the A* algorithme (used in core.c)
+typedef struct node 
+{
+	int x;
+	int y;
+	int cost;
+	int heuristic;
+	struct node* linkedNode;
+}node;
+
+//Initialisation and destruction function
+
 /**
  * \fn node* initNode(int x, int y, int cost, int heuristic)
  * \brief function that initialise a node. A node is a structure used in the A* algorithme
  * A node can be used to create a chain list of node
  *
- * \param x, y : the coordinate of the node, cost : the number of step since the starting node
+ * \param x, y : the coordinate of the node
+ * \param cost : the number of step since the starting node
  * \param heuristic : the cost + the distance between the ending node and the node initialized
  * the function setHeuristic can calculate and set the heuristic of a node so you can just put 0.
  * \return node*
  */
+  
 node* initNode(int x, int y, int cost, int heuristic);
 node* nearestNode(Field oneField, int height, int width, int x, int y);
 void destructNodes(node** frontNode);
