@@ -1,5 +1,16 @@
-#include "entity.h"
+/**
+ * \file entity.c
+ * \brief The Entity management
+ * \author Louis Schuck
+ * \version 0.1
+ * \date 30/11/2018
+ *
+ * Module that contain the functions and the structure used by the neural network to navigate in the Field
+ *
+ */
 
+//Header files containing the prototypes
+#include "entity.h"
 
 /**
  * \fn node* initialiseEntity(int x, int y, int visionRange)
