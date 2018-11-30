@@ -12,7 +12,7 @@ main: main.o pathfinding.o core.o display.o eventhandler.o
 	rm -f *~ *.o
 	@echo ""
 
-main.o:	main.c pathfinding.h core.h display.h
+main.o:	main.c pathfinding.h core.h display.h eventhandler.h
 	@echo "Compilation main :"
 	gcc $(CFLAGS) -c main.c
 	@echo ""
