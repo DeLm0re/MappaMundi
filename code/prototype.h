@@ -26,16 +26,9 @@
     #define EMPTY (0)
     //Definition of a case's value if it is a wall
     #define WALL (1)
+    //Definition of a case's value if it is fog
+    #define FOG (2)
 
 //Typedef of field
 typedef int** Field;
 
-//The structure node used in the A* algorithme (used in core.c)
-typedef struct node 
-{
-	int x;
-	int y;
-	int cost;
-	int heuristic;
-	struct node* linkedNode;
-}node;

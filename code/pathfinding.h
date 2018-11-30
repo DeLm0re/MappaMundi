@@ -12,6 +12,16 @@
 //Header file
 #include "core.h"
 
+//The structure node used in the A* algorithme (used in core.c)
+typedef struct node 
+{
+	int x;
+	int y;
+	int cost;
+	int heuristic;
+	struct node* linkedNode;
+}node;
+
 //Initialisation and destruction function
 node* initNode(int x, int y, int cost, int heuristic);
 node* nearestNode(Field oneField, int height, int width, int x, int y);
