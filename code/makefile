@@ -3,41 +3,25 @@ WARNING_FLAGS = -Wall -Wextra -Werror -pedantic -Wformat\
 				-Wmissing-prototypes -Wcast-align -pedantic-errors
 
 CFLAGS = -std=c99 -m64 -O3 $(WARNING_FLAGS)
-
 CLIBS = -lpthread `sdl2-config --cflags --libs`
+CC = gcc
+DEP = pathfinding.o core.o display.o eventhandler.o
+EXE = main
 
-main: main.o pathfinding.o core.o display.o eventhandler.o
+all: $(EXE)
+
+$(EXE): $(EXE).o $(DEP)
 	@echo "Links edition :"
-	gcc -o main main.o pathfinding.o core.o display.o eventhandler.o $(CLIBS)
+	$(CC) -o $@ $^ $(CLIBS)
 	rm -f *~ *.o
 	@echo ""
 
-main.o:	main.c pathfinding.h core.h display.h eventhandler.h
-	@echo "Compilation main :"
-	gcc $(CFLAGS) -c main.c
-	@echo ""
-
-pathfinding.o : pathfinding.c pathfinding.h
-	@echo "Compilation core :"
-	gcc $(CFLAGS) -c pathfinding.c $(CLIBS)
-	@echo ""
-
-eventhandler.o : eventhandler.c eventhandler.h
-	@echo "Compilation core :"
-	gcc $(CFLAGS) -c eventhandler.c $(CLIBS)
-	@echo ""
-
-core.o : core.c core.h
-	@echo "Compilation core :"
-	gcc $(CFLAGS) -c core.c $(CLIBS)
-	@echo ""
-
-display.o: display.c display.h
-	@echo "Compilation display :"
-	gcc $(CFLAGS) -c display.c $(CLIBS)
+%.o: %.c
+	@echo "Compilation $@"
+	$(CC) $(CFLAGS) -c $^ $(CLIBS)
 	@echo ""
 
 clean:
 	rm -f *.o
-	rm -f main
+	rm -f $(EXE)
 	rm -f *~
