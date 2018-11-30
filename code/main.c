@@ -2,24 +2,12 @@
  * \file main.c
  * \brief main of the project
  * \author Théo Hipault
- * \version 0.4
+ * \version 0.5
  * \date 12/10/2018
  *
  * Module that contain the main of the project
  *
  */
-
-//General header files
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-//More specific headers files
-#include <SDL2/SDL.h>
-#include <time.h>
-#include <math.h>
-#include <string.h>
-#include <stdbool.h>
 
 //Header file
 #include "pathfinding.h"

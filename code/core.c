@@ -9,10 +9,6 @@
  *
  */
 
-//Header files
-#include <time.h>
-#include <math.h>
-
 //Header file containing the prototypes
 #include "core.h"
 
