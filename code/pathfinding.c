@@ -17,7 +17,8 @@
  * \brief function that initialise a node. A node is a structure used in the A* algorithme
  * A node can be used to create a chain list of node
  *
- * \param x, y : the coordinate of the node, cost : the number of step since the starting node
+ * \param x, y : the coordinate of the node
+ * \param cost : the number of step since the starting node
  * \param heuristic : the cost + the distance between the ending node and the node initialized
  * the function setHeuristic can calculate and set the heuristic of a node so you can just put 0.
  * \return node*

@@ -12,6 +12,7 @@
 //Header file
 #include "pathfinding.h"
 #include "eventhandler.h"
+#include "entity.h"
 
 int main(void)
 {
