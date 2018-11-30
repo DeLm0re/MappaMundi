@@ -10,13 +10,7 @@
  */
 
 //Header file for graphical display
-#include <SDL2/SDL.h>
-
-#define EMPTY (0)
-#define WALL (1)
-
-//Typedef of field
-typedef int** Field;
+#include "display.h"
 
 Field initialiseField(int height, int width);
 

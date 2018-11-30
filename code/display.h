@@ -10,7 +10,7 @@
  */
 
 //Header file containing the prototypes
-#include "core.h"
+#include "prototype.h"
 
 int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int size);
 

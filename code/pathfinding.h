@@ -9,28 +9,8 @@
  *
  */
 
-//General header files
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-//More specific headers files
-#include <SDL2/SDL.h>
-#include <math.h>
-#include <stdbool.h>
-
 //Header file
-#include "display.h"
-
-//The structure node used in the A* algorithme
-typedef struct node 
-{
-	int x;
-	int y;
-	int cost;
-	int heuristic;
-	struct node* linkedNode;
-}node;
+#include "core.h"
 
 //Initialisation and destruction function
 node* initNode(int x, int y, int cost, int heuristic);
