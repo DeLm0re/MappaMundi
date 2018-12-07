@@ -19,31 +19,29 @@
  * \fn Field initialiseField(int height, int width)
  * \brief function that initialise our field to make our environment
  *
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param height : height of the field 
+ * \param width : width of the field
+ * \param defaultValue : value used to set each point of the Field
  * \return Field : A field, which is a tydef declared in core.h (2D array)
  */
-Field initialiseField(int height, int width);
+Field *initialiseField(int height, int width, pointEnum defaultValue);
 
 /**
  * \fn void generateEnv(field oneField)
  * \brief function that generate our field to make our environment
  *
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
-void generateEnv(Field oneField, int height, int width);
+void generateEnv(Field *oneField);
 
 /**
  * \fn void destructField(Field oneField, int height)
  * \brief function that free the field out of memory
  *
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
-void destructField(Field oneField, int height);
+void destructField(Field **oneField);
 
 #endif

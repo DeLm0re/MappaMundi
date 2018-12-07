@@ -16,36 +16,42 @@
  * \fn Field initialiseField(int height, int width)
  * \brief function that initialise our field to make our environment
  *
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param height : height of the field 
+ * \param width : width of the field
+ * \param defaultValue : value used to set each point of the Field
  * \return Field : A field, which is a tydef declared in core.h (2D array)
  */
-Field initialiseField(int height, int width)
+Field *initialiseField(int height, int width, pointEnum defaultValue)
 {
 
     int i;
     int j;
 
-    Field oneField = malloc(sizeof(int*) * width);
+    Field *oneField = malloc(sizeof(Field));
+    oneField->height = height;
+    oneField->length = width;
+
+    oneField->values = malloc(sizeof(int*) * width);
+    
     for(i = 0; i < width; i++)
     {
-        oneField[i] = malloc(sizeof(int) * height);
+        oneField->values[i] = malloc(sizeof(int) * height);
     }
 
     for(i = 1; i < (height-1); i++)
     {
         for(j = 1; j < (width-1); j++)
         {
-            oneField[i][j] = EMPTY;
+            oneField->values[i][j] = defaultValue;
         }
     }
 
     for(i = 0; i < height; i++)
     {
-        oneField[i][0] = WALL;
-        oneField[0][i] = WALL;
-        oneField[i][width-1] = WALL;
-        oneField[height-1][i] = WALL;
+        oneField->values[i][0] = WALL;
+        oneField->values[0][i] = WALL;
+        oneField->values[i][width-1] = WALL;
+        oneField->values[height-1][i] = WALL;
     }
     return oneField;
 }
@@ -55,11 +61,9 @@ Field initialiseField(int height, int width)
  * \brief function that generate our field to make our environment
  *
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
-void generateEnv(Field oneField, int height, int width)
+void generateEnv(Field *oneField)
 {
 
     int i;
@@ -69,50 +73,50 @@ void generateEnv(Field oneField, int height, int width)
     int sum_neigh;
 
     //First loop, random generation (obstacle or not, Bernoulli)
-    for(i = 1; i < (height-1); i++)
+    for(i = 1; i < (oneField->height-1); i++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(j = 1; j < (oneField->length-1); j++)
         {
             monRand = rand()%10 + 1;
 
             if(monRand < 5)
             {
-                oneField[i][j] = WALL;
+                oneField->values[i][j] = WALL;
             }
         }
     }
 
     //Second loop to clean and prevent stuck situation
-    for(i = 1; i < (height-1); i++)
+    for(i = 1; i < (oneField->height-1); i++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(j = 1; j < (oneField->length-1); j++)
         {
-            sum_neigh = oneField[i-1][j-1] + oneField[i-1][j] + oneField[i][j-1] + oneField[i-1][j+1]
-                        + oneField[i+1][j-1] + oneField[i+1][j] + oneField[i][j+1] + oneField[i+1][j+1];
+            sum_neigh = oneField->values[i-1][j-1] + oneField->values[i-1][j] + oneField->values[i][j-1] + oneField->values[i-1][j+1]
+                        + oneField->values[i+1][j-1] + oneField->values[i+1][j] + oneField->values[i][j+1] + oneField->values[i+1][j+1];
 
             //Clean some obstacles
             if(sum_neigh < 2)
             {
-                oneField[i][j] = EMPTY;
+                oneField->values[i][j] = EMPTY;
             }
             //Prevent stuck
             else if(sum_neigh >= 4)
             {
-                oneField[i][j] = EMPTY;
+                oneField->values[i][j] = EMPTY;
             }
         }
     }
 
     //Third loop to fill blank
-    for(i = 1; i < (height-1); i++)
+    for(i = 1; i < (oneField->height-1); i++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(j = 1; j < (oneField->length-1); j++)
         {
-            sum_neigh = oneField[i-1][j] + oneField[i][j-1] + oneField[i+1][j] + oneField[i][j+1];
+            sum_neigh = oneField->values[i-1][j] + oneField->values[i][j-1] + oneField->values[i+1][j] + oneField->values[i][j+1];
 
             if(sum_neigh >= 3)
             {
-                oneField[i][j] = WALL;
+                oneField->values[i][j] = WALL;
             }
         }
     }
@@ -123,15 +127,22 @@ void generateEnv(Field oneField, int height, int width)
  * \brief function that free the field out of memory
  *
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
-void destructField(Field oneField, int height)
+void destructField(Field **oneField)
 {
-    int i;
-    for(i = 0; i < height; i++)
+    if(oneField != NULL)
     {
-        free(oneField[i]);
+        if(*oneField != NULL)
+        {
+            int i;
+            for(i = 0; i < (*oneField)->length; i++)
+            {
+                free((*oneField)->values[i]);
+            }
+            free((*oneField)->values);
+            free(*oneField);
+            oneField = NULL;
+        }
     }
-    free(oneField);
 }
