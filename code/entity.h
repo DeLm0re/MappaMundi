@@ -45,4 +45,16 @@ Entity* initialiseEntity(int x, int y, int visionRange);
  */
 void destructEntity(Entity** entity);
 
+/**
+ * \fn void showEntity(Entity* entity, SDL_Color color, int tileSize)
+ * \brief function used to free an Entity
+ *
+ * \param entity : the Entity to display
+ * \param renderer : the renderer used with the window. The renderer must have been set using SDL functions
+ * \param color : the color which will be used to display the entity
+ * \param tileSize : the size of one tile in the window
+ * \return void
+ */
+void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize);
+
 #endif
