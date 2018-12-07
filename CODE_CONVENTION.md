@@ -4,7 +4,7 @@ Normes de codage et conventions pour le projet technique
 ## Langage du code :
 
 Tout le code rédigé pour le projet sera écrit dans la langue de Shakespeare, l'Anglais (ce n'est pas le cas pour les exemples de ce document). Cela comprend aussi bien le code, que les commentaires de celui-ci. <br>
-À noté aussi que chaque instructions est collée à la conditions entre parenthese qui l'a suit. 
+À noté aussi que chaque instruction est collée à la condition entre parentheses qui l'a suit. 
 
 Pour exemple :
 
@@ -16,7 +16,7 @@ if(uneVariable == uneAutreVariable)
 if (uneVariable == uneAutreVariable)
 ```
 
-Dans le même principe, chaque clauses qui nécessite un bloc de code, sera suivit d'une accolade ouvrante et fermante *après un retour à la ligne*, même si ce bloc de code ne contient qu'une seule instruction.
+Dans le même principe, chaque clause qui nécessite un bloc de code, sera suivit d'une accolade ouvrante et fermante *après un retour à la ligne*, même si ce bloc de code ne contient qu'une seule instruction.
 
 Exemple à suivre :
 
@@ -38,7 +38,7 @@ for(i = 0;i < 10; i++) {
 }
 ```
 
-On notera dans cet exemple l'apparition d'une norme qui n'a pas encore été souligné. En effet, on devra respecter le fait de mettre un espace avant et après chaque opérateurs (+ - / * = < >).
+On notera dans cet exemple l'apparition d'une norme qui n'a pas encore été souligné. En effet, on devra respecter le fait de mettre un espace avant et après chaque opérateur (+ - / * = < >).
 
 ## Les tabulations :
 
@@ -68,7 +68,7 @@ if(uneVariable == UNECONSTANTE)
 
 ## Les déclarations de variables :
 
-Les déclarations seront faites en respectant la convention ***Camel case***. Celle-ci stipule que chaque mots soient liés sans espace et que chaqun d'entre eux commence par une majuscule à l’exception du premier.
+Les déclarations seront faites en respectant la convention ***Camel case***. Celle-ci stipule que chaque mots soit lié sans espace et que chacun d'entre eux commence par une majuscule à l’exception du premier.
 
 Voici quelques exemples :
 
@@ -77,12 +77,12 @@ int monNomDeVariable = maNouvelleValeur;
 
 monUrl = "https://unurl.fr"
 ```
->C’est surement la convention la plus utilisée. On la retrouve en JavaScript,en Java, C++, C# et bien plus. C’est également la forme la plus rependu dans les hashtag Twitter. cette convention est aussi utilisée par certaine marque pour afficher leur appartenance au monde numérique comme c’est le cas pour eBay et iPhone. Quand on utilise des acronymes (URL, CSS, HTML, etc…) en Camel Case, seule la première lettre de ces derniers sont à mettre en majuscule. <br>
+>C’est surement la convention la plus utilisée. On la retrouve en JavaScript,en Java, C++, C# et bien plus. C’est également la forme la plus rependu dans les hashtag Twitter. Cette convention est aussi utilisée par certaine marque pour afficher leur appartenance au monde numérique comme c’est le cas pour eBay et iPhone. Quand on utilise des acronymes (URL, CSS, HTML, etc…) en Camel Case, seule la première lettre de ces derniers sont à mettre en majuscule. <br>
 *https://wprock.fr/blog/conventions-nommage-programmation/*
 
 ## Les déclarations de constantes :
 
-Les déclarations de constantes doivent respecter une convention définie par l'équipe. Elle pose le fait que chaque constantes soient définies en majuscules. La principale raison qui explique l'application de cette convention est le fait que celle-ci permet de ne pas confondre les constantes et les variables, qui comme indiqué plus haut, sont sous la convention ***Camel case***.
+Les déclarations de constantes doivent respecter une convention définie par l'équipe. Elle pose le fait que chaque constante soit définie en majuscule. La principale raison qui explique l'application de cette convention est le fait que celle-ci permet de ne pas confondre les constantes et les variables, qui comme indiqué plus haut, sont sous la convention ***Camel case***.
 
 Voici un exemple de déclaration d'une constante, avec cette norme :
 
@@ -106,7 +106,7 @@ double uneAutreFonction(double maLargeur, double maHauteur);
 
 ## Les commentaires :
 
-Les commentaires devront respecter la norme imposée par *Doxygen*. Une explication de chaque fonctions devra être fait par un commentaire en Doxygen avant celle-ci. Concernant les commentaires entre les instructions du code, ils seront fait **avant l'instruction** et avec un double slash, ou un slash + étoile si ceux-ci sont conséquents.
+Les commentaires devront respecter la norme imposée par *Doxygen*. Une explication de chaque fonction devra être faite par un commentaire en Doxygen avant celle-ci. Concernant les commentaires entre les instructions du code, ils seront fait **avant l'instruction** et avec un double slash, ou un slash + étoile si ceux-ci sont conséquents.
 
 Des exemples à suivre :
 

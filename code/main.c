@@ -14,6 +14,7 @@
 #include "eventhandler.h"
 #include "entity.h"
 
+//Main of the programme
 int main(void)
 {
 	SDL_Color openSetColor = {80, 160, 80, 255};
