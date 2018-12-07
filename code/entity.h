@@ -9,6 +9,12 @@
  *
  */
 
+#ifndef H_ENTITY
+    #define H_ENTITY
+
+//Header file for core functions
+#include "core.h"
+
 //The structure entity used as a token which will be control by our neural network
 typedef struct Entity
 {
@@ -38,3 +44,5 @@ Entity* initialiseEntity(int x, int y, int visionRange);
  * \return void
  */
 void destructEntity(Entity** entity);
+
+#endif

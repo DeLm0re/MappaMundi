@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_PATHFINDING
+	#define H_PATHFINDING
+
 //Header file
 #include "core.h"
 
@@ -205,3 +208,6 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \return int
  */
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+
+
+#endif
