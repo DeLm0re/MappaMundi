@@ -42,10 +42,9 @@ node* initNode(int x, int y, int cost, int heuristic)
  *
  * \param x, y : the coordinate of the node used as a starting point for the pathfinding
  * \param oneField : the field in which we search a safe node
- * \param height, width : the height and the width of this specific field
  * \return node*
  */
-node* nearestNode(Field oneField, int height, int width, int x, int y)
+node* nearestNode(Field *oneField, int x, int y)
 {
 	int xNode = x;
 	int yNode = y;
@@ -54,9 +53,9 @@ node* nearestNode(Field oneField, int height, int width, int x, int y)
 	int neighboursOrder = 1;
 	bool findNode = false;
 
-	if((x >= 0) && (x < width) && (y >= 0) && (y <  height))
+	if((x >= 0) && (x < oneField->length) && (y >= 0) && (y <  oneField->height))
 	{
-		if(oneField[x][y] == EMPTY)
+		if(oneField->values[x][y] == EMPTY)
 		{
 			return initNode(x, y, 0, 0);
 		}
@@ -68,9 +67,9 @@ node* nearestNode(Field oneField, int height, int width, int x, int y)
 		{
 			for(j = (y-neighboursOrder); j <= (y+neighboursOrder); j++)
 			{
-				if((i >= 0) && (i < width) && (j >= 0) && (j <  height))
+				if((i >= 0) && (i < oneField->length) && (j >= 0) && (j <  oneField->height))
 				{
-					if(oneField[i][j] == EMPTY)
+					if(oneField->values[i][j] == EMPTY)
 					{
 						xNode = i;
 						yNode = j;
@@ -448,11 +447,9 @@ node* getPath(node** closedSet, node* endNode)
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \return bool
  */
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField)
 {
 	int x = currentNode->x;
 	int y = currentNode->y;
@@ -463,7 +460,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 	-It is not in the closed or open set
 	-It is in an empty tile
 	*/
-	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && theField[x-1][y] == EMPTY)
+	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && theField->values[x-1][y] == EMPTY)
 	{
 		//If everything is verify we create it
 		temp = initNode(x-1, y, currentNode->cost + 1, 0);
@@ -473,19 +470,19 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 		insertFrontNode(openSet, temp);
 	}
 	// etc.
-	if (x+1 < fieldWidth && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField[x+1][y] == EMPTY)
+	if (x+1 < theField->length && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField->values[x+1][y] == EMPTY)
 	{
 		temp = initNode(x+1, y, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1) && theField[x][y-1] == EMPTY)
+	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1) && theField->values[x][y-1] == EMPTY)
 	{
 		temp = initNode(x, y-1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y+1 < fieldHeight && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField[x][y+1] == EMPTY)
+	if (y+1 < theField->height && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField->values[x][y+1] == EMPTY)
 	{
 		temp = initNode(x, y+1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
@@ -502,11 +499,9 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \return int
  */
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField)
 {
 	//If their is no nodes left in the openSet
 	if(*openSet == NULL)
@@ -530,7 +525,7 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
 	else
 	{
 		//Otherwise, we add the neighbors into the open set
-		addNeighbors(openSet, closedSet, lowestNode, endNode, theField, fieldHeight, fieldWidth);
+		addNeighbors(openSet, closedSet, lowestNode, endNode, theField);
 		return NULL;
 	}
 }

@@ -152,3 +152,27 @@ void updateFieldOfViewEntity(Entity *entity)
         }
     }
 }
+
+/**
+ * \fn void updateMentalMapEntity(Entity *entity)
+ * \brief function that updates the mental map of an entity with it's actual field of view
+ * 
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateMentalMapEntity(Entity *entity)
+{
+    if(entity == NULL)
+        return;
+    if(entity->fieldOfView == NULL)
+        return;
+    
+    int indexFieldOfView;
+
+    for(indexFieldOfView = 0; indexFieldOfView < MAX_VIEWPOINT; indexFieldOfView++)
+    {
+        Point currentPoint = entity->fieldOfView[indexFieldOfView];
+
+        entity->mentalMap->values[currentPoint.y][currentPoint.x] = currentPoint.pointValue; 
+    }
+}

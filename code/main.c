@@ -61,9 +61,8 @@ int main(void)
 	const int fieldHeight = 50;
 	const int fieldWidth = 50;
 	const int tileSize = 10;
-	//Declaration of the field
-    Field theField;
-	//Declaration of the nodes for the pathfinding
+	//Declaration of the field and the nodes
+    Field *theField;
 	node* startNode = NULL;
 	node* endNode = NULL;
 	node* openSet = NULL;
@@ -75,29 +74,29 @@ int main(void)
 	while(data->endEvent == false)
 	{
 		//Initialisation and generation of the field
-		theField = initialiseField(fieldHeight, fieldWidth);
-		generateEnv(theField, fieldHeight, fieldWidth);
+		theField = initialiseField(fieldHeight, fieldWidth, EMPTY);
+		generateEnv(theField);
 		//Initialise the entity
 		entity = initialiseEntity(0, 0, 10);
 		//Initialisation of the nodes
-		startNode = nearestNode(theField, fieldHeight, fieldWidth, entity->x, entity->y);
+		startNode = nearestNode(theField, 0, 0);
 		//Updates the position of the entity for the nearest starting node
 		entity->x = startNode->x;
 		entity->y = startNode->y;
-		endNode = nearestNode(theField, fieldHeight, fieldWidth, fieldWidth, fieldHeight);
+		endNode = nearestNode(theField, fieldWidth, fieldHeight);
 		
 
 		insertFrontNode(&openSet, cpyNode(startNode));
 		while (path == NULL && data->endEvent == false)
 		{
 			//Do one step of A* algorithme
-			path = AStar(&openSet, &closedSet, startNode, endNode, theField, fieldHeight, fieldWidth);
+			path = AStar(&openSet, &closedSet, startNode, endNode, theField);
 
 			//Clear the screen
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderClear(renderer);
 			//Draw the field
-			drawField(renderer, theField, fieldHeight, fieldWidth, tileSize);
+			drawField(renderer, theField, tileSize);
 			//Draw a box around the field
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, fieldWidth*tileSize, fieldHeight*tileSize}));
@@ -155,7 +154,7 @@ int main(void)
 		closedSet = NULL;
 		path = NULL;
 		//Free the memory of the field
-		destructField(theField, fieldHeight);
+		destructField(&theField);
 		theField = NULL;
 	}
 

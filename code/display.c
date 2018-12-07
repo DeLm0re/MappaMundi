@@ -18,12 +18,10 @@
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
-int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int size)
+int drawField(SDL_Renderer *renderer, Field *oneField, int size)
 {
     int i;
     int j;
@@ -43,11 +41,11 @@ int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int
         return -1;
     }
 
-    for(i = 0; i < height; i++)
+    for(i = 0; i < oneField->height; i++)
     {
-        for(j = 0; j < width; j++)
+        for(j = 0; j < oneField->length; j++)
         {
-            if(oneField[i][j] == WALL)
+            if(oneField->values[i][j] == WALL)
             {
                 obstacle.x = size*i;
                 obstacle.y = size*j;

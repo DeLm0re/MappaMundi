@@ -46,10 +46,9 @@ node* initNode(int x, int y, int cost, int heuristic);
  *
  * \param x, y : the coordinate of the node used as a starting point for the pathfinding
  * \param oneField : the field in which we search a safe node
- * \param height, width : the height and the width of this specific field
  * \return node*
  */
-node* nearestNode(Field oneField, int height, int width, int x, int y);
+node* nearestNode(Field *oneField, int x, int y);
 
 /**
  * \fn void destructNodes(node** frontNode)
@@ -189,11 +188,9 @@ node* getPath(node** closedSet, node* endNode);
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \return bool
  */
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField);
 
 /**
  * \fn int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int fieldHeight, int fieldWidth)
@@ -204,11 +201,9 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \return int
  */
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField);
 
 
 #endif
