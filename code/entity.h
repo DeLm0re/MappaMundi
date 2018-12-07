@@ -1,11 +1,11 @@
 /**
  * \file entity.h
- * \brief Declaration of the functions prototypes
+ * \brief Prototype of the Entity management
  * \author Louis Schuck
  * \version 0.1
- * \date 29/11/2018
+ * \date 30/11/2018
  *
- * Module that contain the prototypes of the functions which are used to deal with the entity
+ * Module that contain the functions and the structure used by the neural network to navigate in the Field
  *
  */
 
