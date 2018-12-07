@@ -1,5 +1,16 @@
-#include "entity.h"
+/**
+ * \file entity.c
+ * \brief Functions that are used for managing the entity
+ * \author Louis Schuck
+ * \version 0.1
+ * \date 29/11/2018
+ *
+ * Module that contain the functions which are used to deal with the entity
+ *
+ */
 
+//Header file
+#include "entity.h"
 
 /**
  * \fn node* initialiseEntity(int x, int y, int visionRange)
