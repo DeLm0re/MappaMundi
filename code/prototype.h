@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_PROTOTYPE
+    #define H_PROTOTYPE
+
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,3 +35,4 @@
 //Typedef of field
 typedef int** Field;
 
+#endif
