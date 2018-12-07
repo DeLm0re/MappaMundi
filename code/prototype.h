@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_PROTOTYPE
+    #define H_PROTOTYPE
+
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,3 +37,6 @@ typedef int** Field;
 
 //Enumeration of what can be a point in the field
 typedef enum {EMPTY = 0, WALL = 1, FOG = 2} pointEnum;
+
+#endif
+

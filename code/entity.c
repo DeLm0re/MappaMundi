@@ -1,15 +1,15 @@
 /**
  * \file entity.c
- * \brief Functions that are used for managing the entity
+ * \brief The Entity management
  * \author Louis Schuck
  * \version 0.1
- * \date 29/11/2018
+ * \date 30/11/2018
  *
- * Module that contain the functions which are used to deal with the entity
+ * Module that contain the functions and the structure used by the neural network to navigate in the Field
  *
  */
 
-//Header file
+//Header files containing the prototypes
 #include "entity.h"
 
 /**

@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_DISPLAY
+    #define H_DISPLAY
+
 //Header file containing the prototypes
 #include "prototype.h"
 
@@ -33,3 +36,5 @@ int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int
  * \return int, can return an error during the drawing
  */
 int draw(SDL_Renderer *renderer);
+
+#endif

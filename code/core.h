@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_CORE
+    #define H_CORE
+
 //Header file for graphical display
 #include "display.h"
 
@@ -42,3 +45,5 @@ void generateEnv(Field oneField, int height, int width);
  * \return void
  */
 void destructField(Field oneField, int height);
+
+#endif

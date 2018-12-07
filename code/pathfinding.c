@@ -430,7 +430,7 @@ node* getPath(node** closedSet, node* endNode)
 	}
 	//Finaly we return the path
 	return path;
-	/*the logic behind the reconstruction of the path is simple : 
+	/*The logic behind the reconstruction of the path is simple : 
 	-we start with the last node of the path
 	-we find a neighbour with a cost directly inferior of the last added node
 	-we add it
@@ -471,6 +471,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 		//We insert it in the openSet
 		insertFrontNode(openSet, temp);
 	}
+	// etc.
 	if (x+1 < fieldWidth && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField[x+1][y] == EMPTY)
 	{
 		temp = initNode(x+1, y, currentNode->cost + 1, 0);
