@@ -26,6 +26,7 @@ Entity* initialiseEntity(int x, int y, int visionRange)
     entity->x = x;
     entity->y = y;
     entity->visionRange = visionRange;
+    return entity;
 }
 
 /**
@@ -48,6 +49,30 @@ void destructEntity(Entity** entity)
 }
 
 /**
+ * \fn void showEntity(Entity* entity, SDL_Color color, int tileSize)
+ * \brief function used to free an Entity
+ *
+ * \param entity : the Entity to display
+ * \param renderer : the renderer used with the window. The renderer must have been set using SDL functions
+ * \param color : the color which will be used to display the entity
+ * \param tileSize : the size of one tile in the window
+ * \return void
+ */
+void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize)
+{
+    //If the size of the tile is large enought to draw a rectangle
+	if (tileSize > 3)
+	{
+		//We set the drawing color
+		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        //We draw a rectangle at the correct coordiante
+        SDL_RenderFillRect(renderer, &((SDL_Rect) {
+            entity->x*tileSize + 2, 
+            entity->y*tileSize + 2, 
+            tileSize-4, 
+            tileSize-4}));
+	}
+
  * \fn void updateFieldOfViewEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *
