@@ -13,7 +13,7 @@
 #include "entity.h"
 
 /**
- * \fn node* initialiseEntity(int x, int y, int visionRange)
+ * \fn Entity* initialiseEntity(int x, int y, int visionRange)
  * \brief function that initialise an Entity. An Entity is used by the neural network to navigate in a Field
  *
  * \param x, y : the coordinate of the Entity
@@ -26,7 +26,25 @@ Entity* initialiseEntity(int x, int y, int visionRange)
     entity->x = x;
     entity->y = y;
     entity->visionRange = visionRange;
+    initialiseFieldOfViewEntity(entity);
     return entity;
+}
+
+/**
+ * \fn void* initialiseFieldOfView(Entity *entity);
+ * \brief function that initialise the field of view of an entity
+ * 
+ * \param *entity : the entity which have the field of view we want to update
+ * \return void
+ */
+void initialiseFieldOfViewEntity(Entity *entity)
+{
+    int i;
+
+    for(i = 0; i < MAX_VIEWPOINT; i++)
+    {
+        entity->fieldOfView[i] = NULL;
+    }
 }
 
 /**
@@ -44,6 +62,26 @@ void destructEntity(Entity** entity)
         {
             free(*entity);
             *entity = NULL;
+        }
+    }
+}
+
+/**
+ * \fn void destructFieldOfViewEntity(Entity *entity)
+ * \brief function used to free a field of view of an Entity
+ *
+ * \param entity : the Entity that contains the field of view we want to free
+ * \return void
+ */
+void destructFieldOfViewEntity(Entity *entity)
+{
+    int i;
+
+    for(i = 0; i < MAX_VIEWPOINT; i++)
+    {
+        if(entity->fieldOfView[i] != NULL)
+        {
+            free(entity->fieldOfView[i]);
         }
     }
 }
@@ -72,7 +110,9 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
             tileSize-4, 
             tileSize-4}));
 	}
+}
 
+/*
  * \fn void updateFieldOfViewEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *
@@ -81,6 +121,8 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  */
 void updateFieldOfViewEntity(Entity *entity)
 {
+    destructFieldOfViewEntity(entity);
+
     int i;
     int j;
     int heighEntity = entity->y;
