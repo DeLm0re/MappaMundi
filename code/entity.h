@@ -9,16 +9,28 @@
  *
  */
 
+//Header file
+#include "prototype.h"
+
 //The structure entity used as a token which will be control by our neural network
 typedef struct Entity
 {
     int x;
     int y;
     int visionRange;
+    Point* fieldOfView[50];
     //The Field of the mental map is to be added with his dimmension
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
 } Entity;
+
+//The structure point used as a point of a field which can be a wall, empty or fog
+typedef struct Point
+{
+    int x;
+    int y;
+    pointEnum pointValue;
+} Point;
 
 /**
  * \fn node* initialiseEntity(int x, int y, int visionRange)
@@ -38,3 +50,12 @@ Entity* initialiseEntity(int x, int y, int visionRange);
  * \return void
  */
 void destructEntity(Entity** entity);
+
+/**
+ * \fn void updateFieldOfViewEntity(Entity *entity)
+ * \brief function that update the field of view of an entity
+ *
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateFieldOfViewEntity(Entity *entity);

@@ -46,3 +46,42 @@ void destructEntity(Entity** entity)
         }
     }
 }
+
+/**
+ * \fn void updateFieldOfViewEntity(Entity *entity)
+ * \brief function that update the field of view of an entity
+ *
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateFieldOfViewEntity(Entity *entity)
+{
+    int i;
+    int j;
+    int heighEntity = entity->y;
+    int widthEntity = entity->x;
+    int visionRange = entity->visionRange;
+    int heighDifference;
+    int widthDifference;
+    int hypothenus;
+    int index = 0;
+
+    for(i = heighEntity - visionRange; i < heighEntity + visionRange; i++)
+    {
+        for(j = widthEntity - visionRange; j < widthEntity + visionRange; j++)
+        {
+            heighDifference = abs(heighEntity - i);
+            widthDifference = abs(widthEntity - j);
+
+            hypothenus = sqrt( (heighDifference* heighDifference) + (widthDifference * widthDifference) );
+
+            if(hypothenus <= visionRange)
+            {
+                entity->fieldOfView[index] = (Point*)malloc(sizeof(Point));
+                entity->fieldOfView[index]->x = j;
+                entity->fieldOfView[index]->y = i;
+                entity->fieldOfView[index]->pointValue = Field[i][j];
+            }
+        }
+    }
+}
