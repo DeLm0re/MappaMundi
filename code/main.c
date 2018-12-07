@@ -20,6 +20,7 @@ int main(void)
 	SDL_Color openSetColor = {80, 160, 80, 255};
 	SDL_Color closedSetColor = {160, 80, 80, 255};
 	SDL_Color pathColor = {80, 80, 160, 255};
+	SDL_Color entityColor = {80, 160, 160, 255};
 
 	int windowWidth = 1000;
 	int windowHeight = 1000;
@@ -60,21 +61,29 @@ int main(void)
 	const int fieldHeight = 50;
 	const int fieldWidth = 50;
 	const int tileSize = 10;
-	//Declaration of the field and the nodes
+	//Declaration of the field
     Field theField;
+	//Declaration of the nodes for the pathfinding
 	node* startNode = NULL;
 	node* endNode = NULL;
 	node* openSet = NULL;
 	node* closedSet = NULL;
 	node* path = NULL;
+	//Declaration of the entity wich will be used by the neural network
+	Entity* entity = NULL;
 
 	while(data->endEvent == false)
 	{
 		//Initialisation and generation of the field
 		theField = initialiseField(fieldHeight, fieldWidth);
 		generateEnv(theField, fieldHeight, fieldWidth);
+		//Initialise the entity
+		entity = initialiseEntity(0, 0, 10);
 		//Initialisation of the nodes
-		startNode = nearestNode(theField, fieldHeight, fieldWidth, 0, 0);
+		startNode = nearestNode(theField, fieldHeight, fieldWidth, entity->x, entity->y);
+		//Updates the position of the entity for the nearest starting node
+		entity->x = startNode->x;
+		entity->y = startNode->y;
 		endNode = nearestNode(theField, fieldHeight, fieldWidth, fieldWidth, fieldHeight);
 		
 
@@ -108,7 +117,9 @@ int main(void)
 			}
 		}
 		//Draw the final path
-		viewNodes(&path, renderer, pathColor, tileSize);	
+		viewNodes(&path, renderer, pathColor, tileSize);
+		//Draw the entity
+		showEntity(entity, renderer, entityColor, tileSize);
 		//Refresh the window
 		SDL_RenderPresent(renderer);
 
