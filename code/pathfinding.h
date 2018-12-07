@@ -114,7 +114,8 @@ void insertFrontNode(node** frontNode, node* newNode);
  *
  * \param frontNode : the top node of a chain list of node
  * \param renderer : the renderer used with the window. The renderer must have been set using SDL functions
- * \param col : the color which will be used to display the nodes
+ * \param color : the color which will be used to display the nodes
+ * \param tileSize : the size of one tile in the window
  * \return void
  */
 void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize);
