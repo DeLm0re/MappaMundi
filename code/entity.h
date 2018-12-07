@@ -65,7 +65,8 @@ void destructEntity(Entity** entity);
  * \return void
  */
 void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize);
-/*
+
+/**
  * \fn void updateFieldOfViewEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *

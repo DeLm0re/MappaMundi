@@ -72,7 +72,9 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
             tileSize-4, 
             tileSize-4}));
 	}
+}
 
+/*
  * \fn void updateFieldOfViewEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *
