@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_PATHFINDING
+	#define H_PATHFINDING
+
 //Header file
 #include "core.h"
 
@@ -91,3 +94,6 @@ node* getLowestNode(node** openSet);
 node* getPath(node** closedSet, node* endNode);
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+
+
+#endif
