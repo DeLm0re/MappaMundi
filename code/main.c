@@ -71,6 +71,9 @@ int main(void)
 	node* path = NULL;
 	//Declaration of the entity wich will be used by the neural network
 	Entity* entity = NULL;
+	//Used to make the entity move along the path found
+	int positionInPath = 0;
+	node* nodePosition = NULL;
 
 	while(data->endEvent == false)
 	{
@@ -118,8 +121,21 @@ int main(void)
 		}
 		//Draw the final path
 		viewNodes(&path, renderer, pathColor, tileSize);
+
 		//Draw the entity
 		showEntity(entity, renderer, entityColor, tileSize);
+		//Move the entity along the path
+		do
+		{
+			//get the next position
+			positionInPath++;
+			nodePosition = getNode(&path, positionInPath);
+			//Updates the position of the entity for the nearest starting node
+			entity->x = nodePosition->x;
+			entity->y = nodePosition->y;
+			//Draw the entity
+			showEntity(entity, renderer, entityColor, tileSize);
+		}while(nodePosition != NULL);
 		//Refresh the window
 		SDL_RenderPresent(renderer);
 
