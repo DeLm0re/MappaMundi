@@ -15,6 +15,14 @@
 //Header file for core functions
 #include "core.h"
 
+//The structure point used as a point of a field which can be a wall, empty or fog
+typedef struct Point
+{
+    int x;
+    int y;
+    pointEnum pointValue;
+} Point;
+
 //The structure entity used as a token which will be control by our neural network
 typedef struct Entity
 {
@@ -26,14 +34,6 @@ typedef struct Entity
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
 } Entity;
-
-//The structure point used as a point of a field which can be a wall, empty or fog
-typedef struct Point
-{
-    int x;
-    int y;
-    pointEnum pointValue;
-} Point;
 
 /**
  * \fn node* initialiseEntity(int x, int y, int visionRange)
@@ -73,6 +73,6 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  * \param entity : the Entity to update
  * \return void
  */
-void updateFieldOfViewEntity(Entity *entity);
+//void updateFieldOfViewEntity(Entity *entity);
 
 #endif

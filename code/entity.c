@@ -81,7 +81,7 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  * \param entity : the Entity to update
  * \return void
  */
-void updateFieldOfViewEntity(Entity *entity)
+/*void updateFieldOfViewEntity(Entity *entity)
 {
     int i;
     int j;
@@ -111,4 +111,4 @@ void updateFieldOfViewEntity(Entity *entity)
             }
         }
     }
-}
+}*/
