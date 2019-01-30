@@ -1,7 +1,7 @@
 MappaMundi
 =
 
-## Projet technique BISBDE : Cartographie
+## Technical project BISBDE : Cartography
 
-Réalisation d'une intelligence artificielle capable de se repérer dans son environnement proche et cartographier le terrain, 
-puis de prendre une décision sur le chemin à suivre en fonction de ces informations. Ceci appliqué dans le cadre de notre projet technique M1.
+Achievement of an artificial intelligence able to identify itself in its close environment and map the terrain,
+then make a decision on the path to follow based on this information. This applied as part of our technical project M1.
