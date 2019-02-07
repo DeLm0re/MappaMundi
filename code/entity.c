@@ -33,17 +33,28 @@ Entity* initialiseEntity(int x, int y, int visionRange)
 /**
  * \fn void* initialiseFieldOfView(Entity *entity);
  * \brief function that initialise the field of view of an entity
- * 
+ *
  * \param *entity : the entity which have the field of view we want to update
  * \return void
  */
 void initialiseFieldOfViewEntity(Entity *entity)
 {
     int i;
+    int j;
+    int diameter = 2*RADIUS_VIEWPOINT;
 
-    for(i = 0; i < MAX_VIEWPOINT; i++)
+    entity->fieldOfView = malloc(sizeof(Point**));
+
+    for(i = 0; i < diameter; i++)
     {
-        entity->fieldOfView[i] = NULL;
+        entity->fieldOfView[i] = malloc(sizeof(Point*) * diameter);
+    }
+    for(i = 0; i < diameter; i++)
+    {
+        for(j = 0; j < diameter; j++)
+        {
+            entity->>fieldOfView[i][j] = malloc(sizeof(Point) * diameter);
+        }
     }
 }
 
@@ -76,14 +87,29 @@ void destructEntity(Entity** entity)
 void destructFieldOfViewEntity(Entity *entity)
 {
     int i;
+    int j;
+    int diameter = 2*RADIUS_VIEWPOINT;
 
-    for(i = 0; i < MAX_VIEWPOINT; i++)
+    for(i = 0; i < diameter; i++)
+    {
+        for(j = 0; j < diameter; j++)
+        {
+            if(entity->fieldOfView[i][j] != NULL)
+            {
+                free(entity->fieldOfView[i][j]);
+            }
+        }
+    }
+
+    for(i = 0; i < diameter; i++)
     {
         if(entity->fieldOfView[i] != NULL)
         {
             free(entity->fieldOfView[i]);
         }
     }
+
+    free(entity->fieldOfView);
 }
 
 /**
@@ -105,9 +131,9 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
 		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
         //We draw a rectangle at the correct coordiante
         SDL_RenderFillRect(renderer, &((SDL_Rect) {
-            entity->x*tileSize + 2, 
-            entity->y*tileSize + 2, 
-            tileSize-4, 
+            entity->x*tileSize + 2,
+            entity->y*tileSize + 2,
+            tileSize-4,
             tileSize-4}));
 	}
 }

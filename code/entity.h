@@ -13,7 +13,7 @@
     #define H_ENTITY
 
 //Define the maximum number of points a field of view can have
-#define MAX_VIEWPOINT (50)
+#define RADIUS_VIEWPOINT (10)
 
 //Header file for core functions
 #include "core.h"
@@ -24,7 +24,7 @@ typedef struct Entity
     int x;
     int y;
     int visionRange;
-    Point* fieldOfView[MAX_VIEWPOINT];
+    Point** fieldOfView;
     //The Field of the mental map is to be added with his dimmension
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
@@ -51,7 +51,7 @@ Entity* initialiseEntity(int x, int y, int visionRange);
 /**
  * \fn void* initialiseFieldOfView(Entity *entity);
  * \brief function that initialise the field of view of an entity
- * 
+ *
  * \param *entity : the entity which have the field of view we want to update
  * \return void
  */
