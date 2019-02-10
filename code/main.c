@@ -78,7 +78,7 @@ int main(void)
 		theField = initialiseField(fieldHeight, fieldWidth);
 		generateEnv(theField, fieldHeight, fieldWidth);
 		//Initialise the entity
-		entity = initialiseEntity(0, 0, 10);
+		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT);
 		//Initialisation of the nodes
 		startNode = nearestNode(theField, fieldHeight, fieldWidth, entity->x, entity->y);
 		//Updates the position of the entity for the nearest starting node
