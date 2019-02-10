@@ -212,13 +212,57 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
     //b = ya - a*xa
     b = heighEntity - a * widthEntity;
 
-    for(x = widthEntity; x <= width; x += step)
+    //If x entity > x of the point
+    if(widthEntity >= width)
     {
-        y = a * x + b;
-
-        if(aField[(int)y][(int)x] == WALL)
+        for(x = widthEntity; x >= width; x = x - step)
         {
-            return(true);
+            y = a * x + b;
+
+            if(aField[(int)y][(int)x] == WALL)
+            {
+                return(true);
+            }
+        }
+    }
+    //If x entity < x of the point
+    if(widthEntity < width)
+    {
+        for(x = widthEntity; x <= width; x = x + step)
+        {
+            y = a * x + b;
+
+            if(aField[(int)y][(int)x] == WALL)
+            {
+                return(true);
+            }
+        }
+    }
+
+    //If x entity = x of the point
+    if(width == widthEntity)
+    {
+        //If y entity > y of the point
+        if(heighEntity >= heigh)
+        {
+            for(y = heighEntity; y >= heigh; y = y - step)
+            {
+                if(aField[(int)y][(int)x] == WALL)
+                {
+                    return(true);
+                }
+            }
+        }
+        //If y entity < y of the point
+        if(heighEntity < heigh)
+        {
+            for(y = heighEntity; y <= heigh; y = y + step)
+            {
+                if(aField[(int)y][(int)x] == WALL)
+                {
+                    return(true);
+                }
+            }
         }
     }
 
