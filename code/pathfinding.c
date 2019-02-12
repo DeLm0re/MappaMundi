@@ -61,7 +61,6 @@ node* nearestNode(Field oneField, int height, int width, int x, int y)
 			return initNode(x, y, 0, 0);
 		}
 	}
-
 	while(findNode == false)
 	{
 		for(i = (x-neighboursOrder); i <= (x+neighboursOrder); i++)

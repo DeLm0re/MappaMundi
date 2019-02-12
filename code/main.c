@@ -74,7 +74,7 @@ int main(void)
 	//Used to make the entity move along the path found
 	int positionInPath = 0;
 	node* nodePosition = NULL;
-
+	
 	while(data->endEvent == false)
 	{
 		//Initialisation and generation of the field
@@ -90,7 +90,7 @@ int main(void)
 		endNode = nearestNode(theField, fieldHeight, fieldWidth, fieldWidth, fieldHeight);
 		
 		//--- Pathfinding algorithm and visualisation
-
+        
 		insertFrontNode(&openSet, cpyNode(startNode));
 		while (path == NULL && data->endEvent == false)
 		{

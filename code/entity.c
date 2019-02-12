@@ -26,7 +26,12 @@ Entity* initialiseEntity(int x, int y, int visionRange)
     entity->x = x;
     entity->y = y;
     entity->visionRange = visionRange;
-    initialiseFieldOfViewEntity(entity);
+    
+    /////////////////////////////////////////////////////////////////////////////////////
+    //--- Fait marcher ce truc avant de le mettre sur master merci !!!!!!!!!!!!!!!! ---//
+    /////////////////////////////////////////////////////////////////////////////////////
+    
+    //initialiseFieldOfViewEntity(entity);
     return entity;
 }
 
