@@ -72,8 +72,8 @@ int main(void)
 	//Declaration of the entity wich will be used by the neural network
 	Entity* entity = NULL;
 	//Used to make the entity move along the path found
-	/*int positionInPath = 0;
-	node* nodePosition = NULL;*/
+	int positionInPath = 0;
+	node* nodePosition = NULL;
 
 	while(data->endEvent == false)
 	{
@@ -89,6 +89,7 @@ int main(void)
 		entity->y = startNode->y;
 		endNode = nearestNode(theField, fieldHeight, fieldWidth, fieldWidth, fieldHeight);
 		
+		//--- Pathfinding algorithm and visualisation
 
 		insertFrontNode(&openSet, cpyNode(startNode));
 		while (path == NULL && data->endEvent == false)
@@ -111,37 +112,50 @@ int main(void)
 			//Refresh the window
 			SDL_RenderPresent(renderer);
 
-			//If we quit
+			//If we want to interrupt the algorithme
 			if(event.type == SDL_QUIT)
 			{
+			    // We set the ending flag to true
 				data->endEvent = true;
 				quit = SDL_TRUE;
 				statut = EXIT_SUCCESS;
 			}
 		}
-		//Draw the final path
+		//Draw the final path once the algorithm is finished
 		viewNodes(&path, renderer, pathColor, tileSize);
-
-		//Draw the entity
-		showEntity(entity, renderer, entityColor, tileSize);
-
+		
+		//We wait two seconds before moving the entity along the way
+        SDL_Delay(200);
+        
+        //--- Entity movement along the line
 
 		//Move the entity along the path
-		/*do
+		do
 		{
 			//get the next position
 			positionInPath++;
 			nodePosition = getNode(&path, positionInPath);
-			//Updates the position of the entity for the nearest starting node
-			entity->x = nodePosition->x;
-			entity->y = nodePosition->y;
-			//Draw the entity
-			showEntity(entity, renderer, entityColor, tileSize);
-		}while(nodePosition != NULL);*/
-
-		//Refresh the window
-		SDL_RenderPresent(renderer);
-
+			//If we find the next nodePosition
+			if (nodePosition != NULL)
+			{
+			    //Updates the position of the entity for the nearest starting node
+			    entity->x = nodePosition->x;
+			    entity->y = nodePosition->y;
+			    
+			    //Clear the screen
+			    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			    SDL_RenderClear(renderer);
+			    //Draw the field
+			    drawField(renderer, theField, fieldHeight, fieldWidth, tileSize);
+			    //Draw the entity
+			    showEntity(entity, renderer, entityColor, tileSize);
+			    //Refresh the window
+		    	SDL_RenderPresent(renderer);
+		    	//We wait 30ms at each step to see the entity moving
+			    SDL_Delay(30);
+			}
+		}while(nodePosition != NULL);
+		
 		// Tant que le flag pour quitter est faux
 		while(!quit)
 		{
@@ -173,6 +187,8 @@ int main(void)
 		openSet = NULL;
 		closedSet = NULL;
 		path = NULL;
+		nodePosition = NULL;
+		positionInPath = 0;
 		//Free the memory of the field
 		destructField(theField, fieldHeight);
 		theField = NULL;
