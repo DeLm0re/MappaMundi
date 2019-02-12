@@ -440,6 +440,31 @@ node* getPath(node** closedSet, node* endNode)
 }
 
 /**
+ * \fn node* getPath(node** closedSet)
+ * \brief function which create a chain list of nodes which represent the obtimised path
+ * using the closedSet of a A* algorithme
+ * 
+ * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
+ * \param endNode : the end node of the A* algorithme
+ * \return node*
+ */
+node* getNode(node** path, int index)
+{
+	//The node use as a cursor to navigate
+	node* cursor = *path;
+	//The curent index
+	int i = 0;
+	//For each node in the set
+	while(cursor != NULL && i != index)
+	{
+		i++;
+		cursor = cursor->linkedNode;
+	}
+	//Once everything is checked, we return the lowest ndoe found
+	return cursor;
+}
+
+/**
  * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int fieldHeight, int fieldWidth)
  * \brief function which adds and create the neighboors of a given node in the openSet of the A* algorithme
  * It adds neighbors only if they are not in the closedSet or the openSet

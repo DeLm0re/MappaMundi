@@ -174,11 +174,22 @@ node* getLowestNode(node** openSet);
  * \brief function which create a chain list of nodes which represent the obtimised path
  * using the closedSet of a A* algorithme
  * 
+ * \param path : the chain list of nodes which represent the path of the A* algorithme
+ * \param index : the node position of the node you want to return from the path
+ * \return node*
+ */
+node* getPath(node** closedSet, node* endNode);
+
+/**
+ * \fn node* getPath(node** closedSet)
+ * \brief function which create a chain list of nodes which represent the obtimised path
+ * using the closedSet of a A* algorithme
+ * 
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param endNode : the end node of the A* algorithme
  * \return node*
  */
-node* getPath(node** closedSet, node* endNode);
+node* getNode(node** path, int index);
 
 /**
  * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int fieldHeight, int fieldWidth)
