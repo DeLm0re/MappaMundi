@@ -472,9 +472,10 @@ node* getNode(node** path, int index)
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
+ * \param theField : the field used to see if it is a valid neighbor or not
  * \param fieldHeight : the total number of rows of the map we use
  * \param fieldWidth : the total number of columns of the map we use
- * \return bool
+ * \return void
  */
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
 {
@@ -518,17 +519,18 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 }
 
 /**
- * \fn int AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int fieldHeight, int fieldWidth)
+ * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int fieldHeight, int fieldWidth)
  * \brief function which do one step of the A* algorithme
- * once the path has been found, returns the complete path. OtherWise return NULL
+ * once the path has been found, returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  * 
  * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
+ * \param theField : the field used to see where the path can go
  * \param fieldHeight : the total number of rows of the map we use
  * \param fieldWidth : the total number of columns of the map we use
- * \return int
+ * \return node*
  */
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth)
 {
@@ -558,3 +560,55 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
 		return NULL;
 	}
 }
+
+/**
+ * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth, bool* endEvent)
+ * \brief function that finds the path between two points (start, end)
+ * returns the complete path. OtherWise return NULL. If no path possible, returns startNode
+ * 
+ * \param startNode : the starting node of the A* algorithme
+ * \param endNode : the end node of the A* algorithme
+ * \param theField : the field used to see where the path can go
+ * \param fieldHeight : the total number of rows of the map we use
+ * \param fieldWidth : the total number of columns of the map we use
+ * \param endEvent : pointer to boolean that will trigger the end of the function. Put NULL if there is none
+ * \return node*
+ */
+node* findPathFrom_To_(node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth, bool* endEvent)
+{
+	node* path = NULL; //Used to store a path
+	node* openSet = NULL; //Used to store the openSet for the A* algorithm
+	node* closedSet = NULL; //Used to store the closedSet for the A* algorithm
+
+	bool* endPathfinding = NULL; // Used to know if we need to interrupt the loop
+
+	//If an endEvent was given as an argument
+	if (endEvent != NULL) 
+	{
+		//We use it as a reference to end the loop
+		endPathfinding = endEvent;
+	}
+	//Otherwise
+	else
+	{
+		//We use a dummy boolean set to false
+		bool valueEndPathfinding = false;
+		endPathfinding = &valueEndPathfinding;
+	}
+	
+	//We give to the openSet a starting point
+	insertFrontNode(&openSet, cpyNode(startNode));
+	while (path == NULL && *endPathfinding == false)
+	{
+		//We do one step of A* algorithme
+		path = AStar(&openSet, &closedSet, startNode, endNode, theField, fieldHeight, fieldWidth);
+	}
+
+	//We free the openSet and closedSet from the memory
+	destructNodes(&openSet);
+	destructNodes(&closedSet);
+
+	//We return the path we found
+	return path;
+}
+

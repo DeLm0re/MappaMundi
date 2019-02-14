@@ -17,9 +17,9 @@
 //Main of the programme
 int main(void)
 {
-	SDL_Color openSetColor = {80, 160, 80, 255};
-	SDL_Color closedSetColor = {160, 80, 80, 255};
-	SDL_Color pathColor = {80, 80, 160, 255};
+/* 	SDL_Color openSetColor = {80, 160, 80, 255};
+	SDL_Color closedSetColor = {160, 80, 80, 255}; 
+	SDL_Color pathColor = {80, 80, 160, 255};*/
 	SDL_Color entityColor = {80, 160, 160, 255};
 
 	int windowWidth = 1000;
@@ -66,8 +66,8 @@ int main(void)
 	//Declaration of the nodes for the pathfinding
 	node* startNode = NULL;
 	node* endNode = NULL;
-	node* openSet = NULL;
-	node* closedSet = NULL;
+/* 	node* openSet = NULL;
+	node* closedSet = NULL; */
 	node* path = NULL;
 	//Declaration of the entity wich will be used by the neural network
 	Entity* entity = NULL;
@@ -91,41 +91,7 @@ int main(void)
 		
 		//--- Pathfinding algorithm and visualisation
         
-		insertFrontNode(&openSet, cpyNode(startNode));
-		while (path == NULL && data->endEvent == false)
-		{
-			//Do one step of A* algorithme
-			path = AStar(&openSet, &closedSet, startNode, endNode, theField, fieldHeight, fieldWidth);
-
-			//Clear the screen
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderClear(renderer);
-			//Draw the field
-			drawField(renderer, theField, fieldHeight, fieldWidth, tileSize);
-			//Draw a box around the field
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-			SDL_RenderDrawRect(renderer, &((SDL_Rect){0, 0, fieldWidth*tileSize, fieldHeight*tileSize}));
-			//Draw the openSet and the closedSet of the A* algorithme
-			viewNodes(&openSet, renderer, openSetColor, tileSize);
-			viewNodes(&closedSet, renderer, closedSetColor, tileSize);
-
-			//Refresh the window
-			SDL_RenderPresent(renderer);
-
-			//If we want to interrupt the algorithme
-			if(event.type == SDL_QUIT)
-			{
-			    // We set the ending flag to true
-				data->endEvent = true;
-				quit = SDL_TRUE;
-				statut = EXIT_SUCCESS;
-			}
-		}
-		//Draw the final path once the algorithm is finished
-		viewNodes(&path, renderer, pathColor, tileSize);
-		
-		//We wait two seconds before moving the entity along the way
-        SDL_Delay(200);
+		path = findPathFrom_To_(startNode, endNode, theField, fieldHeight, fieldWidth, &(data->endEvent));
         
         //--- Entity movement along the line
 
@@ -178,15 +144,8 @@ int main(void)
 
 		//Free the memory of all the nodes
 		destructNodes(&path);
-		destructNodes(&openSet);
-		destructNodes(&closedSet);
 		destructNodes(&startNode);
 		destructNodes(&endNode);
-		startNode = NULL;
-		endNode = NULL;
-		openSet = NULL;
-		closedSet = NULL;
-		path = NULL;
 		nodePosition = NULL;
 		positionInPath = 0;
 		//Free the memory of the field
