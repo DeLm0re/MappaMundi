@@ -72,7 +72,7 @@ void initialiseFieldOfViewEntity(Entity *entity)
  */
 void destructEntity(Entity** entity)
 {
-    destructFieldOfView(*entity);
+    destructFieldOfViewEntity(*entity);
 
     if(entity != NULL)
     {
@@ -102,7 +102,7 @@ void destructFieldOfViewEntity(Entity *entity)
         {
             free(entity->fieldOfView[i]);
         }
-        
+
         free(entity->fieldOfView);
         entity->fieldOfView = NULL;
     }
@@ -165,7 +165,7 @@ void updateFieldOfViewEntity(Field aField, Entity *entity)
                 
                 if(distanceCarre < rayonCarre)
                 {
-                    entity->fieldOfView[heigh][width]->pointValue = aField[heigh][width];
+                    entity->fieldOfView[heigh][width].pointValue = aField[heigh][width];
                 }
             }
         }
