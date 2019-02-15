@@ -48,27 +48,22 @@ void initialiseFieldOfViewEntity(Entity *entity)
     int j;
     int diameter = 2*RADIUS_VIEWPOINT;
 
-    entity->fieldOfView = malloc(sizeof(Point***));
+    entity->fieldOfView = NULL;
+
+    entity->fieldOfView = (Point**)malloc(sizeof(Point*) * diameter);
 
     for(i = 0; i < diameter; i++)
     {
-        entity->fieldOfView[i] = malloc(sizeof(Point**) * diameter);
-    }
-    for(i = 0; i < diameter; i++)
-    {
-        for(j = 0; j < diameter; j++)
-        {
-            entity->fieldOfView[i][j] = malloc(sizeof(Point*) * diameter);
-        }
+        entity->fieldOfView[i] = (Point*)malloc(sizeof(Point) * diameter);
     }
 
     for(i = 0; i < diameter; i++)
     {
         for(j = 0; j < diameter; j++)
         {
-            entity->fieldOfView[i][j]->pointValue = FOG;
-            entity->fieldOfView[i][j]->y = i;
-            entity->fieldOfView[i][j]->x = j;
+            entity->fieldOfView[i][j].x = j;
+            entity->fieldOfView[i][j].y = i;
+            entity->fieldOfView[i][j].pointValue = FOG;
         }
     }
 }
@@ -82,6 +77,8 @@ void initialiseFieldOfViewEntity(Entity *entity)
  */
 void destructEntity(Entity** entity)
 {
+    destructFieldOfViewEntity(*entity);
+
     if(entity != NULL)
     {
         if(*entity != NULL)
@@ -102,30 +99,18 @@ void destructEntity(Entity** entity)
 void destructFieldOfViewEntity(Entity *entity)
 {
     int i;
-    int j;
     int diameter = 2*RADIUS_VIEWPOINT;
 
-    for(i = 0; i < diameter; i++)
+    if(entity->fieldOfView != NULL)
     {
-        for(j = 0; j < diameter; j++)
-        {
-            if(entity->fieldOfView[i][j] != NULL)
-            {
-                free(entity->fieldOfView[i][j]);
-            }
-        }
-    }
-
-    for(i = 0; i < diameter; i++)
-    {
-        if(entity->fieldOfView[i] != NULL)
+        for(i = 0; i < diameter; i++)
         {
             free(entity->fieldOfView[i]);
         }
-    }
 
-    free(entity->fieldOfView);
-    entity->fieldOfView = NULL;
+        free(entity->fieldOfView);
+        entity->fieldOfView = NULL;
+    }
 }
 
 /**
@@ -185,7 +170,7 @@ void updateFieldOfViewEntity(Field aField, Entity *entity)
                 
                 if(distanceCarre < rayonCarre)
                 {
-                    entity->fieldOfView[heigh][width]->pointValue = aField[heigh][width];
+                    entity->fieldOfView[heigh][width].pointValue = aField[heigh][width];
                 }
             }
         }

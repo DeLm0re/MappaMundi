@@ -32,7 +32,7 @@ typedef struct Entity
     int x;
     int y;
     int visionRange;
-    Point*** fieldOfView;
+    Point** fieldOfView;
     //The Field of the mental map is to be added with his dimmension
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
