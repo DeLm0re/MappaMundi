@@ -54,11 +54,11 @@ Field initialiseField(int width, int height)
 
     int widthIndex, heightIndex;
 
-    for(widthindex = 1; widthIndex < (widthIndex - 1); widthIndex++)
+    for(widthIndex = 1; widthIndex < (widthIndex - 1); widthIndex++)
     {
         for(heightIndex = 1; heightIndex < (height - 1); heightIndex++)
         {
-            oneField.data[widhtIndex][heightIndex] = EMPTY;
+            oneField.data[widthIndex][heightIndex] = EMPTY;
         }
     }
 
@@ -68,7 +68,7 @@ Field initialiseField(int width, int height)
         oneField.data[width-1][heightIndex] = WALL;
     }
 
-    for(widthindex = 0; widthIndex < widthIndex; widthIndex++)
+    for(widthIndex = 0; widthIndex < widthIndex; widthIndex++)
     {
         oneField.data[widthIndex][height-1] = WALL;
         oneField.data[widthIndex][0] = WALL;
