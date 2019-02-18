@@ -37,13 +37,13 @@ Field initialiseField(int height, int width);
 void generateEnv(Field oneField, int height, int width);
 
 /**
- * \fn void destructField(Field oneField, int height)
+ * \fn void destructField(Field oneField, int width)
  * \brief function that free the field out of memory
  *
  * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
-void destructField(Field oneField, int height);
+void destructField(Field *oneField, int width);
 
 #endif
