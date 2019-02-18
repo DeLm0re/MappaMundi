@@ -86,15 +86,15 @@ int main(void)
 		//Initialise the entity
 		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT);
 		//Initialisation of the nodes
-		startNode = nearestNode(theField, fieldHeight, fieldWidth, entity->x, entity->y);
+		startNode = nearestNode(theField, entity->x, entity->y);
 		//Updates the position of the entity for the nearest starting node
 		entity->x = startNode->x;
 		entity->y = startNode->y;
-		endNode = nearestNode(theField, fieldHeight, fieldWidth, fieldWidth, fieldHeight);
+		endNode = nearestNode(theField, fieldWidth, fieldHeight);
 		
 		//--- Pathfinding algorithm and visualisation
         
-		path = findPathFrom_To_(startNode, endNode, theField, fieldHeight, fieldWidth, &(data->endEvent));
+		path = findPathFrom_To_(startNode, endNode, theField, &(data->endEvent));
         
         //--- Entity movement along the line
 
@@ -115,7 +115,7 @@ int main(void)
 			    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			    SDL_RenderClear(renderer);
 			    //Draw the field
-			    drawField(renderer, theField, fieldHeight, fieldWidth, tileSize);
+			    drawField(renderer, theField, tileSize);
 			    //Draw the entity
 			    showEntity(entity, renderer, entityColor, tileSize);
 			    //Refresh the window

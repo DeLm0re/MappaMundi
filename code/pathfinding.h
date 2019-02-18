@@ -39,17 +39,16 @@ typedef struct node
 node* initNode(int x, int y, int cost, int heuristic);
 
 /**
- * \fn node* nearestNode(Field oneField, int height, int width, int x, int y)
+ * \fn node* nearestNode(Field oneField, int x, int y)
  * \brief function that return the nearest and safest node around the node which is used as a starting point for the pathfinding
  * But this node can be a WALL. A node is a structure used in the A* algorithme
  * A node can be used to create a chain list of node
  *
  * \param x, y : the coordinate of the node used as a starting point for the pathfinding
  * \param oneField : the field in which we search a safe node
- * \param height, width : the height and the width of this specific field
  * \return node*
  */
-node* nearestNode(Field oneField, int height, int width, int x, int y);
+node* nearestNode(Field oneField, int x, int y);
 
 /**
  * \fn void destructNodes(node** frontNode)
@@ -192,7 +191,7 @@ node* getPath(node** closedSet, node* endNode);
 node* getNode(node** path, int index);
 
 /**
- * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, int fieldHeight, int fieldWidth)
+ * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode)
  * \brief function which adds and create the neighboors of a given node in the openSet of the A* algorithme
  * It adds neighbors only if they are not in the closedSet or the openSet
  * 
@@ -201,14 +200,12 @@ node* getNode(node** path, int index);
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
  * \param theField : the field used to see if it is a valid neighbor or not
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \return void
  */
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField);
 
 /**
- * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, int fieldHeight, int fieldWidth)
+ * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode)
  * \brief function which do one step of the A* algorithme
  * once the path has been found, returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  * 
@@ -217,25 +214,21 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
  * \param theField : the field used to see where the path can go
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \return node*
  */
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth);
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField);
 
 /**
- * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth, bool* endEvent)
+ * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field theField, bool* endEvent)
  * \brief function that finds the path between two points (start, end)
  * returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  * 
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
  * \param theField : the field used to see where the path can go
- * \param fieldHeight : the total number of rows of the map we use
- * \param fieldWidth : the total number of columns of the map we use
  * \param endEvent : pointer to boolean that will trigger the end of the function. Put NULL if there is none
  * \return node*
  */
-node* findPathFrom_To_(node* startNode, node* endNode, Field theField, int fieldHeight, int fieldWidth, bool* endEvent);
+node* findPathFrom_To_(node* startNode, node* endNode, Field theField, bool* endEvent);
 
 #endif
