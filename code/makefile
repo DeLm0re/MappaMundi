@@ -1,6 +1,7 @@
 WARNING_FLAGS = -Wall -Wextra -Werror -pedantic -Wformat\
 				-Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes\
-				-Wmissing-prototypes -Wcast-align -pedantic-errors
+				-Wmissing-prototypes -Wcast-align -pedantic-errors\
+				-Wno-strict-overflow
 
 CFLAGS = -std=c99 -m64 -O3 $(WARNING_FLAGS)
 CLIBS = -lpthread -lm `sdl2-config --cflags --libs`
