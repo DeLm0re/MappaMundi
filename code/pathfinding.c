@@ -297,7 +297,7 @@ int distNodes(node* n1, node* n2)
  * return true or false
  * 
  * \param frontNode : the top node of a chain list of node
- * x, y : the coordinate to check
+ * \param x, y : the coordinate to check
  * \return bool
  */
 bool isInSet(node** frontNode, int x, int y)
