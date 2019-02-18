@@ -17,6 +17,9 @@
 //Main of the programme
 int main(void)
 {
+	//Initialize the random seed value
+	srand(time(0));
+
 /* 	SDL_Color openSetColor = {80, 160, 80, 255};
 	SDL_Color closedSetColor = {160, 80, 80, 255}; 
 	SDL_Color pathColor = {80, 80, 160, 255};*/
