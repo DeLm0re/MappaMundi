@@ -175,8 +175,6 @@ void destructField(Field *oneField)
     if(oneField != NULL)
     {
         destruct2DIntArray(oneField->data, oneField->width);
-        free(oneField);
-        oneField = NULL;
     }
 }
 
