@@ -145,3 +145,35 @@ void destructField(Field *oneField, int width)
         }
     }
 }
+
+/**
+ * \fn int surface2DCircle(int radius)
+ * \brief function that return the surface of a 2D circle
+ *
+ * \param int radius : the radius of the circle
+ * \return int : the surface
+ */
+int surface2DCircle(int radius)
+{
+    int rayonCarre = radius * radius;
+    float distanceCarre;
+    int initialX = 0;
+    int initialY = 0;
+    int increment = 0;
+    int x, y;
+
+    for(x = initialX - radius; x < initialX + radius; x++)
+    {
+        for(y = initialY - radius; y < initialY + radius; y++)
+        {
+            distanceCarre = (x - initialX)*(x - initialX) + (y - initialY)*(y - initialY);
+                    
+            if(distanceCarre < rayonCarre)
+            {
+                increment++;
+            }
+        }
+    }
+
+    return(increment);
+}

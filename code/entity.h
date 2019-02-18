@@ -93,9 +93,11 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  *
  * \param entity : the Entity to update
  *        field : the field on which we are based
+ *        fieldHeight : the height of the field
+ *        fieldWidth : the width of the field
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, Entity *entity);
+void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity);
 
 /*
  * \fn bool behindAWall(Field aField, Entity *entity, int heigh, int width)

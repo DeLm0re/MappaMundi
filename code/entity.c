@@ -42,7 +42,7 @@ void initialiseFieldOfViewEntity(Entity *entity)
 {
     int i;
     int j;
-    int diameter = 2*RADIUS_VIEWPOINT;
+    int diameter = 2*entity->visionRange;
 
     entity->fieldOfView = NULL;
 
@@ -95,7 +95,7 @@ void destructEntity(Entity** entity)
 void destructFieldOfViewEntity(Entity *entity)
 {
     int i;
-    int diameter = 2*RADIUS_VIEWPOINT;
+    int diameter = 2*entity->visionRange;
 
     if(entity->fieldOfView != NULL)
     {
@@ -141,21 +141,23 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  *
  * \param entity : the Entity to update
  *        field : the field on which we are based
+ *        fieldHeight : the height of the field
+ *        fieldWidth : the width of the field
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, Entity *entity)
+void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity)
 {
     int i,j;
     int height;
     int width;
     int heightEntity = entity->y;
     int widthEntity = entity->x;
-    int rayonCarre = RADIUS_VIEWPOINT * RADIUS_VIEWPOINT;
+    int rayonCarre = entity->visionRange * entity->visionRange;
     float distanceCarre;
 
-    for(i = 0; i < 2*RADIUS_VIEWPOINT; i++)
+    for(i = 0; i < 2*entity->visionRange; i++)
     {
-        for(j = 0; j < 2*RADIUS_VIEWPOINT; j++)
+        for(j = 0; j < 2*entity->visionRange; j++)
         {
             entity->fieldOfView[j][i].x = j;
             entity->fieldOfView[j][i].y = i;
@@ -163,19 +165,22 @@ void updateFieldOfViewEntity(Field aField, Entity *entity)
         }
     }
 
-    for(height = heightEntity - RADIUS_VIEWPOINT; height < heightEntity + RADIUS_VIEWPOINT; height++)
+    for(height = heightEntity - entity->visionRange; height < heightEntity + entity->visionRange; height++)
     {
-        for(width = widthEntity + RADIUS_VIEWPOINT; width < widthEntity + RADIUS_VIEWPOINT; width++)
+        for(width = widthEntity - entity->visionRange; width < widthEntity + entity->visionRange; width++)
         {
-            distanceCarre = (height - widthEntity)*(height - widthEntity) + (width - heightEntity)*(width - heightEntity);
-                
-                if(distanceCarre < rayonCarre)
-                {
-                    if(behindAWall(aField, entity, height, width) != true)
+            if( (height >= 0) && (height < fieldHeight) && (width >= 0) && (width < fieldWidth) )
+            {
+                distanceCarre = (height - heightEntity)*(height - heightEntity) + (width - widthEntity)*(width - widthEntity);
+                    
+                    if(distanceCarre < rayonCarre)
                     {
-                        entity->fieldOfView[width][height].pointValue = aField[width][height];
+                        if(behindAWall(aField, entity, height, width) != true)
+                        {
+                            entity->fieldOfView[width][height].pointValue = aField[width][height];
+                        }
                     }
-                }
+            }
         }
     }
 }
