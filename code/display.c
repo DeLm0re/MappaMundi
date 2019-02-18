@@ -47,10 +47,10 @@ int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int
     {
         for(j = 0; j < width; j++)
         {
-            if(oneField[i][j] == WALL)
+            if(oneField[j][i] == WALL)
             {
-                obstacle.x = size*i;
-                obstacle.y = size*j;
+                obstacle.x = size*j;
+                obstacle.y = size*i;
                 obstacle.h = size;
                 obstacle.w = size;
                 //We draw a black square at the same position.

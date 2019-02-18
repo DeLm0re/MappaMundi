@@ -125,17 +125,23 @@ void generateEnv(Field oneField, int height, int width)
  * \fn void destructField(Field oneField, int width)
  * \brief function that free the field out of memory
  *
- * \param oneField : A field, which is a tydef declared in core.h (2D array)
+ * \param *oneField : A pointer on a field, which is a tydef declared in core.h (2D array)
  * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
 void destructField(Field *oneField, int width)
 {
     int i;
-    for(i = 0; i < width; i++)
+    if(oneField != NULL)
     {
-        free(*(oneField[i]));
+        if(*oneField != NULL)
+        {
+            for(i = 0; i < width; i++)
+            {
+                free((*oneField)[i]);
+            }
+            free(*(oneField));
+            *oneField = NULL;
+        }
     }
-    free(*(oneField));
-    *oneField = NULL;
 }
