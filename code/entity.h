@@ -111,16 +111,4 @@ void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Enti
  */
 bool behindAWall(Field aField, Entity *entity, int heigh, int width);
 
-/*
- * \fn int pointsInFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity)
- * \brief function that count the points in a the field of view of an entity
- *
- * \param entity : the Entity
- *        field : the field on which we are based
- *        fieldHeight : the height of the field
- *        fieldWidth : the width of the field
- * \return void
- */
-int pointsInFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity);
-
 #endif
