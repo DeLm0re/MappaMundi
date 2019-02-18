@@ -164,15 +164,15 @@ void updateFieldOfViewEntity(Field aField, Entity *entity)
     {
         for(width = widthEntity + RADIUS_VIEWPOINT; width < widthEntity + RADIUS_VIEWPOINT; width++)
         {
-            if(behindAWall(aField, entity, heigh, width) != true)
-            {
-                distanceCarre = (heigh - widthEntity)*(heigh - widthEntity) + (width - heighEntity)*(width - heighEntity);
+            distanceCarre = (heigh - widthEntity)*(heigh - widthEntity) + (width - heighEntity)*(width - heighEntity);
                 
                 if(distanceCarre < rayonCarre)
                 {
-                    entity->fieldOfView[heigh][width].pointValue = aField[heigh][width];
+                    if(behindAWall(aField, entity, heigh, width) != true)
+                    {
+                        entity->fieldOfView[heigh][width].pointValue = aField[heigh][width];
+                    }
                 }
-            }
         }
     }
 }
