@@ -93,9 +93,11 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  *
  * \param entity : the Entity to update
  *        field : the field on which we are based
+ *        fieldHeight : the height of the field
+ *        fieldWidth : the width of the field
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, Entity *entity);
+void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity);
 
 /*
  * \fn bool behindAWall(Field aField, Entity *entity, int heigh, int width)
@@ -108,5 +110,17 @@ void updateFieldOfViewEntity(Field aField, Entity *entity);
  * \return bool : true if the point is behind a wall, false if not
  */
 bool behindAWall(Field aField, Entity *entity, int heigh, int width);
+
+/*
+ * \fn int pointsInFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity)
+ * \brief function that count the points in a the field of view of an entity
+ *
+ * \param entity : the Entity
+ *        field : the field on which we are based
+ *        fieldHeight : the height of the field
+ *        fieldWidth : the width of the field
+ * \return void
+ */
+int pointsInFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity);
 
 #endif
