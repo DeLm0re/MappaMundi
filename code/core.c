@@ -28,7 +28,7 @@ int **create2DIntArray(int width, int height)
     int widthIndex;
     for(widthIndex = 0; widthIndex < width; widthIndex++)
     {
-        array[i] = malloc(sizeof(int) * height);
+        array[widthIndex] = malloc(sizeof(int) * height);
     }
 
     return array;
