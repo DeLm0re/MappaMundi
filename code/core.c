@@ -36,16 +36,19 @@ Field initialiseField(int height, int width)
     {
         for(j = 1; j < (width-1); j++)
         {
-            oneField[i][j] = EMPTY;
+            oneField[j][i] = EMPTY;
         }
     }
 
     for(i = 0; i < height; i++)
     {
-        oneField[i][0] = WALL;
         oneField[0][i] = WALL;
-        oneField[i][width-1] = WALL;
-        oneField[height-1][i] = WALL;
+        oneField[width-1][i] = WALL;
+    }
+    for(i = 0; i < width; i++)
+    {
+        oneField[i][height-1] = WALL;
+        oneField[i][0] = WALL;
     }
     return oneField;
 }
@@ -77,7 +80,7 @@ void generateEnv(Field oneField, int height, int width)
 
             if(monRand < 5)
             {
-                oneField[i][j] = WALL;
+                oneField[j][i] = WALL;
             }
         }
     }
@@ -87,18 +90,18 @@ void generateEnv(Field oneField, int height, int width)
     {
         for(j = 1; j < (width-1); j++)
         {
-            sum_neigh = oneField[i-1][j-1] + oneField[i-1][j] + oneField[i][j-1] + oneField[i-1][j+1]
-                        + oneField[i+1][j-1] + oneField[i+1][j] + oneField[i][j+1] + oneField[i+1][j+1];
+            sum_neigh = oneField[j-1][i-1] + oneField[j-1][i] + oneField[j][i-1] + oneField[j-1][i+1]
+                        + oneField[j+1][i-1] + oneField[j+1][i] + oneField[j][i+1] + oneField[j+1][i+1];
 
             //Clean some obstacles
             if(sum_neigh < 2)
             {
-                oneField[i][j] = EMPTY;
+                oneField[j][i] = EMPTY;
             }
             //Prevent stuck
             else if(sum_neigh >= 4)
             {
-                oneField[i][j] = EMPTY;
+                oneField[j][i] = EMPTY;
             }
         }
     }
@@ -108,30 +111,37 @@ void generateEnv(Field oneField, int height, int width)
     {
         for(j = 1; j < (width-1); j++)
         {
-            sum_neigh = oneField[i-1][j] + oneField[i][j-1] + oneField[i+1][j] + oneField[i][j+1];
+            sum_neigh = oneField[j][i-1] + oneField[j-1][i] + oneField[j][i+1] + oneField[j+1][i];
 
             if(sum_neigh >= 3)
             {
-                oneField[i][j] = WALL;
+                oneField[j][i] = WALL;
             }
         }
     }
 }
 
 /**
- * \fn void destructField(Field oneField, int height)
+ * \fn void destructField(Field oneField, int width)
  * \brief function that free the field out of memory
  *
- * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param *oneField : A pointer on a field, which is a tydef declared in core.h (2D array)
+ * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \return void
  */
-void destructField(Field oneField, int height)
+void destructField(Field *oneField, int width)
 {
     int i;
-    for(i = 0; i < height; i++)
+    if(oneField != NULL)
     {
-        free(oneField[i]);
+        if(*oneField != NULL)
+        {
+            for(i = 0; i < width; i++)
+            {
+                free((*oneField)[i]);
+            }
+            free(*(oneField));
+            *oneField = NULL;
+        }
     }
-    free(oneField);
 }
