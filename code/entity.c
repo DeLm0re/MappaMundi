@@ -57,9 +57,9 @@ void initialiseFieldOfViewEntity(Entity *entity)
     {
         for(j = 0; j < diameter; j++)
         {
-            entity->fieldOfView[i][j].x = j;
-            entity->fieldOfView[i][j].y = i;
-            entity->fieldOfView[i][j].pointValue = FOG;
+            entity->fieldOfView[j][i].x = j;
+            entity->fieldOfView[j][i].y = i;
+            entity->fieldOfView[j][i].pointValue = FOG;
         }
     }
 }
@@ -145,28 +145,35 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  */
 void updateFieldOfViewEntity(Field aField, Entity *entity)
 {
-    destructFieldOfViewEntity(entity);
-
-    initialiseFieldOfViewEntity(entity);
-
-    int heigh;
+    int i,j;
+    int height;
     int width;
-    int heighEntity = entity->y;
+    int heightEntity = entity->y;
     int widthEntity = entity->x;
     int rayonCarre = RADIUS_VIEWPOINT * RADIUS_VIEWPOINT;
     float distanceCarre;
-    
-    for(heigh = heighEntity - RADIUS_VIEWPOINT; heigh < heighEntity + RADIUS_VIEWPOINT; heigh++)
+
+    for(i = 0; i < 2*RADIUS_VIEWPOINT; i++)
+    {
+        for(j = 0; j < 2*RADIUS_VIEWPOINT; j++)
+        {
+            entity->fieldOfView[j][i].x = j;
+            entity->fieldOfView[j][i].y = i;
+            entity->fieldOfView[j][i].pointValue = FOG;
+        }
+    }
+
+    for(height = heightEntity - RADIUS_VIEWPOINT; height < heightEntity + RADIUS_VIEWPOINT; height++)
     {
         for(width = widthEntity + RADIUS_VIEWPOINT; width < widthEntity + RADIUS_VIEWPOINT; width++)
         {
-            distanceCarre = (heigh - widthEntity)*(heigh - widthEntity) + (width - heighEntity)*(width - heighEntity);
+            distanceCarre = (height - widthEntity)*(height - widthEntity) + (width - heightEntity)*(width - heightEntity);
                 
                 if(distanceCarre < rayonCarre)
                 {
-                    if(behindAWall(aField, entity, heigh, width) != true)
+                    if(behindAWall(aField, entity, height, width) != true)
                     {
-                        entity->fieldOfView[heigh][width].pointValue = aField[heigh][width];
+                        entity->fieldOfView[width][height].pointValue = aField[width][height];
                     }
                 }
         }
@@ -175,28 +182,28 @@ void updateFieldOfViewEntity(Field aField, Entity *entity)
 
 /*
  * \fn bool behindAWall(Field aField, Entity *entity, int heigh, int width)
- * \brief function that says if a point of our field is behind a wall or not from a POV of an other point
+ * \brief function that says if a point of our field is behind a wall or not from a POV of the entity
  *
  * \param entity : the Entity from where we have the POV
  *        field : the field on which we are based
- *        heigh : the heigh of the point we want to study
+ *        height : the heigh of the point we want to study
  *        width : the width of the point we want to
  * \return bool : true if the point is behind a wall, false if not
  */
-bool behindAWall(Field aField, Entity *entity, int heigh, int width)
+bool behindAWall(Field aField, Entity *entity, int height, int width)
 {
     float a;
     float b;
     float y;
     float x;
-    int heighEntity = entity->y;
+    int heightEntity = entity->y;
     int widthEntity = entity->x;
     float step = 0.1;
 
-    a = (heigh - heighEntity)/(width - widthEntity);
+    a = (height - heightEntity)/(width - widthEntity);
     
     //b = ya - a*xa
-    b = heighEntity - a * widthEntity;
+    b = heightEntity - a * widthEntity;
 
     //If x entity > x of the point
     if(widthEntity >= width)
@@ -205,9 +212,9 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
         {
             y = a * x + b;
 
-            if( (y != heigh) && (x != width) )
+            if( (y != height) && (x != width) )
             {
-                if(aField[(int)y][(int)x] == WALL)
+                if(aField[(int)x][(int)y] == WALL)
                 {
                     return(true);
                 }
@@ -222,9 +229,9 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
         {
             y = a * x + b;
 
-            if( (y != heigh) && (x != width) )
+            if( (y != height) && (x != width) )
             {
-                if(aField[(int)y][(int)x] == WALL)
+                if(aField[(int)x][(int)y] == WALL)
                 {
                     return(true);
                 }
@@ -236,13 +243,13 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
     if(width == widthEntity)
     {
         //If y entity > y of the point
-        if(heighEntity >= heigh)
+        if(heightEntity >= height)
         {
-            for(y = heighEntity; y >= heigh; y = y - step)
+            for(y = heightEntity; y >= height; y = y - step)
             {
-                if( (y != heigh) && (x != width) )
+                if( (y != height) && (x != width) )
                 {
-                    if(aField[(int)y][(int)width] == WALL)
+                    if(aField[(int)width][(int)y] == WALL)
                     {
                         return(true);
                     }
@@ -250,13 +257,13 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
             }
         }
         //If y entity < y of the point
-        if(heighEntity < heigh)
+        if(heightEntity < height)
         {
-            for(y = heighEntity; y <= heigh; y = y + step)
+            for(y = heightEntity; y <= height; y = y + step)
             {
-                if( (y != heigh) && (x != width) )
+                if( (y != height) && (x != width) )
                 {
-                    if(aField[(int)y][(int)width] == WALL)
+                    if(aField[(int)width][(int)y] == WALL)
                     {
                         return(true);
                     }
