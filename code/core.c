@@ -68,7 +68,7 @@ Field initialiseField(int width, int height)
         oneField.data[width-1][heightIndex] = WALL;
     }
 
-    for(widthIndex = 0; widthIndex < widthIndex; widthIndex++)
+    for(widthIndex = 0; widthIndex < width; widthIndex++)
     {
         oneField.data[widthIndex][height-1] = WALL;
         oneField.data[widthIndex][0] = WALL;
