@@ -13,20 +13,17 @@
 #include "display.h"
 
 /**
- * \fn int drawField(SDL_Renderer *renderer, field oneField)
+ * \fn int drawField(SDL_Renderer *renderer, field oneField, int size)
  * \brief function that draw our field in a graphical display
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param oneField : A field, which is a tydef declared in core.h (2D array structure)
  * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
-int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int size)
+int drawField(SDL_Renderer *renderer, Field oneField, int size)
 {
-    int i;
-    int j;
+    int w, h;
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color black = {0, 0, 0, 255};
     SDL_Rect obstacle = {0, 0, 0, 0};
@@ -43,14 +40,14 @@ int drawField(SDL_Renderer *renderer, Field oneField, int height, int width, int
         return -1;
     }
 
-    for(i = 0; i < height; i++)
+    for(w = 0; w < oneField.width; w++)
     {
-        for(j = 0; j < width; j++)
+        for(h = 0; h < oneField.height; h++)
         {
-            if(oneField[j][i] == WALL)
+            if(oneField.data[w][h] == WALL)
             {
-                obstacle.x = size*j;
-                obstacle.y = size*i;
+                obstacle.x = size*w;
+                obstacle.y = size*h;
                 obstacle.h = size;
                 obstacle.w = size;
                 //We draw a black square at the same position.
