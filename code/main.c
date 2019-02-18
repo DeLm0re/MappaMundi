@@ -82,7 +82,7 @@ int main(void)
 	{
 		//Initialisation and generation of the field
 		theField = initialiseField(fieldHeight, fieldWidth);
-		generateEnv(theField, fieldHeight, fieldWidth);
+		generateEnv(theField);
 		//Initialise the entity
 		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT);
 		//Initialisation of the nodes
@@ -152,7 +152,7 @@ int main(void)
 		nodePosition = NULL;
 		positionInPath = 0;
 		//Free the memory of the field
-		destructField(&theField, fieldWidth);
+		destructField(&theField);
 	}
 
 	//Ending the thread
