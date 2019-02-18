@@ -24,16 +24,15 @@
 #include <string.h>
 #include <stdbool.h>
 
-//Our define
-    //Definition of a case's value if it is empty
-    /*#define EMPTY (0)
-    //Definition of a case's value if it is a wall
-    #define WALL (1)
-    //Definition of a case's value if it is fog
-    #define FOG (2)*/
 
 //Typedef of field
-typedef int** Field;
+typedef struct Field
+{
+    int width;
+    int height;
+    int** data;
+}Field;
+
 
 //Enumeration of what can be a point in the field
 typedef enum {EMPTY = 0, WALL = 1, FOG = 2} pointEnum;

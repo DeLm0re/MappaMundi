@@ -12,44 +12,68 @@
 //Header file containing the prototypes
 #include "core.h"
 
+
 /**
- * \fn Field initialiseField(int height, int width)
- * \brief function that initialise our field to make our environment
+ * \fn int **create2DIntArray(int height, int width)
+ * \brief function that creates a 2 dimension array of int
  *
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \return Field : A field, which is a tydef declared in core.h (2D array)
+ * \param width : width of the array
+ * \param height : height of the array
+ * \return int** : A pointer to the created array
  */
-Field initialiseField(int height, int width)
+int **create2DIntArray(int width, int height)
 {
-
-    int i;
-    int j;
-
-    Field oneField = malloc(sizeof(int*) * width);
-    for(i = 0; i < width; i++)
+    int **array = malloc(sizeof(int*) * width);
+    
+    int widthIndex;
+    for(widthIndex = 0; widthIndex < width; widthIndex++)
     {
-        oneField[i] = malloc(sizeof(int) * height);
+        array[i] = malloc(sizeof(int) * height);
     }
 
-    for(i = 1; i < (height-1); i++)
+    return array;
+}
+
+
+/**
+ * \fn Field initialiseField(int width, int height)
+ * \brief function that initialise our field to make our environment
+ *
+ * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \return Field : A field, which is a tydef declared in core.h (2D array struct)
+ */
+Field initialiseField(int width, int height)
+{
+
+    Field oneField;
+
+    oneField.width = width;
+    oneField.height = height;
+    oneField.data = create2DIntArray(width, height);
+
+    int widthIndex, heightIndex;
+
+    for(widthindex = 1; widthIndex < (widthIndex - 1); widthIndex++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(heightIndex = 1; heightIndex < (height - 1); heightIndex++)
         {
-            oneField[j][i] = EMPTY;
+            oneField.data[widhtIndex][heightIndex] = EMPTY;
         }
     }
 
-    for(i = 0; i < height; i++)
+    for(heightIndex = 0; heightIndex < height; heightIndex++)
     {
-        oneField[0][i] = WALL;
-        oneField[width-1][i] = WALL;
+        oneField.data[0][heightIndex] = WALL;
+        oneField.data[width-1][heightIndex] = WALL;
     }
-    for(i = 0; i < width; i++)
+
+    for(widthindex = 0; widthIndex < widthIndex; widthIndex++)
     {
-        oneField[i][height-1] = WALL;
-        oneField[i][0] = WALL;
+        oneField.data[widthIndex][height-1] = WALL;
+        oneField.data[widthIndex][0] = WALL;
     }
+
     return oneField;
 }
 
@@ -57,90 +81,104 @@ Field initialiseField(int height, int width)
  * \fn void generateEnv(field oneField)
  * \brief function that generate our field to make our environment
  *
- * \param oneField : A field, which is a tydef declared in core.h (2D array)
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param oneField : A field, which is a tydef declared in core.h (2D array structure)
  * \return void
  */
-void generateEnv(Field oneField, int height, int width)
+void generateEnv(Field oneField)
 {
 
-    int i;
-    int j;
-    srand(time(0));
+    int w; //i
+    int h; //j
     int monRand;
     int sum_neigh;
 
     //First loop, random generation (obstacle or not, Bernoulli)
-    for(i = 1; i < (height-1); i++)
+    for(w = 1; w < (oneField.width-1); w++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(h = 1; h < (oneField.height-1); h++)
         {
             monRand = rand()%10 + 1;
 
             if(monRand < 5)
             {
-                oneField[j][i] = WALL;
+                oneField.data[w][h] = WALL;
             }
         }
     }
 
     //Second loop to clean and prevent stuck situation
-    for(i = 1; i < (height-1); i++)
+    for(w = 1; w < (oneField.width-1); w++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(h = 1; h < (oneField.height-1); h++)
         {
-            sum_neigh = oneField[j-1][i-1] + oneField[j-1][i] + oneField[j][i-1] + oneField[j-1][i+1]
-                        + oneField[j+1][i-1] + oneField[j+1][i] + oneField[j][i+1] + oneField[j+1][i+1];
+            sum_neigh = oneField.data[w-1][h-1] + oneField.data[w-1][h] + oneField.data[w][h-1] + oneField.data[w-1][h+1]
+                        + oneField.data[w+1][h-1] + oneField.data[w+1][h] + oneField.data[w][h+1] + oneField.data[w+1][h+1];
 
             //Clean some obstacles
             if(sum_neigh < 2)
             {
-                oneField[j][i] = EMPTY;
+                oneField.data[w][h] = EMPTY;
             }
             //Prevent stuck
             else if(sum_neigh >= 4)
             {
-                oneField[j][i] = EMPTY;
+                oneField.data[w][h] = EMPTY;
             }
         }
     }
 
     //Third loop to fill blank
-    for(i = 1; i < (height-1); i++)
+    for(w = 1; w < (oneField.width-1); w++)
     {
-        for(j = 1; j < (width-1); j++)
+        for(h = 1; h < (oneField.height-1); h++)
         {
-            sum_neigh = oneField[j][i-1] + oneField[j-1][i] + oneField[j][i+1] + oneField[j+1][i];
+            sum_neigh = oneField.data[w][h-1] + oneField.data[w-1][h] + oneField.data[w][h+1] + oneField.data[w+1][h];
 
             if(sum_neigh >= 3)
             {
-                oneField[j][i] = WALL;
+                oneField.data[w][h] = WALL;
             }
         }
     }
 }
 
 /**
- * \fn void destructField(Field oneField, int width)
- * \brief function that free the field out of memory
+ * \fn void destruct2DIntArray(int **array, int width)
+ * \brief function that free the 2D array out of memory
  *
- * \param *oneField : A pointer on a field, which is a tydef declared in core.h (2D array)
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param **array : The array to free
+ * \param width : width of the array
  * \return void
  */
-void destructField(Field *oneField, int width)
+void destruct2DIntArray(int **array, int width)
+{
+    int i;
+    if(array != NULL)
+    {
+        for(i = 0; i < width; i++)
+            {
+                free(array[i]);
+            }
+            free(array);
+    }
+}
+
+/**
+ * \fn void destructField(Field oneField)
+ * \brief function that free the field out of memory
+ *
+ * \param *oneField : A pointer on a field, which is a tydef declared in core.h (2D array structure)
+ * \return void
+ */
+void destructField(Field *oneField)
 {
     int i;
     if(oneField != NULL)
     {
         if(*oneField != NULL)
         {
-            for(i = 0; i < width; i++)
-            {
-                free((*oneField)[i]);
-            }
-            free(*(oneField));
+            destruct2DIntArray(oneField->data, oneField->width);
+            free(*oneField);
             *oneField = NULL;
         }
     }
