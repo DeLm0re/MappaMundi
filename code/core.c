@@ -172,15 +172,11 @@ void destruct2DIntArray(int **array, int width)
  */
 void destructField(Field *oneField)
 {
-    int i;
     if(oneField != NULL)
     {
-        if(*oneField != NULL)
-        {
-            destruct2DIntArray(oneField->data, oneField->width);
-            free(*oneField);
-            *oneField = NULL;
-        }
+        destruct2DIntArray(oneField->data, oneField->width);
+        free(oneField);
+        oneField = NULL;
     }
 }
 
