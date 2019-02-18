@@ -27,11 +27,7 @@ Entity* initialiseEntity(int x, int y, int visionRange)
     entity->y = y;
     entity->visionRange = visionRange;
     
-    /////////////////////////////////////////////////////////////////////////////////////
-    //--- Fait marcher ce truc avant de le mettre sur master merci !!!!!!!!!!!!!!!! ---//
-    /////////////////////////////////////////////////////////////////////////////////////
-    
-    //initialiseFieldOfViewEntity(entity);
+    initialiseFieldOfViewEntity(entity);
     return entity;
 }
 
@@ -195,7 +191,7 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
     float x;
     int heighEntity = entity->y;
     int widthEntity = entity->x;
-    float step = 0.2;
+    float step = 0.1;
 
     a = (heigh - heighEntity)/(width - widthEntity);
     
@@ -209,12 +205,16 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
         {
             y = a * x + b;
 
-            if(aField[(int)y][(int)x] == WALL)
+            if( (y != heigh) && (x != width) )
             {
-                return(true);
+                if(aField[(int)y][(int)x] == WALL)
+                {
+                    return(true);
+                }
             }
         }
     }
+
     //If x entity < x of the point
     if(widthEntity < width)
     {
@@ -222,9 +222,12 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
         {
             y = a * x + b;
 
-            if(aField[(int)y][(int)x] == WALL)
+            if( (y != heigh) && (x != width) )
             {
-                return(true);
+                if(aField[(int)y][(int)x] == WALL)
+                {
+                    return(true);
+                }
             }
         }
     }
@@ -237,9 +240,12 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
         {
             for(y = heighEntity; y >= heigh; y = y - step)
             {
-                if(aField[(int)y][(int)x] == WALL)
+                if( (y != heigh) && (x != width) )
                 {
-                    return(true);
+                    if(aField[(int)y][(int)width] == WALL)
+                    {
+                        return(true);
+                    }
                 }
             }
         }
@@ -248,9 +254,12 @@ bool behindAWall(Field aField, Entity *entity, int heigh, int width)
         {
             for(y = heighEntity; y <= heigh; y = y + step)
             {
-                if(aField[(int)y][(int)x] == WALL)
+                if( (y != heigh) && (x != width) )
                 {
-                    return(true);
+                    if(aField[(int)y][(int)width] == WALL)
+                    {
+                        return(true);
+                    }
                 }
             }
         }
