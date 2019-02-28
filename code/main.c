@@ -152,8 +152,7 @@ int main(void)
 		nodePosition = NULL;
 		positionInPath = 0;
 		//Free the memory of the field
-		destructField(theField);
-		theField = NULL;
+		destructField(&theField);
 	}
 
 	//Ending the thread

@@ -166,16 +166,20 @@ void destruct2DIntArray(int **array, int width)
  * \fn void destructField(Field oneField)
  * \brief function that free the field out of memory
  *
- * \param *oneField : A pointer on a field, which is a tydef declared in core.h (2D array structure)
+ * \param **oneField : A double pointer on a field, which is a tydef declared in core.h (2D array structure)
  * \return void
  */
-void destructField(Field *oneField)
+void destructField(Field **oneField)
 {
     if(oneField != NULL)
     {
-        destruct2DIntArray(oneField->data, oneField->width);
-        oneField->data = NULL;
-        free(oneField);
+        if(*oneField != NULL)
+        {
+            destruct2DIntArray((*oneField)->data, (*oneField)->width);
+            (*oneField)->data = NULL;
+            free(*oneField);
+            *oneField = NULL;
+        }
     }
 }
 
