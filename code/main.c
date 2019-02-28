@@ -65,7 +65,7 @@ int main(void)
 	const int fieldWidth = 50;
 	const int tileSize = 10;
 	//Declaration of the field
-    Field theField;
+    Field *theField = NULL;
 	//Declaration of the nodes for the pathfinding
 	node* startNode = NULL;
 	node* endNode = NULL;
@@ -152,7 +152,8 @@ int main(void)
 		nodePosition = NULL;
 		positionInPath = 0;
 		//Free the memory of the field
-		destructField(&theField);
+		destructField(theField);
+		theField = NULL;
 	}
 
 	//Ending the thread

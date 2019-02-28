@@ -31,18 +31,18 @@ int **create2DIntArray(int width, int height);
  *
  * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \return Field : A field, which is a tydef declared in core.h (2D array struct)
+ * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
-Field initialiseField(int width, int height);
+Field *initialiseField(int width, int height);
 
 /**
  * \fn void generateEnv(field oneField)
  * \brief function that generate our field to make our environment
  *
- * \param oneField : A field, which is a tydef declared in core.h (2D array structure)
+ * \param oneField : Poiter to a field, which is a tydef declared in core.h (2D array structure)
  * \return void
  */
-void generateEnv(Field oneField);
+void generateEnv(Field *oneField);
 
 /**
  * \fn void destruct2DIntArray(int **array, int width)

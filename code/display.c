@@ -17,11 +17,11 @@
  * \brief function that draw our field in a graphical display
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \param oneField : A field, which is a tydef declared in core.h (2D array structure)
+ * \param oneField* : Poiter to a field, which is a tydef declared in core.h (2D array structure)
  * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
-int drawField(SDL_Renderer *renderer, Field oneField, int size)
+int drawField(SDL_Renderer *renderer, Field *oneField, int size)
 {
     int w, h;
     SDL_Color white = {255, 255, 255, 255};
@@ -40,11 +40,11 @@ int drawField(SDL_Renderer *renderer, Field oneField, int size)
         return -1;
     }
 
-    for(w = 0; w < oneField.width; w++)
+    for(w = 0; w < oneField->width; w++)
     {
-        for(h = 0; h < oneField.height; h++)
+        for(h = 0; h < oneField->height; h++)
         {
-            if(oneField.data[w][h] == WALL)
+            if(oneField->data[w][h] == WALL)
             {
                 obstacle.x = size*w;
                 obstacle.y = size*h;

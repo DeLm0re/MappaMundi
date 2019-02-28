@@ -45,10 +45,10 @@ node* initNode(int x, int y, int cost, int heuristic);
  * A node can be used to create a chain list of node
  *
  * \param x, y : the coordinate of the node used as a starting point for the pathfinding
- * \param oneField : the field in which we search a safe node
+ * \param oneField* : poiter to the field in which we search a safe node
  * \return node*
  */
-node* nearestNode(Field oneField, int x, int y);
+node* nearestNode(Field *oneField, int x, int y);
 
 /**
  * \fn void destructNodes(node** frontNode)
@@ -199,10 +199,10 @@ node* getNode(node** path, int index);
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
- * \param theField : the field used to see if it is a valid neighbor or not
+ * \param theField* : poiter to the field used to see if it is a valid neighbor or not
  * \return void
  */
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField);
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField);
 
 /**
  * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode)
@@ -213,10 +213,10 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param theField : the field used to see where the path can go
+ * \param theField* : pointer the field used to see where the path can go
  * \return node*
  */
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField);
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField);
 
 /**
  * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field theField, bool* endEvent)
@@ -225,10 +225,10 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
  * 
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param theField : the field used to see where the path can go
+ * \param theField* : pointer to the field used to see where the path can go
  * \param endEvent : pointer to boolean that will trigger the end of the function. Put NULL if there is none
  * \return node*
  */
-node* findPathFrom_To_(node* startNode, node* endNode, Field theField, bool* endEvent);
+node* findPathFrom_To_(node* startNode, node* endNode, Field *theField, bool* endEvent);
 
 #endif

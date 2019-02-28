@@ -41,10 +41,10 @@ node* initNode(int x, int y, int cost, int heuristic)
  * A node can be used to create a chain list of node
  *
  * \param x, y : the coordinate of the node used as a starting point for the pathfinding
- * \param oneField : the field in which we search a safe node
+ * \param oneField* : poiter to the field in which we search a safe node
  * \return node*
  */
-node* nearestNode(Field oneField, int x, int y)
+node* nearestNode(Field *oneField, int x, int y)
 {
 	int xNode = x;
 	int yNode = y;
@@ -53,9 +53,9 @@ node* nearestNode(Field oneField, int x, int y)
 	int neighboursOrder = 1;
 	bool findNode = false;
 
-	if((x >= 0) && (x < oneField.width) && (y >= 0) && (y <  oneField.height))
+	if((x >= 0) && (x < oneField->width) && (y >= 0) && (y <  oneField->height))
 	{
-		if(oneField.data[x][y] == EMPTY)
+		if(oneField->data[x][y] == EMPTY)
 		{
 			return initNode(x, y, 0, 0);
 		}
@@ -66,9 +66,9 @@ node* nearestNode(Field oneField, int x, int y)
 		{
 			for(j = (y-neighboursOrder); j <= (y+neighboursOrder); j++)
 			{
-				if((i >= 0) && (i < oneField.width) && (j >= 0) && (j <  oneField.height))
+				if((i >= 0) && (i < oneField->width) && (j >= 0) && (j <  oneField->height))
 				{
-					if(oneField.data[i][j] == EMPTY)
+					if(oneField->data[i][j] == EMPTY)
 					{
 						xNode = i;
 						yNode = j;
@@ -471,10 +471,10 @@ node* getNode(node** path, int index)
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
- * \param theField : the field used to see if it is a valid neighbor or not
+ * \param theField* : poiter to the field used to see if it is a valid neighbor or not
  * \return void
  */
-void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field theField)
+void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField)
 {
 	int x = currentNode->x;
 	int y = currentNode->y;
@@ -485,7 +485,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 	-It is not in the closed or open set
 	-It is in an empty tile
 	*/
-	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && theField.data[x-1][y] == EMPTY)
+	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && theField->data[x-1][y] == EMPTY)
 	{
 		//If everything is verify we create it
 		temp = initNode(x-1, y, currentNode->cost + 1, 0);
@@ -495,19 +495,19 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 		insertFrontNode(openSet, temp);
 	}
 	// etc.
-	if (x+1 < theField.width && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField.data[x+1][y] == EMPTY)
+	if (x+1 < theField->width && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField->data[x+1][y] == EMPTY)
 	{
 		temp = initNode(x+1, y, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1) && theField.data[x][y-1] == EMPTY)
+	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1) && theField->data[x][y-1] == EMPTY)
 	{
 		temp = initNode(x, y-1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y+1 < theField.height && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField.data[x][y+1] == EMPTY)
+	if (y+1 < theField->height && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField->data[x][y+1] == EMPTY)
 	{
 		temp = initNode(x, y+1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
@@ -524,10 +524,10 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param theField : the field used to see where the path can go
+ * \param theField* : pointer the field used to see where the path can go
  * \return node*
  */
-node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field theField)
+node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField)
 {
 	//If their is no nodes left in the openSet
 	if(*openSet == NULL)
@@ -563,11 +563,11 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
  * 
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \param theField : the field used to see where the path can go
+ * \param theField* : pointer to the field used to see where the path can go
  * \param endEvent : pointer to boolean that will trigger the end of the function. Put NULL if there is none
  * \return node*
  */
-node* findPathFrom_To_(node* startNode, node* endNode, Field theField, bool* endEvent)
+node* findPathFrom_To_(node* startNode, node* endNode, Field *theField, bool* endEvent)
 {
 	node* path = NULL; //Used to store a path
 	node* openSet = NULL; //Used to store the openSet for the A* algorithm

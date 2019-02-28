@@ -23,12 +23,12 @@
  */
 int **create2DIntArray(int width, int height)
 {
-    int **array = malloc(sizeof(int*) * width);
+    int **array = (int**)malloc(sizeof(int*) * width);
     
     int widthIndex;
     for(widthIndex = 0; widthIndex < width; widthIndex++)
     {
-        array[widthIndex] = malloc(sizeof(int) * height);
+        array[widthIndex] = (int*)malloc(sizeof(int) * height);
     }
 
     return array;
@@ -41,37 +41,36 @@ int **create2DIntArray(int width, int height)
  *
  * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \return Field : A field, which is a tydef declared in core.h (2D array struct)
+ * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
-Field initialiseField(int width, int height)
+Field *initialiseField(int width, int height)
 {
+    Field *oneField = (Field*)malloc(sizeof(Field));
 
-    Field oneField;
-
-    oneField.width = width;
-    oneField.height = height;
-    oneField.data = create2DIntArray(width, height);
+    oneField->width = width;
+    oneField->height = height;
+    oneField->data = create2DIntArray(width, height);
 
     int widthIndex, heightIndex;
 
-    for(widthIndex = 1; widthIndex < (widthIndex - 1); widthIndex++)
+    for(widthIndex = 1; widthIndex < (width - 1); widthIndex++)
     {
         for(heightIndex = 1; heightIndex < (height - 1); heightIndex++)
         {
-            oneField.data[widthIndex][heightIndex] = EMPTY;
+            oneField->data[widthIndex][heightIndex] = EMPTY;
         }
     }
 
     for(heightIndex = 0; heightIndex < height; heightIndex++)
     {
-        oneField.data[0][heightIndex] = WALL;
-        oneField.data[width-1][heightIndex] = WALL;
+        oneField->data[0][heightIndex] = WALL;
+        oneField->data[width-1][heightIndex] = WALL;
     }
 
     for(widthIndex = 0; widthIndex < width; widthIndex++)
     {
-        oneField.data[widthIndex][height-1] = WALL;
-        oneField.data[widthIndex][0] = WALL;
+        oneField->data[widthIndex][height-1] = WALL;
+        oneField->data[widthIndex][0] = WALL;
     }
 
     return oneField;
@@ -81,10 +80,10 @@ Field initialiseField(int width, int height)
  * \fn void generateEnv(field oneField)
  * \brief function that generate our field to make our environment
  *
- * \param oneField : A field, which is a tydef declared in core.h (2D array structure)
+ * \param oneField : Poiter to a field, which is a tydef declared in core.h (2D array structure)
  * \return void
  */
-void generateEnv(Field oneField)
+void generateEnv(Field *oneField)
 {
 
     int w; //i
@@ -93,50 +92,50 @@ void generateEnv(Field oneField)
     int sum_neigh;
 
     //First loop, random generation (obstacle or not, Bernoulli)
-    for(w = 1; w < (oneField.width-1); w++)
+    for(w = 1; w < (oneField->width-1); w++)
     {
-        for(h = 1; h < (oneField.height-1); h++)
+        for(h = 1; h < (oneField->height-1); h++)
         {
             monRand = rand()%10 + 1;
 
             if(monRand < 5)
             {
-                oneField.data[w][h] = WALL;
+                oneField->data[w][h] = WALL;
             }
         }
     }
 
     //Second loop to clean and prevent stuck situation
-    for(w = 1; w < (oneField.width-1); w++)
+    for(w = 1; w < (oneField->width-1); w++)
     {
-        for(h = 1; h < (oneField.height-1); h++)
+        for(h = 1; h < (oneField->height-1); h++)
         {
-            sum_neigh = oneField.data[w-1][h-1] + oneField.data[w-1][h] + oneField.data[w][h-1] + oneField.data[w-1][h+1]
-                        + oneField.data[w+1][h-1] + oneField.data[w+1][h] + oneField.data[w][h+1] + oneField.data[w+1][h+1];
+            sum_neigh = oneField->data[w-1][h-1] + oneField->data[w-1][h] + oneField->data[w][h-1] + oneField->data[w-1][h+1]
+                        + oneField->data[w+1][h-1] + oneField->data[w+1][h] + oneField->data[w][h+1] + oneField->data[w+1][h+1];
 
             //Clean some obstacles
             if(sum_neigh < 2)
             {
-                oneField.data[w][h] = EMPTY;
+                oneField->data[w][h] = EMPTY;
             }
             //Prevent stuck
             else if(sum_neigh >= 4)
             {
-                oneField.data[w][h] = EMPTY;
+                oneField->data[w][h] = EMPTY;
             }
         }
     }
 
     //Third loop to fill blank
-    for(w = 1; w < (oneField.width-1); w++)
+    for(w = 1; w < (oneField->width-1); w++)
     {
-        for(h = 1; h < (oneField.height-1); h++)
+        for(h = 1; h < (oneField->height-1); h++)
         {
-            sum_neigh = oneField.data[w][h-1] + oneField.data[w-1][h] + oneField.data[w][h+1] + oneField.data[w+1][h];
+            sum_neigh = oneField->data[w][h-1] + oneField->data[w-1][h] + oneField->data[w][h+1] + oneField->data[w+1][h];
 
             if(sum_neigh >= 3)
             {
-                oneField.data[w][h] = WALL;
+                oneField->data[w][h] = WALL;
             }
         }
     }
@@ -156,10 +155,10 @@ void destruct2DIntArray(int **array, int width)
     if(array != NULL)
     {
         for(i = 0; i < width; i++)
-            {
-                free(array[i]);
-            }
-            free(array);
+        {
+            free(array[i]);
+        }
+        free(array);
     }
 }
 
@@ -175,6 +174,8 @@ void destructField(Field *oneField)
     if(oneField != NULL)
     {
         destruct2DIntArray(oneField->data, oneField->width);
+        oneField->data = NULL;
+        free(oneField);
     }
 }
 
