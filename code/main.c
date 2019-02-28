@@ -10,9 +10,8 @@
  */
 
 //Header file
-#include "pathfinding.h"
+#include "display.h"
 #include "eventhandler.h"
-#include "entity.h"
 
 //Main of the programme
 int main(void)
