@@ -33,7 +33,10 @@ typedef struct Entity
     int y;
     int visionRange;
     Point** fieldOfView;
-    //The Field of the mental map is to be added with his dimmension
+
+    int mentalMapWidth;
+    int mentalMapHeight;
+    Field* mentalMap;
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
 } Entity;
@@ -49,7 +52,18 @@ typedef struct Entity
 Entity* initialiseEntity(int x, int y, int visionRange);
 
 /**
- * \fn void* initialiseFieldOfView(Entity *entity);
+ * \fn void initializeMentalMap(Entity *entity)
+ * \brief function that initialize the mental map of an entity
+ * 
+ * \param *entity : the entity which have the mental map to be updated
+ * \param width : width of the mental map we want to initialize
+ * \param height : height of the mental map we want to initialize
+ * \return void
+ */
+void initializeMentalMapEntity(Entity *entity, int width, int height);
+
+/**
+ * \fn void initialiseFieldOfView(Entity *entity);
  * \brief function that initialise the field of view of an entity
  *
  * \param *entity : the entity which have the field of view we want to update

@@ -32,6 +32,22 @@ Entity* initialiseEntity(int x, int y, int visionRange)
 }
 
 /**
+ * \fn void initializeMentalMap(Entity *entity)
+ * \brief function that initialize the mental map of an entity
+ * 
+ * \param *entity : the entity which have the mental map to be updated
+ * \param width : width of the mental map we want to initialize
+ * \param height : height of the mental map we want to initialize
+ * \return void
+ */
+void initializeMentalMapEntity(Entity *entity, int width, int height)
+{
+    entity->mentalMapWidth = width;
+    entity->mentalMapHeight = height;
+    entity->mentalMap = initialiseField(width, height, FOG);
+}
+
+/**
  * \fn void* initialiseFieldOfView(Entity *entity);
  * \brief function that initialise the field of view of an entity
  *

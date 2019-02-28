@@ -79,7 +79,7 @@ int main(void)
 	while(data->endEvent == false)
 	{
 		//Initialisation and generation of the field
-		theField = initialiseField(fieldHeight, fieldWidth);
+		theField = initialiseField(fieldHeight, fieldWidth, EMPTY);
 		generateEnv(theField);
 		//Initialise the entity
 		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT);
