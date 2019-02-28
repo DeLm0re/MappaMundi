@@ -44,8 +44,6 @@ Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fiel
  */
 void initializeMentalMapEntity(Entity *entity, int width, int height)
 {
-    entity->mentalMapWidth = width;
-    entity->mentalMapHeight = height;
     entity->mentalMap = initialiseField(width, height, FOG);
 }
 
@@ -152,6 +150,33 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
             tileSize-4,
             tileSize-4}));
 	}
+}
+
+/*
+ * \fn void updateMentalMapEntity(Entity *entity)
+ * \brief function that update the mental map of an entity
+ *
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateMentalMapEntity(Entity *entity)
+{
+    int widthIndex, heightIndex;
+    for(widthIndex = 0; widthIndex < 2*entity->visionRange; widthIndex++)
+    {
+        for(heightIndex = 0; heightIndex < 2*entity->visionRange; heightIndex++)
+        {
+            int pointWidth = entity->fieldOfView[widthIndex][heightIndex].x;
+            int pointHeight = entity->fieldOfView[widthIndex][heightIndex].y;
+            pointEnum pointValue = entity->fieldOfView[widthIndex][heightIndex].pointValue;
+
+            if(pointWidth >= 0 && pointWidth < entity->mentalMap->width && 
+                pointHeight >= 0 && pointHeight < entity->mentalMap->height)
+            {
+                entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
+            }
+        }
+    }
 }
 
 /*

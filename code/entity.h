@@ -34,8 +34,6 @@ typedef struct Entity
     int visionRange;
     Point** fieldOfView;
 
-    int mentalMapWidth;
-    int mentalMapHeight;
     Field* mentalMap;
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
@@ -101,6 +99,15 @@ void destructFieldOfViewEntity(Entity *entity);
  * \return void
  */
 void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize);
+
+/*
+ * \fn void updateMentalMapEntity(Entity *entity)
+ * \brief function that update the mental map of an entity
+ *
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateMentalMapEntity(Entity *entity);
 
 /*
  * \fn void updateFieldOfViewEntity(Entity *entity)
