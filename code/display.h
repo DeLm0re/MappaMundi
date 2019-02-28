@@ -13,7 +13,8 @@
     #define H_DISPLAY
 
 //Header file containing the prototypes
-#include "prototype.h"
+#include "pathfinding.h"
+#include "entity.h"
 
 /**
  * \fn int drawField(SDL_Renderer *renderer, field oneField, int size)

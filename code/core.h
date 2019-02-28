@@ -13,7 +13,7 @@
     #define H_CORE
 
 //Header file for graphical display
-#include "display.h"
+#include "prototype.h"
 
 /**
  * \fn int **create2DIntArray(int width, int height)
