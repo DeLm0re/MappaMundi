@@ -79,10 +79,10 @@ int main(void)
 	while(data->endEvent == false)
 	{
 		//Initialisation and generation of the field
-		theField = initialiseField(fieldHeight, fieldWidth, EMPTY);
+		theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 		generateEnv(theField);
 		//Initialise the entity
-		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT);
+		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 		//Initialisation of the nodes
 		startNode = nearestNode(theField, entity->x, entity->y);
 		//Updates the position of the entity for the nearest starting node

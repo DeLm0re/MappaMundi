@@ -47,9 +47,10 @@ typedef struct Entity
  *
  * \param x, y : the coordinate of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
+ * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
  */
-Entity* initialiseEntity(int x, int y, int visionRange);
+Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight);
 
 /**
  * \fn void initializeMentalMap(Entity *entity)

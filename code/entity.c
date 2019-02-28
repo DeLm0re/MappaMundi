@@ -13,14 +13,15 @@
 #include "entity.h"
 
 /**
- * \fn Entity* initialiseEntity(int x, int y, int visionRange)
+ * \fn node* initialiseEntity(int x, int y, int visionRange)
  * \brief function that initialise an Entity. An Entity is used by the neural network to navigate in a Field
  *
  * \param x, y : the coordinate of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
+ * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
  */
-Entity* initialiseEntity(int x, int y, int visionRange)
+Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight)
 {
     Entity* entity = malloc(sizeof(Entity));
     entity->x = x;
@@ -28,6 +29,7 @@ Entity* initialiseEntity(int x, int y, int visionRange)
     entity->visionRange = visionRange;
     
     initialiseFieldOfViewEntity(entity);
+    initializeMentalMapEntity(entity, fieldWidth, fieldHeight);
     return entity;
 }
 
@@ -90,6 +92,7 @@ void initialiseFieldOfViewEntity(Entity *entity)
 void destructEntity(Entity** entity)
 {
     destructFieldOfViewEntity(*entity);
+    destructField(&((*entity)->mentalMap));
 
     if(entity != NULL)
     {
