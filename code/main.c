@@ -25,7 +25,6 @@ int main(void)
 	int windowWidth = 1000;
 	int windowHeight = 1000;
 	SDL_Event event;
-    SDL_bool quit = SDL_FALSE;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     int statut = EXIT_FAILURE;
@@ -61,13 +60,13 @@ int main(void)
 	const int fieldHeight = 50;
 	const int fieldWidth = 50;
 	const int tileSize = 10;
+	//Used to know if we're waiting for an instruction (keyboard input, etc)
+	bool waitForInstruction = true;
 	//Declaration of the field
     Field theField;
 	//Declaration of the nodes for the pathfinding
 	node* startNode = NULL;
 	node* endNode = NULL;
-/* 	node* openSet = NULL;
-	node* closedSet = NULL; */
 	node* path = NULL;
 	//Declaration of the entity wich will be used by the neural network
 	Entity* entity = NULL;
@@ -119,28 +118,51 @@ int main(void)
 		    	SDL_RenderPresent(renderer);
 		    	//We wait 30ms at each step to see the entity moving
 			    SDL_Delay(30);
+			    
+			    //If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
+			    if (event.type == SDL_QUIT ||
+			    (event.type == SDL_TEXTINPUT && 
+				(*event.text.text == 'q' || 
+				*event.text.text == 'Q')))
+			    {
+			        //We put an end to the program
+				    data->endEvent = true;
+				    //We update the exit statut
+				    statut = EXIT_SUCCESS;
+				    //We set the waiting flag to false (not waiting for inputs anymore)
+				    waitForInstruction = false;
+			    }
 			}
-		}while(nodePosition != NULL);
+		}while(nodePosition != NULL && !data->endEvent);
 		
-		// Tant que le flag pour quitter est faux
-		while(!quit)
+		//While the waiting flag is set to true (waiting for inputs)
+		while(waitForInstruction)
 		{
 			SDL_Delay(50);
-			// On attend l'arriver de l'event de fermeture (la croix)
-			if(event.type == SDL_QUIT) 
+			//If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
+			if (event.type == SDL_QUIT ||
+			    (event.type == SDL_TEXTINPUT && 
+				(*event.text.text == 'q' || 
+				*event.text.text == 'Q')))
 			{
+			    //We put an end to the program
 				data->endEvent = true;
-				quit = SDL_TRUE;
+				//We update the exit statut
 				statut = EXIT_SUCCESS;
+				//We set the waiting flag to false (not waiting for inputs anymore)
+				waitForInstruction = false;
 			}
+			//If we want to do a new simulation ("r" key on the keyboard)
 			else if(event.type == SDL_TEXTINPUT && 
 				(*event.text.text == 'r' || 
 				*event.text.text == 'R'))
 			{
-				quit = SDL_TRUE;
+			    //We set the waiting flag to false (not waiting for inputs anymore)
+				waitForInstruction = false;
 			}
 		}
-		quit = SDL_FALSE;
+		//We put the waiting flag back to true
+		waitForInstruction = true;
 
 		//Free the memory of all the nodes
 		destructNodes(&path);
