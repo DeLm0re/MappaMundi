@@ -162,9 +162,9 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
 void updateMentalMapEntity(Entity *entity)
 {
     int widthIndex, heightIndex;
-    for(widthIndex = 0; widthIndex < 2*entity->visionRange; widthIndex++)
+    for(widthIndex = 0; widthIndex < 2*entity->visionRange + 1; widthIndex++)
     {
-        for(heightIndex = 0; heightIndex < 2*entity->visionRange; heightIndex++)
+        for(heightIndex = 0; heightIndex < 2*entity->visionRange + 1; heightIndex++)
         {
             int pointWidth = entity->fieldOfView[widthIndex][heightIndex].x;
             int pointHeight = entity->fieldOfView[widthIndex][heightIndex].y;
