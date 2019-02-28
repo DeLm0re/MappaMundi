@@ -141,11 +141,9 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  *
  * \param entity : the Entity to update
  *        field : the field on which we are based
- *        fieldHeight : the height of the field
- *        fieldWidth : the width of the field
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Entity *entity)
+void updateFieldOfViewEntity(Field aField, Entity *entity)
 {
     int i,j;
     int height;
@@ -169,7 +167,7 @@ void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Enti
     {
         for(width = widthEntity - entity->visionRange; width < widthEntity + entity->visionRange; width++)
         {
-            if( (height >= 0) && (height < fieldHeight) && (width >= 0) && (width < fieldWidth) )
+            if( (height >= 0) && (height < aField.height) && (width >= 0) && (width < aField.width) )
             {
                 distanceCarre = (height - heightEntity)*(height - heightEntity) + (width - widthEntity)*(width - widthEntity);
                     
@@ -177,7 +175,7 @@ void updateFieldOfViewEntity(Field aField, int fieldHeight, int fieldWidth, Enti
                     {
                         if(behindAWall(aField, entity, height, width) != true)
                         {
-                            entity->fieldOfView[width][height].pointValue = aField[width][height];
+                            entity->fieldOfView[width][height].pointValue = aField.data[width][height];
                         }
                     }
             }
@@ -219,7 +217,7 @@ bool behindAWall(Field aField, Entity *entity, int height, int width)
 
             if( (y != height) && (x != width) )
             {
-                if(aField[(int)x][(int)y] == WALL)
+                if(aField.data[(int)x][(int)y] == WALL)
                 {
                     return(true);
                 }
@@ -236,7 +234,7 @@ bool behindAWall(Field aField, Entity *entity, int height, int width)
 
             if( (y != height) && (x != width) )
             {
-                if(aField[(int)x][(int)y] == WALL)
+                if(aField.data[(int)x][(int)y] == WALL)
                 {
                     return(true);
                 }
@@ -254,7 +252,7 @@ bool behindAWall(Field aField, Entity *entity, int height, int width)
             {
                 if( (y != height) && (x != width) )
                 {
-                    if(aField[(int)width][(int)y] == WALL)
+                    if(aField.data[(int)width][(int)y] == WALL)
                     {
                         return(true);
                     }
@@ -268,7 +266,7 @@ bool behindAWall(Field aField, Entity *entity, int height, int width)
             {
                 if( (y != height) && (x != width) )
                 {
-                    if(aField[(int)width][(int)y] == WALL)
+                    if(aField.data[(int)width][(int)y] == WALL)
                     {
                         return(true);
                     }
