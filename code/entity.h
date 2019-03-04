@@ -114,21 +114,9 @@ void updateMentalMapEntity(Entity *entity);
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
- *        field : the field on which we are based
+ *        field* : A pointer to the field on which we are based
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, Entity *entity);
-
-/*
- * \fn bool behindAWall(Field aField, Entity *entity, int heigh, int width)
- * \brief function that says if a point of our field is behind a wall or not from a POV of an other point
- *
- * \param entity : the Entity from where we have the POV
- *        field : the field on which we are based
- *        heigh : the heigh of the point we want to study
- *        width : the width of the point we want to
- * \return bool : true if the point is behind a wall, false if not
- */
-bool behindAWall(Field aField, Entity *entity, int heigh, int width);
+void updateFieldOfViewEntity(Field *aField, Entity *entity);
 
 #endif

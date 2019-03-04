@@ -12,6 +12,10 @@
 #ifndef H_PROTOTYPE
     #define H_PROTOTYPE
 
+#ifndef M_PI
+	#define M_PI 3.14159265358979323846
+#endif
+
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
