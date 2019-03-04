@@ -17,7 +17,7 @@
 int main(void)
 {
 	//Initialize the random seed value
-	srand(time(0));
+	srand(12345);
 
 /* 	SDL_Color openSetColor = {80, 160, 80, 255};
 	SDL_Color closedSetColor = {160, 80, 80, 255}; 
@@ -108,12 +108,17 @@ int main(void)
 			    //Updates the position of the entity for the nearest starting node
 			    entity->x = nodePosition->x;
 			    entity->y = nodePosition->y;
+
+				//Updates the field of view of our entity
+				updateFieldOfViewEntity(theField, entity);
 			    
 			    //Clear the screen
 			    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			    SDL_RenderClear(renderer);
 			    //Draw the field
 			    drawField(renderer, theField, tileSize);
+				//Draw the field of view
+				drawFieldOfViewEntity(renderer, entity, tileSize);
 			    //Draw the entity
 			    showEntity(entity, renderer, entityColor, tileSize);
 			    //Refresh the window

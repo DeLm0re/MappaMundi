@@ -17,46 +17,144 @@
  * \brief function that draw our field in a graphical display
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \param oneField* : Poiter to a field, which is a tydef declared in core.h (2D array structure)
+ * \param oneField* : Pointer to a field, which is a tydef declared in core.h (2D array structure)
  * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
 int drawField(SDL_Renderer *renderer, Field *oneField, int size)
 {
     int w, h;
-    SDL_Color white = {255, 255, 255, 255};
-    SDL_Color black = {0, 0, 0, 255};
-    SDL_Rect obstacle = {0, 0, 0, 0};
 
-    //Set a white background
-    if(SDL_SetRenderDrawColor(renderer, white.r, white.g, white.b, white.a) < 0)
-        return -1;
-    if(SDL_RenderClear(renderer) < 0)
-        return -1;
+    SDL_Color emptyColor = {255, 255, 255, 255};
+    SDL_Color wallColor = {0, 0, 0, 255};
+    SDL_Color fogColor = {100, 100, 100, 255};
+    SDL_Color defaultColor = {255, 0, 0, 255};
 
-    //Set black color
-    if(SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a) < 0)
-    {
-        return -1;
-    }
+    SDL_Rect square = {0, 0, 0, 0};
 
     for(w = 0; w < oneField->width; w++)
     {
         for(h = 0; h < oneField->height; h++)
         {
-            if(oneField->data[w][h] == WALL)
+            switch(oneField->data[w][h])
             {
-                obstacle.x = size*w;
-                obstacle.y = size*h;
-                obstacle.h = size;
-                obstacle.w = size;
-                //We draw a black square at the same position.
-                if(SDL_RenderFillRect(renderer, &obstacle) < 0)
-                {
-		            return -1;
-                }
+                case WALL:
+                    //Set black color
+                    if(SDL_SetRenderDrawColor(renderer, wallColor.r, wallColor.g, wallColor.b, wallColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+            
+                case EMPTY:
+                    //Set white color
+                    if(SDL_SetRenderDrawColor(renderer, emptyColor.r, emptyColor.g, emptyColor.b, emptyColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+
+                case FOG:
+                    //Set fog color
+                    if(SDL_SetRenderDrawColor(renderer, fogColor.r, fogColor.g, fogColor.b, fogColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+                
+                default:
+                    //Set default color
+                    if(SDL_SetRenderDrawColor(renderer, defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
             }
 
+            square.x = size*w;
+            square.y = size*h;
+            square.h = size;
+            square.w = size;
+
+            //We draw a square at the same position.
+            if(SDL_RenderFillRect(renderer, &square) < 0)
+            {
+		        return -1;
+            }
+        }
+    }
+    return 0;
+}
+
+/**
+ * \fn int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size)
+ * \brief function that draw the field of view of an entity in a graphical display
+ *
+ * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
+ * \param oneEntity : Pointer to a field of view of an entity, which is a tydef declared in entity.h (2D array structure)
+ * \param size : the size of a single unique obstacle
+ * \return int, can return an error during the drawing
+ */
+int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size)
+{
+    int w, h;
+
+    SDL_Color emptyColor = {255, 255, 255, 255};
+    SDL_Color wallColor = {0, 0, 0, 255};
+    SDL_Color fogColor = {100, 100, 100, 255};
+    SDL_Color defaultColor = {255, 0, 0, 255};
+
+    SDL_Rect square = {0, 0, 0, 0};
+
+    for(w = 0; w < (2*oneEntity->visionRange +1); w++)
+    {
+        for(h = 0; h < (2*oneEntity->visionRange +1); h++)
+        {
+            switch(oneEntity->fieldOfView[w][h].pointValue)
+            {
+                case WALL:
+                    //Set black color
+                    if(SDL_SetRenderDrawColor(renderer, wallColor.r, wallColor.g, wallColor.b, wallColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+            
+                case EMPTY:
+                    //Set white color
+                    if(SDL_SetRenderDrawColor(renderer, emptyColor.r, emptyColor.g, emptyColor.b, emptyColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+
+                case FOG:
+                    //Set fog color
+                    if(SDL_SetRenderDrawColor(renderer, fogColor.r, fogColor.g, fogColor.b, fogColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+                
+                default:
+                    //Set default color
+                    if(SDL_SetRenderDrawColor(renderer, defaultColor.r, defaultColor.g, defaultColor.b, defaultColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                break;
+            }
+
+            square.x = size*w + (50*size) + 20;
+            square.y = size*h;
+            square.h = size;
+            square.w = size;
+
+            //We draw a square at the same position.
+            if(SDL_RenderFillRect(renderer, &square) < 0)
+            {
+		        return -1;
+            }
         }
     }
     return 0;
