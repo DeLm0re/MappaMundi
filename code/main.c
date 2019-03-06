@@ -111,12 +111,15 @@ int main(void)
 
 				//Updates the field of view of our entity
 				updateFieldOfViewEntity(theField, entity);
+
+				//Updates the mental map of our entity with its new field of view
+				updateMentalMapEntity(entity);
 			    
 			    //Clear the screen
 			    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			    SDL_RenderClear(renderer);
 			    //Draw the field
-			    drawField(renderer, theField, tileSize);
+			    drawField(renderer, entity->mentalMap, tileSize);
 				//Draw the field of view
 				drawFieldOfViewEntity(renderer, entity, tileSize);
 			    //Draw the entity
