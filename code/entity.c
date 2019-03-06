@@ -13,14 +13,15 @@
 #include "entity.h"
 
 /**
- * \fn Entity* initialiseEntity(int x, int y, int visionRange)
+ * \fn node* initialiseEntity(int x, int y, int visionRange)
  * \brief function that initialise an Entity. An Entity is used by the neural network to navigate in a Field
  *
  * \param x, y : the coordinate of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
+ * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
  */
-Entity* initialiseEntity(int x, int y, int visionRange)
+Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight)
 {
     Entity* entity = malloc(sizeof(Entity));
     entity->x = x;
@@ -28,7 +29,22 @@ Entity* initialiseEntity(int x, int y, int visionRange)
     entity->visionRange = visionRange;
     
     initialiseFieldOfViewEntity(entity);
+    initializeMentalMapEntity(entity, fieldWidth, fieldHeight);
     return entity;
+}
+
+/**
+ * \fn void initializeMentalMap(Entity *entity)
+ * \brief function that initialize the mental map of an entity
+ * 
+ * \param *entity : the entity which have the mental map to be updated
+ * \param width : width of the mental map we want to initialize
+ * \param height : height of the mental map we want to initialize
+ * \return void
+ */
+void initializeMentalMapEntity(Entity *entity, int width, int height)
+{
+    entity->mentalMap = initialiseField(width, height, FOG);
 }
 
 /**
@@ -42,7 +58,7 @@ void initialiseFieldOfViewEntity(Entity *entity)
 {
     int i;
     int j;
-    int diameter = 2*entity->visionRange;
+    int diameter = (2*entity->visionRange + 1);
 
     entity->fieldOfView = NULL;
 
@@ -74,6 +90,7 @@ void initialiseFieldOfViewEntity(Entity *entity)
 void destructEntity(Entity** entity)
 {
     destructFieldOfViewEntity(*entity);
+    destructField(&((*entity)->mentalMap));
 
     if(entity != NULL)
     {
@@ -95,7 +112,7 @@ void destructEntity(Entity** entity)
 void destructFieldOfViewEntity(Entity *entity)
 {
     int i;
-    int diameter = 2*entity->visionRange;
+    int diameter = (2*entity->visionRange + 1);
 
     if(entity->fieldOfView != NULL)
     {
@@ -136,26 +153,53 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
 }
 
 /*
+ * \fn void updateMentalMapEntity(Entity *entity)
+ * \brief function that update the mental map of an entity
+ *
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateMentalMapEntity(Entity *entity)
+{
+    int widthIndex, heightIndex;
+    for(widthIndex = 0; widthIndex < 2*entity->visionRange + 1; widthIndex++)
+    {
+        for(heightIndex = 0; heightIndex < 2*entity->visionRange + 1; heightIndex++)
+        {
+            int pointWidth = entity->fieldOfView[widthIndex][heightIndex].x;
+            int pointHeight = entity->fieldOfView[widthIndex][heightIndex].y;
+            pointEnum pointValue = entity->fieldOfView[widthIndex][heightIndex].pointValue;
+
+            if(pointWidth >= 0 && pointWidth < entity->mentalMap->width && 
+                pointHeight >= 0 && pointHeight < entity->mentalMap->height)
+            {
+                pointEnum mentalMapPoint = entity->mentalMap->data[pointWidth][pointHeight];
+
+                //Check if the old value of the point was FOG before updating it
+                if(mentalMapPoint == FOG)
+                {
+                    entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
+                }
+            }
+        }
+    }
+}
+
+/*
  * \fn void updateFieldOfViewEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
- *        field : the field on which we are based
+ *        field* : A pointer to the field on which we are based
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, Entity *entity)
+void updateFieldOfViewEntity(Field *aField, Entity *entity)
 {
     int i,j;
-    int height;
-    int width;
-    int heightEntity = entity->y;
-    int widthEntity = entity->x;
-    int rayonCarre = entity->visionRange * entity->visionRange;
-    float distanceCarre;
 
-    for(i = 0; i < 2*entity->visionRange; i++)
+    for(i = 0; i < (2*entity->visionRange + 1); i++)
     {
-        for(j = 0; j < 2*entity->visionRange; j++)
+        for(j = 0; j < (2*entity->visionRange + 1); j++)
         {
             entity->fieldOfView[j][i].x = j;
             entity->fieldOfView[j][i].y = i;
@@ -163,117 +207,48 @@ void updateFieldOfViewEntity(Field aField, Entity *entity)
         }
     }
 
-    for(height = heightEntity - entity->visionRange; height < heightEntity + entity->visionRange; height++)
+    // ================
+
+    float angle;
+    float stepAngle = 0.1; //tan(1 / entity->visionRange);
+    float stepDistance = 0.5;
+    float distance;
+    bool aWall;
+
+    for(angle = 0; angle < 2*M_PI; angle += stepAngle)
     {
-        for(width = widthEntity - entity->visionRange; width < widthEntity + entity->visionRange; width++)
+        aWall = false;
+
+        for(distance = 0; distance < entity->visionRange; distance += stepDistance)
         {
-            if( (height >= 0) && (height < aField.height) && (width >= 0) && (width < aField.width) )
+            if(!aWall)
             {
-                distanceCarre = (height - heightEntity)*(height - heightEntity) + (width - widthEntity)*(width - widthEntity);
-                    
-                    if(distanceCarre < rayonCarre)
+                float x = distance * cos(angle);
+                float y = distance * sin(angle);
+
+                if( ((entity->x + x) >= 0) && ((entity->x + x) < aField->width) && ((entity->y + y) >= 0) && ((entity->y + y) < aField->height) )
+                {
+                    int widthFieldOfView = entity->visionRange + 1 + x;
+                    int heightFieldOfView = entity->visionRange + 1 + y;
+
+                    if( (widthFieldOfView >= 0) && (widthFieldOfView < 2*entity->visionRange + 1) 
+                        &&  (heightFieldOfView >= 0) && (heightFieldOfView < 2*entity->visionRange + 1) )
                     {
-                        if(behindAWall(aField, entity, height, width) != true)
+                        pointEnum currentValue;
+
+                        entity->fieldOfView[widthFieldOfView][heightFieldOfView].x = (int)(entity->x + x);
+                        entity->fieldOfView[widthFieldOfView][heightFieldOfView].y = (int)(entity->y + y);
+
+                        currentValue = aField->data[(int)(entity->x + x)][(int)(entity->y + y)];
+                        entity->fieldOfView[widthFieldOfView][heightFieldOfView].pointValue = currentValue;
+
+                        if(currentValue == WALL)
                         {
-                            entity->fieldOfView[width][height].pointValue = aField.data[width][height];
+                            aWall = true;
                         }
                     }
-            }
-        }
-    }
-}
-
-/*
- * \fn bool behindAWall(Field aField, Entity *entity, int heigh, int width)
- * \brief function that says if a point of our field is behind a wall or not from a POV of the entity
- *
- * \param entity : the Entity from where we have the POV
- *        field : the field on which we are based
- *        height : the heigh of the point we want to study
- *        width : the width of the point we want to
- * \return bool : true if the point is behind a wall, false if not
- */
-bool behindAWall(Field aField, Entity *entity, int height, int width)
-{
-    float a;
-    float b;
-    float y;
-    float x;
-    int heightEntity = entity->y;
-    int widthEntity = entity->x;
-    float step = 0.1;
-
-    a = (height - heightEntity)/(width - widthEntity);
-    
-    //b = ya - a*xa
-    b = heightEntity - a * widthEntity;
-
-    //If x entity > x of the point
-    if(widthEntity >= width)
-    {
-        for(x = widthEntity; x >= width; x = x - step)
-        {
-            y = a * x + b;
-
-            if( (y != height) && (x != width) )
-            {
-                if(aField.data[(int)x][(int)y] == WALL)
-                {
-                    return(true);
                 }
             }
         }
     }
-
-    //If x entity < x of the point
-    if(widthEntity < width)
-    {
-        for(x = widthEntity; x <= width; x = x + step)
-        {
-            y = a * x + b;
-
-            if( (y != height) && (x != width) )
-            {
-                if(aField.data[(int)x][(int)y] == WALL)
-                {
-                    return(true);
-                }
-            }
-        }
-    }
-
-    //If x entity = x of the point
-    if(width == widthEntity)
-    {
-        //If y entity > y of the point
-        if(heightEntity >= height)
-        {
-            for(y = heightEntity; y >= height; y = y - step)
-            {
-                if( (y != height) && (x != width) )
-                {
-                    if(aField.data[(int)width][(int)y] == WALL)
-                    {
-                        return(true);
-                    }
-                }
-            }
-        }
-        //If y entity < y of the point
-        if(heightEntity < height)
-        {
-            for(y = heightEntity; y <= height; y = y + step)
-            {
-                if( (y != height) && (x != width) )
-                {
-                    if(aField.data[(int)width][(int)y] == WALL)
-                    {
-                        return(true);
-                    }
-                }
-            }
-        }
-    }
-
-    return(false);
 }

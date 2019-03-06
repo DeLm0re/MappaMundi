@@ -21,11 +21,22 @@
  * \brief function that draw our field in a graphical display
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \param oneField* : Poiter to a field, which is a tydef declared in core.h (2D array structure)
+ * \param oneField* : Pointer to a field, which is a tydef declared in core.h (2D array structure)
  * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
 int drawField(SDL_Renderer *renderer, Field *oneField, int size);
+
+/**
+ * \fn int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size)
+ * \brief function that draw the field of view of an entity in a graphical display
+ *
+ * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
+ * \param oneEntity : Pointer to a field of view of an entity, which is a tydef declared in entity.h (2D array structure)
+ * \param size : the size of a single unique obstacle
+ * \return int, can return an error during the drawing
+ */
+int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size);
 
 /**
  * \fn int draw(SDL_Renderer *renderer)
@@ -35,5 +46,6 @@ int drawField(SDL_Renderer *renderer, Field *oneField, int size);
  * \return int, can return an error during the drawing
  */
 int draw(SDL_Renderer *renderer);
+
 
 #endif

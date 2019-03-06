@@ -41,9 +41,10 @@ int **create2DIntArray(int width, int height)
  *
  * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
  * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param defaultValue : the value we initialize each tile of the field with
  * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
-Field *initialiseField(int width, int height)
+Field *initialiseField(int width, int height, pointEnum defaultValue)
 {
     Field *oneField = (Field*)malloc(sizeof(Field));
 
@@ -57,7 +58,7 @@ Field *initialiseField(int width, int height)
     {
         for(heightIndex = 1; heightIndex < (height - 1); heightIndex++)
         {
-            oneField->data[widthIndex][heightIndex] = EMPTY;
+            oneField->data[widthIndex][heightIndex] = defaultValue;
         }
     }
 

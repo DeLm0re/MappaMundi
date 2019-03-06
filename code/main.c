@@ -17,7 +17,7 @@
 int main(void)
 {
 	//Initialize the random seed value
-	srand(time(0));
+	srand(12345);
 
 /* 	SDL_Color openSetColor = {80, 160, 80, 255};
 	SDL_Color closedSetColor = {160, 80, 80, 255}; 
@@ -79,10 +79,10 @@ int main(void)
 	while(data->endEvent == false)
 	{
 		//Initialisation and generation of the field
-		theField = initialiseField(fieldHeight, fieldWidth);
+		theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 		generateEnv(theField);
 		//Initialise the entity
-		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT);
+		entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 		//Initialisation of the nodes
 		startNode = nearestNode(theField, entity->x, entity->y);
 		//Updates the position of the entity for the nearest starting node
@@ -108,12 +108,20 @@ int main(void)
 			    //Updates the position of the entity for the nearest starting node
 			    entity->x = nodePosition->x;
 			    entity->y = nodePosition->y;
+
+				//Updates the field of view of our entity
+				updateFieldOfViewEntity(theField, entity);
+
+				//Updates the mental map of our entity with its new field of view
+				updateMentalMapEntity(entity);
 			    
 			    //Clear the screen
 			    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			    SDL_RenderClear(renderer);
 			    //Draw the field
-			    drawField(renderer, theField, tileSize);
+			    drawField(renderer, entity->mentalMap, tileSize);
+				//Draw the field of view
+				drawFieldOfViewEntity(renderer, entity, tileSize);
 			    //Draw the entity
 			    showEntity(entity, renderer, entityColor, tileSize);
 			    //Refresh the window

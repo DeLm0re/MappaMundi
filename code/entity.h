@@ -33,7 +33,8 @@ typedef struct Entity
     int y;
     int visionRange;
     Point** fieldOfView;
-    //The Field of the mental map is to be added with his dimmension
+
+    Field* mentalMap;
     //The list of the valid visible position is to be added
     //The neural network structure is to be added
 } Entity;
@@ -44,12 +45,24 @@ typedef struct Entity
  *
  * \param x, y : the coordinate of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
+ * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
  */
-Entity* initialiseEntity(int x, int y, int visionRange);
+Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight);
 
 /**
- * \fn void* initialiseFieldOfView(Entity *entity);
+ * \fn void initializeMentalMap(Entity *entity)
+ * \brief function that initialize the mental map of an entity
+ * 
+ * \param *entity : the entity which have the mental map to be updated
+ * \param width : width of the mental map we want to initialize
+ * \param height : height of the mental map we want to initialize
+ * \return void
+ */
+void initializeMentalMapEntity(Entity *entity, int width, int height);
+
+/**
+ * \fn void initialiseFieldOfView(Entity *entity);
  * \brief function that initialise the field of view of an entity
  *
  * \param *entity : the entity which have the field of view we want to update
@@ -88,25 +101,22 @@ void destructFieldOfViewEntity(Entity *entity);
 void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize);
 
 /*
+ * \fn void updateMentalMapEntity(Entity *entity)
+ * \brief function that update the mental map of an entity
+ *
+ * \param entity : the Entity to update
+ * \return void
+ */
+void updateMentalMapEntity(Entity *entity);
+
+/*
  * \fn void updateFieldOfViewEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
- *        field : the field on which we are based
+ *        field* : A pointer to the field on which we are based
  * \return void
  */
-void updateFieldOfViewEntity(Field aField, Entity *entity);
-
-/*
- * \fn bool behindAWall(Field aField, Entity *entity, int heigh, int width)
- * \brief function that says if a point of our field is behind a wall or not from a POV of an other point
- *
- * \param entity : the Entity from where we have the POV
- *        field : the field on which we are based
- *        heigh : the heigh of the point we want to study
- *        width : the width of the point we want to
- * \return bool : true if the point is behind a wall, false if not
- */
-bool behindAWall(Field aField, Entity *entity, int heigh, int width);
+void updateFieldOfViewEntity(Field *aField, Entity *entity);
 
 #endif
