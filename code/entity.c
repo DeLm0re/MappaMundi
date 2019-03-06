@@ -173,7 +173,13 @@ void updateMentalMapEntity(Entity *entity)
             if(pointWidth >= 0 && pointWidth < entity->mentalMap->width && 
                 pointHeight >= 0 && pointHeight < entity->mentalMap->height)
             {
-                entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
+                pointEnum mentalMapPoint = entity->mentalMap->data[pointWidth][pointHeight];
+
+                //Check if the old value of the point was FOG before updating it
+                if(mentalMapPoint == FOG)
+                {
+                    entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
+                }
             }
         }
     }
