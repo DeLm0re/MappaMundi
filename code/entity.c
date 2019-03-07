@@ -252,3 +252,80 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
         }
     }
 }
+
+/*
+ * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on the mental map, the vision range,
+ *      the coordinate of the point we want to test and the coordinate the entity wants to get to
+ *
+ * \param mentalMap* : A pointer to the mental map of the entity
+ * \param visionRange : the vision range of the entity
+ * \param x, y : the coordinate of the point we want to test in the neural network
+ * \param xEnd, yEnd : the coordinate the entity wants to get to
+ *      
+ * \return InputNeuralNetwork*
+ */
+InputNeuralNetwork* createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+{
+    InputNeuralNetwork* input = NULL;
+    if (mentalMap != NULL)
+    {
+        //We initialize the input
+        input = (InputNeuralNetwork*) malloc(sizeof(InputNeuralNetwork));
+        //We calculate his size which is the total tile in the vision range plus one for each coordinates
+        input->size = surface2DCircle(visionRange) + 4;
+        //We initialize the input's data
+        input->data = (float*) malloc(sizeof(float)*input->size);
+        
+        int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
+        int distanceSquare; // use to know the distance of a tile from the x and y coordinate
+        int dataIndex = 0; // use to navigate through the input's data
+        //For each tile that could be in the vision range (a square around the x and y coordinate)
+        int width, height;
+        for(width = x - visionRange; width <= x + visionRange; width++)
+        {
+            for(height = y - visionRange; height <= y + visionRange; height++)
+            {
+                //We calculate his distance to the x and y coordinate
+                distanceSquare = pow(width - x, 2) + pow(height - y, 2);
+                //If it is in the vision range
+                if (distanceSquare < radiusSquare)
+                {
+                    //If it is a tile in the mental map
+                    if (0 < width && width < mentalMap->width && 0 < height && height < mentalMap->height)
+                    {
+                        //We add it to the inputs
+                        input->data[dataIndex] = mentalMap->data[width][height];
+                    }
+                    else
+                    {
+                        //We concider it as a wall
+                        input->data[dataIndex] = WALL;
+                    }
+                    //We go to the next input's data
+                    dataIndex++;
+                }
+            }
+        }
+        //Once the map is fully added, we add the 4 cordinates
+        input->data[dataIndex] = x;
+        input->data[dataIndex + 1] = y;
+        input->data[dataIndex + 2] = xEnd;
+        input->data[dataIndex + 3] = yEnd;
+    }
+    // We return the input
+    return input;
+}
+
+void destructInput(InputNeuralNetwork** input)
+{
+    if (input != NULL)
+    {
+        if (*input != NULL)
+        {
+            free((*input)->data);
+            free(*input);
+            *input = NULL;
+        }
+    }
+}
