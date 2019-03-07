@@ -35,9 +35,15 @@ typedef struct Entity
     Point** fieldOfView;
 
     Field* mentalMap;
-    //The list of the valid visible position is to be added
     //The neural network structure is to be added
 } Entity;
+
+//The structure used to store the inputs of the neural network
+typedef struct InputNeuralNetwork
+{
+    float* data;
+    int size;
+} InputNeuralNetwork;
 
 /**
  * \fn node* initialiseEntity(int x, int y, int visionRange)
@@ -114,9 +120,23 @@ void updateMentalMapEntity(Entity *entity);
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
- *        field* : A pointer to the field on which we are based
+ * \param field* : A pointer to the field on which we are based
  * \return void
  */
 void updateFieldOfViewEntity(Field *aField, Entity *entity);
+
+/*
+ * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on the mental map, the vision range,
+ *      the coordinate of the point we want to test and the coordinate the entity wants to get to
+ *
+ * \param mentalMap* : A pointer to the mental map of the entity
+ * \param visionRange : the vision range of the entity
+ * \param x, y : the coordinate of the point we want to test in the neural network
+ * \param xEnd, yEnd : the coordinate the entity wants to get to
+ *      
+ * \return InputNeuralNetwork*
+ */
+InputNeuralNetwork* createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd);
 
 #endif

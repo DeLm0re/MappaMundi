@@ -252,3 +252,20 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
         }
     }
 }
+
+/*
+ * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on the mental map, the vision range,
+ *      the coordinate of the point we want to test and the coordinate the entity wants to get to
+ *
+ * \param mentalMap* : A pointer to the mental map of the entity
+ * \param visionRange : the vision range of the entity
+ * \param x, y : the coordinate of the point we want to test in the neural network
+ * \param xEnd, yEnd : the coordinate the entity wants to get to
+ *      
+ * \return InputNeuralNetwork*
+ */
+InputNeuralNetwork* createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+{
+    return NULL;
+}
