@@ -193,8 +193,8 @@ void destructField(Field **oneField)
  */
 int surface2DCircle(int radius)
 {
-    int rayonCarre = radius * radius;
-    float distanceCarre;
+    int radiusSquare = radius * radius;
+    float distanceSquare;
     int increment = 0;
     int x, y;
 
@@ -202,9 +202,9 @@ int surface2DCircle(int radius)
     {
         for(y = -radius; y <= radius; y++)
         {
-            distanceCarre = x*x + y*y;
+            distanceSquare = x*x + y*y;
                     
-            if(distanceCarre < rayonCarre)
+            if(distanceSquare < radiusSquare)
             {
                 increment++;
             }

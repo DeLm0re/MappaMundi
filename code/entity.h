@@ -139,4 +139,14 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity);
  */
 InputNeuralNetwork* createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd);
 
+/*
+ * \fn void destructInput(InputNeuralNetwork** input)
+ * \brief free a structure InputNeuralNetwork from the memory
+ *
+ * \param input** : a double pointer to the structure wwe want to free
+ *      
+ * \return void
+ */
+void destructInput(InputNeuralNetwork** input);
+
 #endif
