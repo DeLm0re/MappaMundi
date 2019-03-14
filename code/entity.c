@@ -253,6 +253,50 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
     }
 }
 
+/**
+ * \fn Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange)
+ * \brief function that return the field of view from a map on a given coordinate
+ *
+ * \param *mentalMap : a pointer to the map from which we want to extrat the field of view
+ * \param x, y : the coordinate in the map from wihc we will extract the field of view
+ * \param visionRange : the radius of the field of view
+ * \return Field* : the field of view
+ */
+Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange)
+{
+    Field* fieldOfView = NULL;
+    // If the mental map exist and if the vision range is greater than 0
+    if (map != NULL && visionRange > 0)
+    {
+        // We initialize the foeld of view
+        fieldOfView = initialiseField(visionRange*2 + 1, visionRange*2 + 1, WALL);
+        int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
+        float distanceSquare; // use to know the distance of a tile from the x and y coordinate
+        //For each tile that could be in the vision range (a square around the x and y coordinate)
+        int width, height;
+        for(width = x - visionRange; width <= x + visionRange; width++)
+        {
+            for(height = y - visionRange; height <= y + visionRange; height++)
+            {
+                //We calculate his distance to the x and y coordinate
+                distanceSquare = pow(width - x, 2) + pow(height - y, 2);
+                //If it is in the vision range
+                if(distanceSquare < radiusSquare)
+                {
+                    // If it doesn't go out of bounds
+                    if (0 < width && width < map->width && 0 < height && height < map->height)
+                    {
+                        // We add it to the mental map
+                        fieldOfView->data[width - x + visionRange][height - y + visionRange] = map->data[width][height];
+                    }
+                }
+            }
+        }
+    }
+    // Then, we return the field of view
+    return fieldOfView;
+}
+
 /*
  * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
  * \brief function that create the inputs for the neural network based on the mental map, the vision range,
@@ -265,53 +309,49 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
  *      
  * \return InputNeuralNetwork*
  */
-InputNeuralNetwork* createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int yEnd)
 {
     InputNeuralNetwork* input = NULL;
-    if (mentalMap != NULL)
+    if (fieldOfView != NULL)
     {
-        //We initialize the input
-        input = (InputNeuralNetwork*) malloc(sizeof(InputNeuralNetwork));
-        //We calculate his size which is the total tile in the vision range plus one for each coordinates
-        input->size = surface2DCircle(visionRange) + 4;
-        //We initialize the input's data
-        input->data = (float*) malloc(sizeof(float)*input->size);
-        
-        int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
-        int distanceSquare; // use to know the distance of a tile from the x and y coordinate
-        int dataIndex = 0; // use to navigate through the input's data
-        //For each tile that could be in the vision range (a square around the x and y coordinate)
-        int width, height;
-        for(width = x - visionRange; width <= x + visionRange; width++)
+        // If the field of view is a square and if the field of view has a correct format
+        if (fieldOfView->height == fieldOfView->width && fieldOfView->height%2 == 1)
         {
-            for(height = y - visionRange; height <= y + visionRange; height++)
+            // We calculate the vision range from the length of the field fo view
+            int visionRange = (fieldOfView->height - 1)/2;
+            //We initialize the input
+            input = (InputNeuralNetwork*) malloc(sizeof(InputNeuralNetwork));
+            //We calculate his size which is the total tile in the vision range plus one for each coordinates
+            input->size = surface2DCircle(visionRange) + 4;
+            //We initialize the input's data
+            input->data = (float*) malloc(sizeof(float)*input->size);
+            int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
+            int distanceSquare; // use to know the distance of a tile from the x and y coordinate
+            int dataIndex = 0; // use to navigate through the input's data
+            //For each tile that could be in the vision range (a square around the x and y coordinate)
+            int width, height;
+            for(width = -visionRange; width <= visionRange; width++)
             {
-                //We calculate his distance to the x and y coordinate
-                distanceSquare = pow(width - x, 2) + pow(height - y, 2);
-                //If it is in the vision range
-                if (distanceSquare < radiusSquare)
+                for(height = -visionRange; height <= visionRange; height++)
                 {
-                    //If it is a tile in the mental map
-                    if (0 < width && width < mentalMap->width && 0 < height && height < mentalMap->height)
+                    //We calculate his distance to the center coordinate
+                    distanceSquare = width*width + height*height;
+                    //If it is in the vision range
+                    if (distanceSquare < radiusSquare)
                     {
                         //We add it to the inputs
-                        input->data[dataIndex] = mentalMap->data[width][height];
+                        input->data[dataIndex] = fieldOfView->data[width + visionRange][height + visionRange];
+                        //We go to the next input's data
+                        dataIndex++;
                     }
-                    else
-                    {
-                        //We concider it as a wall
-                        input->data[dataIndex] = WALL;
-                    }
-                    //We go to the next input's data
-                    dataIndex++;
                 }
             }
+            //Once the map is fully added, we add the 4 cordinates
+            input->data[dataIndex] = x;
+            input->data[dataIndex + 1] = y;
+            input->data[dataIndex + 2] = xEnd;
+            input->data[dataIndex + 3] = yEnd;
         }
-        //Once the map is fully added, we add the 4 cordinates
-        input->data[dataIndex] = x;
-        input->data[dataIndex + 1] = y;
-        input->data[dataIndex + 2] = xEnd;
-        input->data[dataIndex + 3] = yEnd;
     }
     // We return the input
     return input;

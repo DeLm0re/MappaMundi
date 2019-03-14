@@ -125,19 +125,29 @@ void updateMentalMapEntity(Entity *entity);
  */
 void updateFieldOfViewEntity(Field *aField, Entity *entity);
 
+/**
+ * \fn Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange)
+ * \brief function that return the field of view from a map on a given coordinate
+ *
+ * \param *mentalMap : a pointer to the map from which we want to extrat the field of view
+ * \param x, y : the coordinate in the map from wihc we will extract the field of view
+ * \param visionRange : the radius of the field of view
+ * \return Field* : the field of view
+ */
+Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange);
+
 /*
  * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
- * \brief function that create the inputs for the neural network based on the mental map, the vision range,
+ * \brief function that create the inputs for the neural network based on the fieldOfView,
  *      the coordinate of the point we want to test and the coordinate the entity wants to get to
  *
  * \param mentalMap* : A pointer to the mental map of the entity
- * \param visionRange : the vision range of the entity
  * \param x, y : the coordinate of the point we want to test in the neural network
  * \param xEnd, yEnd : the coordinate the entity wants to get to
  *      
  * \return InputNeuralNetwork*
  */
-InputNeuralNetwork* createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd);
+InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int yEnd);
 
 /*
  * \fn void destructInput(InputNeuralNetwork** input)
