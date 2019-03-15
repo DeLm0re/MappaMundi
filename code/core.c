@@ -254,7 +254,7 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
 
     if (fieldOfView->data[(fieldOfView->height-1)/2][(fieldOfView->width-1)/2] != EMPTY) 
     {
-        return NULL;
+        return 0;
     }
     
     for(int width = 0; width < fieldOfView->width; width++)
@@ -276,7 +276,7 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
         }
     }
 
-    distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-xPosition)*(yFinalPosition-xPosition);
+    distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-yPosition)*(yFinalPosition-yPosition);
 
     value = fogPoint + distPoint*0.1;
 
