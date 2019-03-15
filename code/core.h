@@ -66,9 +66,9 @@ void destructField(Field **oneField);
 
 /**
  * \fn int surface2DCircle(int radius)
- * \brief function that return the surface of a 2D circle
+ * \brief function that return the number of 1 by 1 square in a 2D circle
  *
- * \param int radius : the radius of the circle
+ * \param radius : the radius of the circle
  * \return int : the surface
  */
 int surface2DCircle(int radius);
