@@ -215,3 +215,72 @@ int surface2DCircle(int radius)
 
     return(increment);
 }
+
+/**
+ * \fn Field* generateRandomFieldOfView(int visionRange)
+ * \brief function that returns a random field of view
+ * will be used for labelization
+ *
+ * \param int visionRange : the vision range
+ * \return Field*
+ */
+Field* generateRandomFieldOfView(int visionRange)
+{
+    Field *fieldOfView = initialiseField(2*visionRange+1, 2*visionRange+1, FOG);
+
+    return fieldOfView;
+}
+
+/**
+ * \fn Field* labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the entity
+ * \param int yPosition : y coordinate of the entity
+ * \param int xFinalPosition : x coordinate of the end point
+ * \param int yFinalPosition : y coordinate of the end point
+ * \return float
+ */
+float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+{
+    int emptyPoint = 0;
+    int wallPoint = 0;
+    int fogPoint = 0;
+    int distPoint = 0;
+    float value = 0;
+    float finalValue = 0;
+
+    if (fieldOfView->data[(fieldOfView->height-1)/2][(fieldOfView->width-1)/2] != EMPTY) 
+    {
+        return NULL;
+    }
+    
+    for(int width = 0; width < fieldOfView->width; width++)
+    {
+        for(int height = 0; height < fieldOfView->height; height++)
+        {
+            switch (fieldOfView->data[width][height])
+            {
+                case EMPTY:
+                    emptyPoint++;
+                    break;
+                case WALL:
+                    wallPoint++;
+                    break;
+                case FOG:
+                    fogPoint++;
+                    break;
+            }
+        }
+    }
+
+    distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-xPosition)*(yFinalPosition-xPosition);
+
+    value = fogPoint + distPoint*0.1;
+
+    finalValue = (1.0/(1+exp(-value)));
+
+    return finalValue;
+}

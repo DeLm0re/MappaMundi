@@ -73,4 +73,28 @@ void destructField(Field **oneField);
  */
 int surface2DCircle(int radius);
 
+/**
+ * \fn Field* generateRandomFieldOfView(int visionRange)
+ * \brief function that returns a random field of view
+ * will be used for labelization
+ *
+ * \param int visionRange : the vision range
+ * \return Field*
+ */
+Field* generateRandomFieldOfView(int visionRange);
+
+/**
+ * \fn Field* labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the entity
+ * \param int yPosition : y coordinate of the entity
+ * \param int xFinalPosition : x coordinate of the end point
+ * \param int yFinalPosition : y coordinate of the end point
+ * \return float
+ */
+float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
+
 #endif
