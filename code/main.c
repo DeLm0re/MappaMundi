@@ -78,12 +78,64 @@ int main(void)
 	int positionInPath = 0;
 	node* nodePosition = NULL;
 	
+	//--- Creation and learning loop for the neural network
+	    
+    //We create a neural network
+    int neuronsPerLayers[4] = {surface2DCircle(RADIUS_VIEWPOINT) + 4, floor(surface2DCircle(RADIUS_VIEWPOINT)/2), 2, 1};
+    NeuralNetwork* neuralNetwork = createNeuralNetwork(4, neuronsPerLayers, -0.5, 0.5);
+    
+    //Some variables used for the neural network
+    Field* fieldInput = NULL; //use to store the field of view that will be used as an input for our neural network
+    InputNeuralNetwork* inputs = NULL; //use to store the inputs of the neural network
+    float referenceOutputs[1] = {0}; //use to store the expected output of the neural network
+    
+    //Some variables used for the learning
+    int correctAnswer = 0;
+    float successRate = 0;
+    int nbLearning = 0;
+    // While the neural network is not correct 100% of the time
+    while (successRate < 1)
+    {
+        //We create a new field of view
+        fieldInput = generateRandomFieldOfView(RADIUS_VIEWPOINT);
+        //We create new random coordinates for the position of an entity and for the end coordinate
+        int xPosition = rand()%fieldWidth;
+        int yPosition = rand()%fieldHeight;
+        int xFinalPosition = rand()%fieldWidth;
+        int yFinalPosition = rand()%fieldHeight;
+        //We convert the field of view to an input for the neural network
+        inputs = createInput(fieldInput, xPosition, yPosition, xFinalPosition, yFinalPosition);
+        //We create the expected output with the labeling function
+        referenceOutputs[0] = labeling(fieldInput, xPosition, yPosition, xFinalPosition, yFinalPosition);
+        
+        //We make the neural network learn and if he andswered correctly
+        if(superviseLearningNeuralNetwork(neuralNetwork, inputs->data, referenceOutputs, 0.1, 0.1))
+        {
+            // We count it as a new correct answer
+            correctAnswer++;
+        }
+        
+        //We increment the number of learning
+        nbLearning++;
+        //Every 200 learnings
+        if(nbLearning >= 200)
+        {
+            //We calculate the average success
+            successRate = ((float) correctAnswer)/nbLearning;
+            //We reset the number of learning and the number of success
+            nbLearning = 0;
+            correctAnswer = 0;
+        }
+        
+        //We free the inputs for the next loop
+        destructInput(&inputs);
+        destructField(&fieldInput);
+    }
+	
+	//--- Main loop
+	
 	while(data->endEvent == false)
 	{
-	    //--- Creation and learning loop for the neural network
-	    //int neuronsPerLayers[surface2DCircle(RADIUS_VIEWPOINT), 
-	    //neuralNetwork = createNeuralNetwork(int nbLayer, int* neuronsPerLayers, float minWeight, float maxWeight);
-	
 		//Initialisation and generation of the field
 		theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 		generateEnv(theField);
@@ -189,6 +241,9 @@ int main(void)
 		//Free the memory of the field
 		destructField(&theField);
 	}
+
+    //Free the neural network from the memory
+	destructNeuralNetwork(&neuralNetwork);
 
 	//Ending the thread
 	data->endEvent = true;
