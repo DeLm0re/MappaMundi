@@ -12,20 +12,22 @@
 //Header file
 #include "display.h"
 #include "eventhandler.h"
+#include "neuralNetwork.h"
 
 //Main of the programme
 int main(void)
 {
 	//Initialize the random seed value
 	srand(12345);
-
-/* 	SDL_Color openSetColor = {80, 160, 80, 255};
-	SDL_Color closedSetColor = {160, 80, 80, 255}; 
-	SDL_Color pathColor = {80, 80, 160, 255};*/
+    
+    // Create a color for the entity that will move
 	SDL_Color entityColor = {80, 160, 160, 255};
 
+    // init a width and height for the windows
 	int windowWidth = 1000;
 	int windowHeight = 1000;
+	
+	// Set some basic variables for the SDL to work
 	SDL_Event event;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -78,6 +80,10 @@ int main(void)
 	
 	while(data->endEvent == false)
 	{
+	    //--- Creation and learning loop for the neural network
+	    //int neuronsPerLayers[surface2DCircle(RADIUS_VIEWPOINT), 
+	    //neuralNetwork = createNeuralNetwork(int nbLayer, int* neuronsPerLayers, float minWeight, float maxWeight);
+	
 		//Initialisation and generation of the field
 		theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 		generateEnv(theField);
