@@ -16,7 +16,7 @@
 #define RADIUS_VIEWPOINT (10)
 
 //Header file for core functions
-#include "core.h"
+#include "pathfinding.h"
 
 //The structure point used as a point of a field which can be a wall, empty or fog
 typedef struct Point
@@ -141,7 +141,7 @@ Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange);
  * \brief function that create the inputs for the neural network based on the fieldOfView,
  *      the coordinate of the point we want to test and the coordinate the entity wants to get to
  *
- * \param mentalMap* : A pointer to the mental map of the entity
+ * \param fieldOfView* : A pointer to a field of the mental map of the entity
  * \param x, y : the coordinate of the point we want to test in the neural network
  * \param xEnd, yEnd : the coordinate the entity wants to get to
  *      
@@ -158,5 +158,45 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
  * \return void
  */
 void destructInput(InputNeuralNetwork** input);
+
+/**
+ * \fn void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd)
+ * \brief function that change the values in an interest field according to the output of a trained neural network
+ *
+ * \param InterestField* interestField : the interest field that will be update
+ * \param NeuralNetwork* neuralNetwork : the neural network that will give their values to the point in the interest field
+ * \param Field* mentalMap : the mental map on wich the updated values will be based on
+ * \param int xEnd : x coordinate of the ending point
+ * \param int yEnd : y coordinate of the ending point
+ * \param int visionRange : the vision range of the entity
+ * \return void
+ */
+void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange);
+
+/**
+ * \fn void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd)
+ * \brief function that change the values in an interest field according to the labelisation function
+ *
+ * \param InterestField* interestField : the interest field that will be update
+ * \param Field* mentalMap : the mental map on wich the updated values will be based on
+ * \param int xEnd : x coordinate of the ending point
+ * \param int yEnd : y coordinate of the ending point
+ * \param int visionRange : the vision range of the entity
+ * \return void
+ */
+void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange);
+
+/**
+ * \fn void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
+ * \brief function that change the coordinate of a node to the best coordinate on the interest field.
+ * This is use to get the position where our entity will go next.
+ * Each time this function is called, the choosen position will be set to 0 (no interest)
+ * will be used for labelisation
+ *
+ * \param node* wantedPosition : the node which will be updated to the best position on the interest field
+ * \param InterestField* interestField : the interest field that will be used to get the best position
+ * \return void
+ */
+void updateBestWantedPosition(node* wantedPosition, InterestField* interestField);
 
 #endif

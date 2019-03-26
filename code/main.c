@@ -21,10 +21,11 @@ int main(void)
     
     // Create a color for the entity that will move
 	SDL_Color entityColor = {80, 160, 160, 255};
+	SDL_Color wantedPositionColor = {160, 80, 80, 255};
 
     // init a width and height for the windows
-	int windowWidth = 1000;
-	int windowHeight = 1000;
+	int windowWidth = 800;
+	int windowHeight = 500;
 	
 	// Set some basic variables for the SDL to work
 	SDL_Event event;
@@ -80,10 +81,10 @@ int main(void)
 	node* wantedPosition = NULL; //The position the entity want to explore
 	
 	//--- Creation and learning loop for the neural network
-	    
+	/*    
     //We create a neural network
-    int neuronsPerLayers[4] = {surface2DCircle(RADIUS_VIEWPOINT) + 4, floor(surface2DCircle(RADIUS_VIEWPOINT)/2), 2, 1};
-    NeuralNetwork* neuralNetwork = createNeuralNetwork(4, neuronsPerLayers, -0.5, 0.5);
+    int neuronsPerLayers[5] = {surface2DCircle(RADIUS_VIEWPOINT) + 4, (surface2DCircle(RADIUS_VIEWPOINT) + 4)*2, surface2DCircle(RADIUS_VIEWPOINT)/2, 2, 1};
+    NeuralNetwork* neuralNetwork = createNeuralNetwork(5, neuronsPerLayers, -0.5, 0.5);
     
     //Some variables used for the neural network
     Field* fieldInput = NULL; //use to store the field of view that will be used as an input for our neural network
@@ -95,7 +96,7 @@ int main(void)
     float successRate = 0;
     int nbLearning = 0;
     // While the neural network is not correct 100% of the time
-    while (successRate < 1)
+    while (successRate < 0.90)
     {
         //We create a new field of view
         fieldInput = generateRandomFieldOfView(RADIUS_VIEWPOINT);
@@ -123,6 +124,7 @@ int main(void)
         {
             //We calculate the average success
             successRate = ((float) correctAnswer)/nbLearning;
+            printf("successRate : %f\n", successRate);
             //We reset the number of learning and the number of success
             nbLearning = 0;
             correctAnswer = 0;
@@ -132,7 +134,7 @@ int main(void)
         destructInput(&inputs);
         destructField(&fieldInput);
     }
-	
+	*/
 	//--- Main loop
 	
 	while(data->endEvent == false)
@@ -154,6 +156,12 @@ int main(void)
 		{
 		    //--- Pathfinding algorithm and movement along it
 		    
+		    //Updates the field of view of our entity
+	        updateFieldOfViewEntity(theField, entity);
+
+	        //Updates the mental map of our entity with its new field of view
+	        updateMentalMapEntity(entity);
+		    
 		    //Clear the screen
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             SDL_RenderClear(renderer);
@@ -166,15 +174,29 @@ int main(void)
             //Refresh the window
         	SDL_RenderPresent(renderer);
 		    
-		    // We set a defautl wanted node
-		    wantedPosition = endNode;
-		    // We try to find a path
+		    //We initialize an interest field
+		    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
+		    //We update each values of the interest field with what our neural network think
+		    //updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+		    updateInterestFieldCheat(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+		    //We set a default wanted node
+		    wantedPosition = cpyNode(endNode);
+		    //We update the start node of the pathfinding
+		    startNode->x = entity->x;
+		    startNode->y = entity->y;
+		    //We try to find a path
 		    while((path == startNode || path == NULL) && !data->endEvent)
 		    {
-		        // We try to find a path
-		        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
-		        // We change our wanted node
-		        //////function that return a correct node
+		        destructNodes(&path);
+		        //We change our wanted node to the best position found by the neural network
+		        updateBestWantedPosition(wantedPosition, interestField);
+		        // If the wantedPosition is not the actual position of the entity
+	            if(wantedPosition->x != startNode->x && wantedPosition->y != startNode->y)
+	            {
+		            //We try to find a path
+		            path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+	            }
+		        
 		        //If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
                 if (event.type == SDL_QUIT ||
                 (event.type == SDL_TEXTINPUT && 
@@ -189,10 +211,12 @@ int main(void)
 	                waitForInstruction = false;
                 }
 		    }
-		    // We free the wantedPosition from the memory
-		    destructNodes(&wantedPosition);
-
-	        positionInPath = 0;
+		    //We free the interest field from the memory
+		    destructInterestField(&interestField);
+		    printf("%d, %d\n", wantedPosition->x, wantedPosition->y);
+		    
+		    //We reset the path position
+		    positionInPath = 0;
 	        //Move the entity along the path
 	        do
 	        {
@@ -221,6 +245,8 @@ int main(void)
 			        drawFieldOfViewEntity(renderer, entity, tileSize);
 		            //Draw the entity
 		            showEntity(entity, renderer, entityColor, tileSize);
+		            //We draw the wanted position
+                    viewNodes(&wantedPosition, renderer, wantedPositionColor, tileSize);
 		            //Refresh the window
 	            	SDL_RenderPresent(renderer);
 	            	//We wait 30ms at each step to see the entity moving
@@ -241,6 +267,13 @@ int main(void)
 		            }
 		        }
 	        }while(nodePosition != NULL && !data->endEvent);
+	        //Free the memory of all the nodes use for the pathfinding
+	        destructNodes(&path);
+	        path = NULL;
+	        destructNodes(&startNode);
+	        destructNodes(&endNode);
+	        // We free the wantedPosition from the memory
+		    destructNodes(&wantedPosition);
 		}
 		//While the waiting flag is set to true (waiting for inputs)
 		while(waitForInstruction)
@@ -271,18 +304,12 @@ int main(void)
 		//We put the waiting flag back to true
 		waitForInstruction = true;
 
-		//Free the memory of all the nodes
-		destructNodes(&path);
-		destructNodes(&startNode);
-		destructNodes(&endNode);
-		nodePosition = NULL;
-		positionInPath = 0;
 		//Free the memory of the field
 		destructField(&theField);
 	}
 
     //Free the neural network from the memory
-	destructNeuralNetwork(&neuralNetwork);
+	//destructNeuralNetwork(&neuralNetwork);
 
 	//Ending the thread
 	data->endEvent = true;
