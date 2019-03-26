@@ -12,7 +12,6 @@
 //Header file
 #include "display.h"
 #include "eventhandler.h"
-#include "neuralNetwork.h"
 
 //Main of the programme
 int main(void)
@@ -68,15 +67,17 @@ int main(void)
 	bool waitForInstruction = true;
 	//Declaration of the field
     Field *theField = NULL;
-	//Declaration of the nodes for the pathfinding
+	//Declaration of the nodes where the entity will start and where it wants to go
 	node* startNode = NULL;
 	node* endNode = NULL;
+	//Use to store the path found by the pathfinding
 	node* path = NULL;
 	//Declaration of the entity wich will be used by the neural network
 	Entity* entity = NULL;
 	//Used to make the entity move along the path found
 	int positionInPath = 0;
-	node* nodePosition = NULL;
+	node* nodePosition = NULL; //The position of the entity
+	node* wantedPosition = NULL; //The position the entity want to explore
 	
 	//--- Creation and learning loop for the neural network
 	    
@@ -148,61 +149,99 @@ int main(void)
 		entity->y = startNode->y;
 		endNode = nearestNode(theField, fieldWidth, fieldHeight);
 		
-		//--- Pathfinding algorithm and visualisation
-        
-		path = findPathFrom_To_(startNode, endNode, theField, &(data->endEvent));
-        
-        //--- Entity movement along the line
-
-		//Move the entity along the path
-		do
+		//While the entity hasn't arrived
+		while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
 		{
-			//get the next position
-			positionInPath++;
-			nodePosition = getNode(&path, positionInPath);
-			//If we find the next nodePosition
-			if (nodePosition != NULL)
-			{
-			    //Updates the position of the entity for the nearest starting node
-			    entity->x = nodePosition->x;
-			    entity->y = nodePosition->y;
+		    //--- Pathfinding algorithm and movement along it
+		    
+		    //Clear the screen
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_RenderClear(renderer);
+            //Draw the field
+            drawField(renderer, entity->mentalMap, tileSize);
+	        //Draw the field of view
+	        drawFieldOfViewEntity(renderer, entity, tileSize);
+            //Draw the entity
+            showEntity(entity, renderer, entityColor, tileSize);
+            //Refresh the window
+        	SDL_RenderPresent(renderer);
+		    
+		    // We set a defautl wanted node
+		    wantedPosition = endNode;
+		    // We try to find a path
+		    while((path == startNode || path == NULL) && !data->endEvent)
+		    {
+		        // We try to find a path
+		        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+		        // We change our wanted node
+		        //////function that return a correct node
+		        //If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
+                if (event.type == SDL_QUIT ||
+                (event.type == SDL_TEXTINPUT && 
+	            (*event.text.text == 'q' || 
+	            *event.text.text == 'Q')))
+                {
+                    //We put an end to the program
+	                data->endEvent = true;
+	                //We update the exit statut
+	                statut = EXIT_SUCCESS;
+	                //We set the waiting flag to false (not waiting for inputs anymore)
+	                waitForInstruction = false;
+                }
+		    }
+		    // We free the wantedPosition from the memory
+		    destructNodes(&wantedPosition);
 
-				//Updates the field of view of our entity
-				updateFieldOfViewEntity(theField, entity);
+	        positionInPath = 0;
+	        //Move the entity along the path
+	        do
+	        {
+		        //get the next position
+		        positionInPath++;
+		        nodePosition = getNode(&path, positionInPath);
+		        //If we find the next nodePosition
+		        if (nodePosition != NULL)
+		        {
+		            //Updates the position of the entity for the nearest starting node
+		            entity->x = nodePosition->x;
+		            entity->y = nodePosition->y;
 
-				//Updates the mental map of our entity with its new field of view
-				updateMentalMapEntity(entity);
-			    
-			    //Clear the screen
-			    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			    SDL_RenderClear(renderer);
-			    //Draw the field
-			    drawField(renderer, entity->mentalMap, tileSize);
-				//Draw the field of view
-				drawFieldOfViewEntity(renderer, entity, tileSize);
-			    //Draw the entity
-			    showEntity(entity, renderer, entityColor, tileSize);
-			    //Refresh the window
-		    	SDL_RenderPresent(renderer);
-		    	//We wait 30ms at each step to see the entity moving
-			    SDL_Delay(30);
-			    
-			    //If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
-			    if (event.type == SDL_QUIT ||
-			    (event.type == SDL_TEXTINPUT && 
-				(*event.text.text == 'q' || 
-				*event.text.text == 'Q')))
-			    {
-			        //We put an end to the program
-				    data->endEvent = true;
-				    //We update the exit statut
-				    statut = EXIT_SUCCESS;
-				    //We set the waiting flag to false (not waiting for inputs anymore)
-				    waitForInstruction = false;
-			    }
-			}
-		}while(nodePosition != NULL && !data->endEvent);
-		
+			        //Updates the field of view of our entity
+			        updateFieldOfViewEntity(theField, entity);
+
+			        //Updates the mental map of our entity with its new field of view
+			        updateMentalMapEntity(entity);
+		            
+		            //Clear the screen
+		            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		            SDL_RenderClear(renderer);
+		            //Draw the field
+		            drawField(renderer, entity->mentalMap, tileSize);
+			        //Draw the field of view
+			        drawFieldOfViewEntity(renderer, entity, tileSize);
+		            //Draw the entity
+		            showEntity(entity, renderer, entityColor, tileSize);
+		            //Refresh the window
+	            	SDL_RenderPresent(renderer);
+	            	//We wait 30ms at each step to see the entity moving
+		            SDL_Delay(30);
+		            
+		            //If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
+		            if (event.type == SDL_QUIT ||
+		            (event.type == SDL_TEXTINPUT && 
+			        (*event.text.text == 'q' || 
+			        *event.text.text == 'Q')))
+		            {
+		                //We put an end to the program
+			            data->endEvent = true;
+			            //We update the exit statut
+			            statut = EXIT_SUCCESS;
+			            //We set the waiting flag to false (not waiting for inputs anymore)
+			            waitForInstruction = false;
+		            }
+		        }
+	        }while(nodePosition != NULL && !data->endEvent);
+		}
 		//While the waiting flag is set to true (waiting for inputs)
 		while(waitForInstruction)
 		{

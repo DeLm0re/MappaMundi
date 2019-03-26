@@ -14,6 +14,7 @@
 
 //Header file for graphical display
 #include "prototype.h"
+#include "neuralNetwork.h"
 
 /**
  * \fn int **create2DIntArray(int width, int height)

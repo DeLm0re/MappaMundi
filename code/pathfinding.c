@@ -93,11 +93,15 @@ node* nearestNode(Field *oneField, int x, int y)
  */
 void destructNodes(node** frontNode)
 {
-	//While their is still node in the chakn list
-	while((*frontNode)->linkedNode != NULL)
-	{
-		//Extract the top node from the chain list and free it
-		free(popNode(frontNode));
+    // If the front node exists
+    if (*frontNode != NULL)
+    {
+	    //While their is still node in the chakn list
+	    while((*frontNode)->linkedNode != NULL)
+	    {
+		    //Extract the top node from the chain list and free it
+		    free(popNode(frontNode));
+	    }
 	}
 }
 
