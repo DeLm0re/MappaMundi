@@ -13,7 +13,7 @@
     #define H_ENTITY
 
 //Define the maximum number of points a field of view can have
-#define RADIUS_VIEWPOINT (10)
+#define RADIUS_VIEWPOINT (5)
 
 //Header file for core functions
 #include "pathfinding.h"

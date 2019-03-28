@@ -39,7 +39,7 @@ typedef struct Field
 
 
 //Enumeration of what can be a point in the field
-typedef enum {EMPTY = 0, WALL = 1, FOG = 2} pointEnum;
+typedef enum {EMPTY = 0, WALL = 1, FOG = 2, VISITED = 3} pointEnum;
 
 #endif
 

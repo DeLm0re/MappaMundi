@@ -345,6 +345,7 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
     int emptyPoint = 0;
     int wallPoint = 0;
     int fogPoint = 0;
+    int visitedPoint = 0;
     int distPoint = 0;
     float value = 0;
     float finalValue = 0;
@@ -368,6 +369,9 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
                     break;
                 case FOG:
                     fogPoint++;
+                    break;
+                case VISITED:
+                    visitedPoint++;
                     break;
             }
         }

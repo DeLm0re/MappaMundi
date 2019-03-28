@@ -158,21 +158,8 @@ int main(void)
 		    
 		    //Updates the field of view of our entity
 	        updateFieldOfViewEntity(theField, entity);
-
 	        //Updates the mental map of our entity with its new field of view
 	        updateMentalMapEntity(entity);
-		    
-		    //Clear the screen
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDL_RenderClear(renderer);
-            //Draw the field
-            drawField(renderer, entity->mentalMap, tileSize);
-	        //Draw the field of view
-	        drawFieldOfViewEntity(renderer, entity, tileSize);
-            //Draw the entity
-            showEntity(entity, renderer, entityColor, tileSize);
-            //Refresh the window
-        	SDL_RenderPresent(renderer);
 		    
 		    //We initialize an interest field
 		    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
@@ -188,14 +175,14 @@ int main(void)
 		    while((path == startNode || path == NULL) && !data->endEvent)
 		    {
 		        destructNodes(&path);
-		        //We change our wanted node to the best position found by the neural network
-		        updateBestWantedPosition(wantedPosition, interestField);
-		        // If the wantedPosition is not the actual position of the entity
-	            if(wantedPosition->x != startNode->x && wantedPosition->y != startNode->y)
-	            {
-		            //We try to find a path
-		            path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
-	            }
+		        //We try to find a path
+		        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+		        //If we haven't find a path
+		        if (path == startNode || path == NULL)
+		        {
+		            //We change our wanted node to the best position found by the neural network
+		            updateBestWantedPosition(wantedPosition, interestField);
+		        }
 		        
 		        //If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
                 if (event.type == SDL_QUIT ||
@@ -213,7 +200,6 @@ int main(void)
 		    }
 		    //We free the interest field from the memory
 		    destructInterestField(&interestField);
-		    printf("%d, %d\n", wantedPosition->x, wantedPosition->y);
 		    
 		    //We reset the path position
 		    positionInPath = 0;
@@ -229,6 +215,7 @@ int main(void)
 		            //Updates the position of the entity for the nearest starting node
 		            entity->x = nodePosition->x;
 		            entity->y = nodePosition->y;
+		            entity->mentalMap->data[entity->x][entity->y] = VISITED;
 
 			        //Updates the field of view of our entity
 			        updateFieldOfViewEntity(theField, entity);
@@ -243,10 +230,10 @@ int main(void)
 		            drawField(renderer, entity->mentalMap, tileSize);
 			        //Draw the field of view
 			        drawFieldOfViewEntity(renderer, entity, tileSize);
+			        //We draw the wanted position
+                    viewNodes(&wantedPosition, renderer, wantedPositionColor, tileSize);
 		            //Draw the entity
 		            showEntity(entity, renderer, entityColor, tileSize);
-		            //We draw the wanted position
-                    viewNodes(&wantedPosition, renderer, wantedPositionColor, tileSize);
 		            //Refresh the window
 	            	SDL_RenderPresent(renderer);
 	            	//We wait 30ms at each step to see the entity moving
