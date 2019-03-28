@@ -180,6 +180,8 @@ void updateMentalMapEntity(Entity *entity)
                 {
                     entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
                 }
+                
+                entity->mentalMap->data[entity->x][entity->y] = VISITED;
             }
         }
     }
@@ -322,7 +324,7 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
             //We initialize the input
             input = (InputNeuralNetwork*) malloc(sizeof(InputNeuralNetwork));
             //We calculate his size which is the total tile in the vision range plus one for each coordinates
-            input->size = surface2DCircle(visionRange) + 4;
+            input->size = surface2DCircle(visionRange) + 1;
             //We initialize the input's data
             input->data = (float*) malloc(sizeof(float)*input->size);
             int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
@@ -340,17 +342,14 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
                     if (distanceSquare < radiusSquare)
                     {
                         //We add it to the inputs
-                        input->data[dataIndex] = fieldOfView->data[width + visionRange][height + visionRange];
+                        input->data[dataIndex] = neuroneTransferFunction(fieldOfView->data[width + visionRange][height + visionRange]);
                         //We go to the next input's data
                         dataIndex++;
                     }
                 }
             }
             //Once the map is fully added, we add the 4 cordinates
-            input->data[dataIndex] = x;
-            input->data[dataIndex + 1] = y;
-            input->data[dataIndex + 2] = xEnd;
-            input->data[dataIndex + 3] = yEnd;
+            input->data[dataIndex] = pow(x-xEnd, 2) + pow(y-yEnd, 2);
         }
     }
     // We return the input
@@ -391,15 +390,22 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
         {
             for(height = 0; height < interestField->height; height++)
             {
-                Field* fieldOfView = getFieldOfViewFromMap(mentalMap, width, height, visionRange);
-                InputNeuralNetwork* inputs = createInput(fieldOfView, width, height, xEnd, yEnd);
-                float* outputs = getOutputOfNeuralNetwork(neuralNetwork, inputs->data);
-                
-                interestField->data[width][height] = outputs[0];
-                
-                destructField(&fieldOfView);
-                destructInput(&inputs);
-                free(outputs);
+                if (mentalMap->data[width][height] != EMPTY)
+                {
+                    interestField->data[width][height] = 0;
+                }
+                else
+                {
+                    Field* fieldOfView = getFieldOfViewFromMap(mentalMap, width, height, visionRange);
+                    InputNeuralNetwork* inputs = createInput(fieldOfView, width, height, xEnd, yEnd);
+                    float* outputs = getOutputOfNeuralNetwork(neuralNetwork, inputs->data);
+                    
+                    interestField->data[width][height] = outputs[0];
+                    
+                    destructField(&fieldOfView);
+                    destructInput(&inputs);
+                    free(outputs);
+                }
             }
         }
     }

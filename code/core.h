@@ -128,9 +128,10 @@ int surface2DCircle(int radius);
  * will be used for labelization
  *
  * \param int visionRange : the vision range
+ * \param bool isValid : if the random field of view is a valid position to move or not
  * \return Field*
  */
-Field* generateRandomFieldOfView(int visionRange);
+Field* generateRandomFieldOfView(int visionRange, bool isValid);
 
 /**
  * \fn Field* labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)

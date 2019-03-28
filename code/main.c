@@ -81,10 +81,10 @@ int main(void)
 	node* wantedPosition = NULL; //The position the entity want to explore
 	
 	//--- Creation and learning loop for the neural network
-	/*    
+	
     //We create a neural network
-    int neuronsPerLayers[5] = {surface2DCircle(RADIUS_VIEWPOINT) + 4, (surface2DCircle(RADIUS_VIEWPOINT) + 4)*2, surface2DCircle(RADIUS_VIEWPOINT)/2, 2, 1};
-    NeuralNetwork* neuralNetwork = createNeuralNetwork(5, neuronsPerLayers, -0.5, 0.5);
+    int neuronsPerLayers[4] = {surface2DCircle(RADIUS_VIEWPOINT) + 1, surface2DCircle(RADIUS_VIEWPOINT) + 1, 2, 1};
+    NeuralNetwork* neuralNetwork = createNeuralNetwork(4, neuronsPerLayers, -0.5, 0.5);
     
     //Some variables used for the neural network
     Field* fieldInput = NULL; //use to store the field of view that will be used as an input for our neural network
@@ -96,10 +96,11 @@ int main(void)
     float successRate = 0;
     int nbLearning = 0;
     // While the neural network is not correct 100% of the time
-    while (successRate < 0.90)
+    while (successRate < 0.70)
     {
         //We create a new field of view
-        fieldInput = generateRandomFieldOfView(RADIUS_VIEWPOINT);
+        fieldInput = generateRandomFieldOfView(RADIUS_VIEWPOINT, true);
+        
         //We create new random coordinates for the position of an entity and for the end coordinate
         int xPosition = rand()%fieldWidth;
         int yPosition = rand()%fieldHeight;
@@ -111,7 +112,7 @@ int main(void)
         referenceOutputs[0] = labeling(fieldInput, xPosition, yPosition, xFinalPosition, yFinalPosition);
         
         //We make the neural network learn and if he andswered correctly
-        if(superviseLearningNeuralNetwork(neuralNetwork, inputs->data, referenceOutputs, 0.1, 0.1))
+        if(superviseLearningNeuralNetwork(neuralNetwork, inputs->data, referenceOutputs, 0.015, 0.1))
         {
             // We count it as a new correct answer
             correctAnswer++;
@@ -120,13 +121,12 @@ int main(void)
         //We increment the number of learning
         nbLearning++;
         //Every 200 learnings
-        if(nbLearning >= 200)
+        if(nbLearning%200 == 0)
         {
             //We calculate the average success
-            successRate = ((float) correctAnswer)/nbLearning;
-            printf("successRate : %f\n", successRate);
+            successRate = ((float) correctAnswer)/200;
+            printf("successRate : %f, %d\n", successRate, nbLearning);
             //We reset the number of learning and the number of success
-            nbLearning = 0;
             correctAnswer = 0;
         }
         
@@ -134,7 +134,7 @@ int main(void)
         destructInput(&inputs);
         destructField(&fieldInput);
     }
-	*/
+	
 	//--- Main loop
 	
 	while(data->endEvent == false)
@@ -164,8 +164,8 @@ int main(void)
 		    //We initialize an interest field
 		    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
 		    //We update each values of the interest field with what our neural network think
-		    //updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
-		    updateInterestFieldCheat(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+		    updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+		    //updateInterestFieldCheat(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
 		    //We set a default wanted node
 		    wantedPosition = cpyNode(endNode);
 		    //We update the start node of the pathfinding
@@ -178,7 +178,7 @@ int main(void)
 		        //We try to find a path
 		        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
 		        //If we haven't find a path
-		        if (path == startNode || path == NULL)
+		        if ((path == startNode || path == NULL))
 		        {
 		            //We change our wanted node to the best position found by the neural network
 		            updateBestWantedPosition(wantedPosition, interestField);
@@ -215,7 +215,6 @@ int main(void)
 		            //Updates the position of the entity for the nearest starting node
 		            entity->x = nodePosition->x;
 		            entity->y = nodePosition->y;
-		            entity->mentalMap->data[entity->x][entity->y] = VISITED;
 
 			        //Updates the field of view of our entity
 			        updateFieldOfViewEntity(theField, entity);
@@ -296,7 +295,7 @@ int main(void)
 	}
 
     //Free the neural network from the memory
-	//destructNeuralNetwork(&neuralNetwork);
+	destructNeuralNetwork(&neuralNetwork);
 
 	//Ending the thread
 	data->endEvent = true;
