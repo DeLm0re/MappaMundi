@@ -28,6 +28,7 @@ int drawField(SDL_Renderer *renderer, Field *oneField, int size)
     SDL_Color emptyColor = {255, 255, 255, 255};
     SDL_Color wallColor = {0, 0, 0, 255};
     SDL_Color fogColor = {100, 100, 100, 255};
+    SDL_Color visitedColor = {220, 220, 220, 255};
     SDL_Color defaultColor = {255, 0, 0, 255};
 
     SDL_Rect square = {0, 0, 0, 0};
@@ -45,7 +46,7 @@ int drawField(SDL_Renderer *renderer, Field *oneField, int size)
                         return -1;
                     }
                 break;
-            
+                
                 case EMPTY:
                     //Set white color
                     if(SDL_SetRenderDrawColor(renderer, emptyColor.r, emptyColor.g, emptyColor.b, emptyColor.a) < 0)
@@ -61,6 +62,14 @@ int drawField(SDL_Renderer *renderer, Field *oneField, int size)
                         return -1;
                     }
                 break;
+                
+                case VISITED:
+                    //Set visited color
+                    if(SDL_SetRenderDrawColor(renderer, visitedColor.r, visitedColor.g, visitedColor.b, visitedColor.a) < 0)
+                    {
+                        return -1;
+                    }
+                    break;
                 
                 default:
                     //Set default color

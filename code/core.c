@@ -34,6 +34,27 @@ int **create2DIntArray(int width, int height)
     return array;
 }
 
+/**
+ * \fn int **create2DIntArray(int width, int height)
+ * \brief function that creates a 2 dimension array of int
+ *
+ * \param width : width of the array
+ * \param height : height of the array
+ * \return int** : A pointer to the created array
+ */
+float **create2DFloatArray(int width, int height)
+{
+    float **array = (float**)malloc(sizeof(float*) * width);
+    
+    int widthIndex;
+    for(widthIndex = 0; widthIndex < width; widthIndex++)
+    {
+        array[widthIndex] = (float*)malloc(sizeof(float) * height);
+    }
+
+    return array;
+}
+
 
 /**
  * \fn Field initialiseField(int width, int height)
@@ -72,6 +93,35 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
     {
         oneField->data[widthIndex][height-1] = WALL;
         oneField->data[widthIndex][0] = WALL;
+    }
+
+    return oneField;
+}
+
+/**
+ * \fn Field initialiseInterestField(int width, int height)
+ * \brief function that initialise our field to make our environment
+ *
+ * \param width : width of the interest field
+ * \param height : height of the interest field
+ * \return Field : Pointer to an InterestField
+ */
+InterestField *initialiseInterestField(int width, int height)
+{
+    InterestField *oneField = (InterestField*)malloc(sizeof(InterestField));
+
+    oneField->width = width;
+    oneField->height = height;
+    oneField->data = create2DFloatArray(width, height);
+
+    int widthIndex, heightIndex;
+
+    for(widthIndex = 0; widthIndex < width; widthIndex++)
+    {
+        for(heightIndex = 0; heightIndex < height; heightIndex++)
+        {
+            oneField->data[widthIndex][heightIndex] = 0;
+        }
     }
 
     return oneField;
@@ -164,6 +214,27 @@ void destruct2DIntArray(int **array, int width)
 }
 
 /**
+ * \fn void destruct2DFloatArray(int **array, int width)
+ * \brief function that free the 2D array out of memory
+ *
+ * \param **array : The array to free
+ * \param width : width of the array
+ * \return void
+ */
+void destruct2DFloatArray(float **array, int width)
+{
+    int i;
+    if(array != NULL)
+    {
+        for(i = 0; i < width; i++)
+        {
+            free(array[i]);
+        }
+        free(array);
+    }
+}
+
+/**
  * \fn void destructField(Field oneField)
  * \brief function that free the field out of memory
  *
@@ -177,6 +248,27 @@ void destructField(Field **oneField)
         if(*oneField != NULL)
         {
             destruct2DIntArray((*oneField)->data, (*oneField)->width);
+            (*oneField)->data = NULL;
+            free(*oneField);
+            *oneField = NULL;
+        }
+    }
+}
+
+/**
+ * \fn void destructInterestField(InterestField **oneField)
+ * \brief function that free the field out of memory
+ *
+ * \param **oneField : A double pointer on an InterestField
+ * \return void
+ */
+void destructInterestField(InterestField **oneField)
+{
+    if(oneField != NULL)
+    {
+        if(*oneField != NULL)
+        {
+            destruct2DFloatArray((*oneField)->data, (*oneField)->width);
             (*oneField)->data = NULL;
             free(*oneField);
             *oneField = NULL;
@@ -220,12 +312,28 @@ int surface2DCircle(int radius)
  * will be used for labelization
  *
  * \param int visionRange : the vision range
+ * \param bool isValid : if the random field of view is a valid position to move or not
  * \return Field*
  */
-Field* generateRandomFieldOfView(int visionRange)
+Field* generateRandomFieldOfView(int visionRange, bool isValid)
 {
     Field *fieldOfView = initialiseField(2*visionRange+1, 2*visionRange+1, FOG);
-
+    int width, height;
+    for(width = 0; width < fieldOfView->width; width++)
+    {
+        for(height = 0; height < fieldOfView->height; height++)
+        {
+            fieldOfView->data[width][height] = rand()%3;
+        }
+    }
+    if (isValid)
+    { 
+        fieldOfView->data[visionRange][visionRange] = EMPTY;
+    }
+    else
+    {
+        fieldOfView->data[visionRange][visionRange] = rand()%2 + 1;
+    }
     return fieldOfView;
 }
 
@@ -246,6 +354,7 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
     int emptyPoint = 0;
     int wallPoint = 0;
     int fogPoint = 0;
+    int visitedPoint = 0;
     int distPoint = 0;
     float value = 0;
     float finalValue = 0;
@@ -270,15 +379,20 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
                 case FOG:
                     fogPoint++;
                     break;
+                case VISITED:
+                    visitedPoint++;
+                    break;
             }
         }
     }
 
     distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-yPosition)*(yFinalPosition-yPosition);
 
-    value = fogPoint + distPoint*0.1;
+    value = fogPoint/(distPoint*0.1);
 
     finalValue = (1.0/(1+exp(-value)));
 
     return finalValue;
 }
+
+

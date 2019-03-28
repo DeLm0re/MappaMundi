@@ -93,11 +93,15 @@ node* nearestNode(Field *oneField, int x, int y)
  */
 void destructNodes(node** frontNode)
 {
-	//While their is still node in the chakn list
-	while((*frontNode)->linkedNode != NULL)
-	{
-		//Extract the top node from the chain list and free it
-		free(popNode(frontNode));
+    // If the front node exists
+    if (*frontNode != NULL)
+    {
+	    //While their is still node in the chakn list
+	    while((*frontNode)->linkedNode != NULL)
+	    {
+		    //Extract the top node from the chain list and free it
+		    free(popNode(frontNode));
+	    }
 	}
 }
 
@@ -485,7 +489,8 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 	-It is not in the closed or open set
 	-It is in an empty tile
 	*/
-	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && theField->data[x-1][y] == EMPTY)
+	if (x-1 >= 0 && !isInSet(closedSet, x-1, y) && !isInSet(openSet, x-1, y) && 
+	    (theField->data[x-1][y] == EMPTY || theField->data[x-1][y] == VISITED))
 	{
 		//If everything is verify we create it
 		temp = initNode(x-1, y, currentNode->cost + 1, 0);
@@ -495,19 +500,22 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 		insertFrontNode(openSet, temp);
 	}
 	// etc.
-	if (x+1 < theField->width && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && theField->data[x+1][y] == EMPTY)
+	if (x+1 < theField->width && !isInSet(closedSet, x+1, y) && !isInSet(openSet, x+1, y) && 
+	    (theField->data[x+1][y] == EMPTY || theField->data[x+1][y] == VISITED))
 	{
 		temp = initNode(x+1, y, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1) && theField->data[x][y-1] == EMPTY)
+	if (y-1 >= 0 && !isInSet(closedSet, x, y-1) && !isInSet(openSet, x, y-1) && 
+	    (theField->data[x][y-1] == EMPTY || theField->data[x][y-1] == VISITED))
 	{
 		temp = initNode(x, y-1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);
 		insertFrontNode(openSet, temp);
 	}
-	if (y+1 < theField->height && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && theField->data[x][y+1] == EMPTY)
+	if (y+1 < theField->height && !isInSet(closedSet, x, y+1) && !isInSet(openSet, x, y+1) && 
+	    (theField->data[x][y+1] == EMPTY || theField->data[x][y+1] == VISITED))
 	{
 		temp = initNode(x, y+1, currentNode->cost + 1, 0);
 		setHeuristic(temp, endNode);

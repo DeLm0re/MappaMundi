@@ -180,6 +180,8 @@ void updateMentalMapEntity(Entity *entity)
                 {
                     entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
                 }
+                
+                entity->mentalMap->data[entity->x][entity->y] = VISITED;
             }
         }
     }
@@ -322,7 +324,7 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
             //We initialize the input
             input = (InputNeuralNetwork*) malloc(sizeof(InputNeuralNetwork));
             //We calculate his size which is the total tile in the vision range plus one for each coordinates
-            input->size = surface2DCircle(visionRange) + 4;
+            input->size = surface2DCircle(visionRange) + 1;
             //We initialize the input's data
             input->data = (float*) malloc(sizeof(float)*input->size);
             int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
@@ -340,17 +342,14 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
                     if (distanceSquare < radiusSquare)
                     {
                         //We add it to the inputs
-                        input->data[dataIndex] = fieldOfView->data[width + visionRange][height + visionRange];
+                        input->data[dataIndex] = neuroneTransferFunction(fieldOfView->data[width + visionRange][height + visionRange]);
                         //We go to the next input's data
                         dataIndex++;
                     }
                 }
             }
             //Once the map is fully added, we add the 4 cordinates
-            input->data[dataIndex] = x;
-            input->data[dataIndex + 1] = y;
-            input->data[dataIndex + 2] = xEnd;
-            input->data[dataIndex + 3] = yEnd;
+            input->data[dataIndex] = pow(x-xEnd, 2) + pow(y-yEnd, 2);
         }
     }
     // We return the input
@@ -367,5 +366,112 @@ void destructInput(InputNeuralNetwork** input)
             free(*input);
             *input = NULL;
         }
+    }
+}
+
+/**
+ * \fn void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd);
+ * \brief function that change the values in an interest field according to the output of a trained neural network
+ * will be used for labelisation
+ *
+ * \param InterestField* interestField : the interest field that will be update
+ * \param NeuralNetwork* neuralNetwork : the neural network that will give their values to the point in the interest field
+ * \param Field* mentalMap : the mental map on wich the updated values will be based on
+ * \param int xEnd : x coordinate of the ending point
+ * \param int yEnd : y coordinate of the ending point
+ * \return void
+ */
+void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange)
+{
+    if (interestField != NULL && neuralNetwork != NULL && mentalMap != NULL)
+    {
+        int width, height;
+        for(width = 0; width < interestField->width; width++)
+        {
+            for(height = 0; height < interestField->height; height++)
+            {
+                if (mentalMap->data[width][height] != EMPTY)
+                {
+                    interestField->data[width][height] = 0;
+                }
+                else
+                {
+                    Field* fieldOfView = getFieldOfViewFromMap(mentalMap, width, height, visionRange);
+                    InputNeuralNetwork* inputs = createInput(fieldOfView, width, height, xEnd, yEnd);
+                    float* outputs = getOutputOfNeuralNetwork(neuralNetwork, inputs->data);
+                    
+                    interestField->data[width][height] = outputs[0];
+                    
+                    destructField(&fieldOfView);
+                    destructInput(&inputs);
+                    free(outputs);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * \fn void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd)
+ * \brief function that change the values in an interest field according to the labelisation function
+ *
+ * \param InterestField* interestField : the interest field that will be update
+ * \param Field* mentalMap : the mental map on wich the updated values will be based on
+ * \param int xEnd : x coordinate of the ending point
+ * \param int yEnd : y coordinate of the ending point
+ * \param int visionRange : the vision range of the entity
+ * \return void
+ */
+void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange)
+{
+    if (interestField != NULL && mentalMap != NULL)
+    {
+        int width, height;
+        for(width = 0; width < interestField->width; width++)
+        {
+            for(height = 0; height < interestField->height; height++)
+            {
+                Field* fieldOfView = getFieldOfViewFromMap(mentalMap, width, height, visionRange);
+                
+                interestField->data[width][height] = labeling(fieldOfView, width, height, xEnd, yEnd);
+                
+                destructField(&fieldOfView);
+            }
+        }
+    }
+}
+
+/**
+ * \fn void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
+ * \brief function that change the coordinate of a node to the best coordinate on the interest field.
+ * This is use to get the position where our entity will go next.
+ * Each time this function is called, the choosen position will be set to 0 (no interest)
+ * will be used for labelisation
+ *
+ * \param node* wantedPosition : the node which will be updated to the best position on the interest field
+ * \param InterestField* interestField : the interest field that will be used to get the best position
+ * \return void
+ */
+void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
+{
+    if (wantedPosition != NULL && interestField != NULL)
+    {
+        float bestPoint = 0;
+        wantedPosition->x = 0;
+        wantedPosition->y = 0;
+        int width, height;
+        for(width = 0; width < interestField->width; width++)
+        {
+            for(height = 0; height < interestField->height; height++)
+            {
+                if (interestField->data[width][height] > bestPoint)
+                {
+                    bestPoint = interestField->data[width][height];
+                    wantedPosition->x = width;
+                    wantedPosition->y = height;
+                }
+            }
+        }
+        interestField->data[wantedPosition->x][wantedPosition->y] = 0;
     }
 }
