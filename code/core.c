@@ -395,4 +395,102 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
     return finalValue;
 }
 
+/**
+ * \fn Field* labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the entity
+ * \param int yPosition : y coordinate of the entity
+ * \param int xFinalPosition : x coordinate of the end point
+ * \param int yFinalPosition : y coordinate of the end point
+ * \return float
+ */
+float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+{
+    int emptyPoint = 0;
+    int wallPoint = 0;
+    int fogPoint = 0;
+    int visitedPoint = 0;
+    int distPoint = 0;
+    float value = 0;
+    float finalValue = 0;
+
+    if (fieldOfView->data[(fieldOfView->height-1)/2][(fieldOfView->width-1)/2] != EMPTY) 
+    {
+        return 0;
+    }
+    
+    for(int width = 0; width < fieldOfView->width; width++)
+    {
+        for(int height = 0; height < fieldOfView->height; height++)
+        {
+            switch (fieldOfView->data[width][height])
+            {
+                case EMPTY:
+                    emptyPoint++;
+                    break;
+                case WALL:
+                    wallPoint++;
+                    break;
+                case FOG:
+                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
+                    {
+                        fogPoint++;
+                    }
+                    break;
+                case VISITED:
+                    visitedPoint++;
+                    break;
+            }
+        }
+    }
+
+    distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-yPosition)*(yFinalPosition-yPosition);
+
+    value = fogPoint/(distPoint*0.1);
+
+    finalValue = (1.0/(1+exp(-value)));
+
+    return finalValue;
+}
+
+/**
+ * \fn bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition)
+ * \brief function that returns true if a given position is visible from actual position
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xOrigin : x coordinate of actual position
+ * \param int yOrigin : y coordinate of actual position
+ * \param int xPosition : x coordinate we want to check
+ * \param int yPosition : y coordinate we want to check
+ * \return bool
+ */
+bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition)
+{
+    float angle = atan2(yPosition - yOrigin, xPosition - xOrigin);
+
+    float dist = sqrt(pow(xPosition-xOrigin, 2) + pow(yPosition-yOrigin, 2));
+
+    float vect[2] = {cos(angle), sin(angle)};
+
+    bool isVisible = true;
+
+    for(int i = 0; i < dist; i++)
+    {
+        float x = xOrigin + i * vect[0];
+        float y = yOrigin + i * vect[1];
+
+        if ( ((int) x) != xPosition && ((int) y) != yPosition)
+        {
+            if (fieldOfView->data[(int) x][(int) y] == WALL)
+            {
+                isVisible = false;
+            }
+        }
+    }
+    return isVisible;
+}
+
 
