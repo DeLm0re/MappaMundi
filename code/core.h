@@ -147,4 +147,33 @@ Field* generateRandomFieldOfView(int visionRange, bool isValid);
  */
 float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
 
+/**
+ * \fn Field* labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the entity
+ * \param int yPosition : y coordinate of the entity
+ * \param int xFinalPosition : x coordinate of the end point
+ * \param int yFinalPosition : y coordinate of the end point
+ * \return float
+ */
+float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
+
+/**
+ * \fn bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition)
+ * \brief function that returns true if a given position is visible from actual position
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xOrigin : x coordinate of actual position
+ * \param int yOrigin : y coordinate of actual position
+ * \param int xPosition : x coordinate we want to check
+ * \param int yPosition : y coordinate we want to check
+ * \return bool
+ */
+bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition);
+
+
+
 #endif

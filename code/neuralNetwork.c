@@ -531,7 +531,7 @@ bool saveNeuralNetwork(NeuralNetwork* neuralNetwork, const char* path)
 {
 	FILE* file; // use to store the file where the game will be save
 	// If we managed to open the file
-	if((file = fopen(path, "wb")))
+	if((file = fopen(path, "wb+")))
 	{
 		//////////////////////////////////////
 		//--- size of the neural network ---//
@@ -597,22 +597,20 @@ NeuralNetwork* loadNeuralNetwork(const char* path)
 	FILE* file;
 	if((file = fopen(path, "rb")))
 	{
-	    int readStatus;
+		int statut = 0;
+	
 		//////////////////////////////////////
 		//--- size of the neural network ---//
 		//////////////////////////////////////
 		
 		// We read the number of layer
 		int nbLayer;
-		readStatus = fread(&nbLayer, sizeof(int), 1, file);
-		// If fread didn't find the number of layer
-		if (readStatus == 0)
+		statut = fread(&nbLayer, sizeof(int), 1, file);
+		if (statut == 0) 
 		{
-		    // We close the file
-		    fclose(file);
-		    // We end the program here
-		    return NULL;
+			return NULL;
 		}
+		
 		// We initialize a list to store the information about the number of neurone per layer
 		int neuronsPerLayers[nbLayer];
 		// Then, for each layer
@@ -620,15 +618,11 @@ NeuralNetwork* loadNeuralNetwork(const char* path)
 		for(indexLayer = 0; indexLayer < nbLayer; indexLayer++)
 		{
 			// We read the number of neurone per layer
-			readStatus = fread(&(neuronsPerLayers[indexLayer]), sizeof(int), 1, file);
-			// If fread didn't find the number of layer
-		    if (readStatus == 0)
-		    {
-		        // We close the file
-		        fclose(file);
-		        // We end the program here
-		        return NULL;
-		    }
+			statut = fread(&(neuronsPerLayers[indexLayer]), sizeof(int), 1, file);
+			if (statut == 0) 
+			{
+				return NULL;
+			}
 		}
 		// We create a neural network with the correct number of layer and neurone
 		NeuralNetwork* neuralNetwork = createNeuralNetwork(nbLayer, neuronsPerLayers, -0.5, 0.5);
@@ -645,35 +639,17 @@ NeuralNetwork* loadNeuralNetwork(const char* path)
 			for(indexNeurone = 0; indexNeurone < neuronsPerLayers[indexLayer]; indexNeurone++)
 			{
 				// We read the bias
-				readStatus = fread(&(neuralNetwork->layers[indexLayer]->neurons[indexNeurone]->bias), 
+				statut = fread(&(neuralNetwork->layers[indexLayer]->neurons[indexNeurone]->bias), 
 					sizeof(float), 
 					1, 
 					file);
-				// If fread didn't find the number of layer
-	            if (readStatus == 0)
-	            {
-	                // We destruct the neural network
-	                destructNeuralNetwork(&neuralNetwork);
-	                // We close the file
-	                fclose(file);
-	                // We end the program here
-	                return NULL;
-	            }
+
 				// We read the weights
-				readStatus = fread(neuralNetwork->layers[indexLayer]->neurons[indexNeurone]->inputWeights, 
+				statut = fread(neuralNetwork->layers[indexLayer]->neurons[indexNeurone]->inputWeights, 
 					sizeof(float), 
 					neuralNetwork->layers[indexLayer]->neurons[indexNeurone]->nbInput, 
 					file);
-				// If fread didn't find the number of layer
-	            if (readStatus == 0)
-	            {
-	                // We destruct the neural network
-	                destructNeuralNetwork(&neuralNetwork);
-	                // We close the file
-	                fclose(file);
-	                // We end the program here
-	                return NULL;
-	            }
+
 			}
 		}
 		
