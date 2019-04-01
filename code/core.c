@@ -98,6 +98,54 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
     return oneField;
 }
 
+Field *createCustomField(char *customFieldName)
+{
+    Field *oneField = (Field*)malloc(sizeof(Field));
+
+    int widthIndex, heightIndex;
+    int compteur = 0;
+
+    char buffer[5] = ".bmp";
+    char *completeCustomFieldName;
+    completeCustomFieldName = (char *)malloc((strlen(customFieldName)+strlen(buffer))*sizeof(char));
+    strcpy(customFieldName, buffer);
+
+    DonneesImageRGB *imageCustomField = lisBMPRGB(completeCustomFieldName);
+
+    if(imageCustomField == NULL)
+    {
+        printf("ERROR : Imposible to read the custom field... \n");
+    }
+
+    oneField->width = imageCustomField->largeurImage;
+    oneField->height = imageCustomField->hauteurImage;
+
+    oneField->data = create2DIntArray(oneField->width, oneField->height);
+
+    //Copie des valeurs
+	for(heightIndex = (oneField->height-1); heightIndex >= 0; heightIndex--)
+	{
+		for(widthIndex = 0; widthIndex < oneField->width; oneField->width++)
+		{
+			if(imageCustomField->donneesRGB[compteur] == 0)
+            {
+                oneField->data[widthIndex][heightIndex] = WALL;
+            }
+            if(imageCustomField->donneesRGB[compteur] == 255)
+            {
+                oneField->data[widthIndex][heightIndex] = EMPTY;
+            }
+            else
+            {
+                oneField->data[widthIndex][heightIndex] = -1;
+            }
+			compteur = compteur + 3;
+		}
+	}
+
+    return oneField;
+}
+
 /**
  * \fn Field initialiseInterestField(int width, int height)
  * \brief function that initialise our field to make our environment

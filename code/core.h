@@ -56,6 +56,8 @@ float **create2DFloatArray(int width, int height);
  */
 Field *initialiseField(int width, int height, pointEnum defaultValue);
 
+Field *createCustomField(char *customFieldName);
+
 /**
  * \fn Field initialiseInterestField(int width, int height)
  * \brief function that initialise our field to make our environment

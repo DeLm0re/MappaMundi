@@ -28,6 +28,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "BmpLib.h"
+
 
 //Typedef of field
 typedef struct Field
