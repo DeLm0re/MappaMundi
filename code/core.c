@@ -98,19 +98,25 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
     return oneField;
 }
 
+/**
+ * \fn Field *createCustomField(char *customFieldName)
+ * \brief function that create a field using a custom field (custom fields are located in ../custom_field)
+ *
+ * \param char *customFieldName : the name of the .bmp of our custom field
+ * 
+ * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
+ */
 Field *createCustomField(char *customFieldName)
 {
     Field *oneField = (Field*)malloc(sizeof(Field));
 
     int widthIndex, heightIndex;
     int compteur = 0;
+    
+    strcpy(customFieldName, ".bmp");
+    strcpy("../custom_field/", customFieldName);
 
-    char buffer[5] = ".bmp";
-    char *completeCustomFieldName;
-    completeCustomFieldName = (char *)malloc((strlen(customFieldName)+strlen(buffer))*sizeof(char));
-    strcpy(customFieldName, buffer);
-
-    DonneesImageRGB *imageCustomField = lisBMPRGB(completeCustomFieldName);
+    DonneesImageRGB *imageCustomField = lisBMPRGB(customFieldName);
 
     if(imageCustomField == NULL)
     {
