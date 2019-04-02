@@ -16,6 +16,9 @@
 	#define M_PI 3.14159265358979323846
 #endif
 
+#define CUSTOM_FIELD_PATH "../custom_field/"
+#define CUSTOM_FIELD_EXTENSION ".bmp"
+
 //General header files
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +30,8 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
+
+#include "BmpLib.h"
 
 
 //Typedef of field

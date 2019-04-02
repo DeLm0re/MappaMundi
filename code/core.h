@@ -57,6 +57,16 @@ float **create2DFloatArray(int width, int height);
 Field *initialiseField(int width, int height, pointEnum defaultValue);
 
 /**
+ * \fn Field *createCustomField(char *customFieldName)
+ * \brief function that create a field using a custom field (custom fields are located in ../custom_field)
+ *
+ * \param char *customFieldName : the name of the .bmp of our custom field
+ * 
+ * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
+ */
+Field* createCustomField(char *customFieldName);
+
+/**
  * \fn Field initialiseInterestField(int width, int height)
  * \brief function that initialise our field to make our environment
  *

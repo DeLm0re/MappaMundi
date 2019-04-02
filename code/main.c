@@ -182,9 +182,12 @@ int main(int argc, char** argv)
 		
 		while(data->endEvent == false)
 		{
-			//Initialisation and generation of the field
-			theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-			generateEnv(theField);
+			//Initialisation and generation of a field :
+				//theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+				//generateEnv(theField);
+			//Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
+				theField = createCustomField("myField");
+
 			//Initialise the entity
 			entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 			//Initialisation of the nodes
