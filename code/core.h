@@ -64,7 +64,7 @@ Field *initialiseField(int width, int height, pointEnum defaultValue);
  * 
  * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
-Field *createCustomField(char *customFieldName);
+Field* createCustomField(char *customFieldName);
 
 /**
  * \fn Field initialiseInterestField(int width, int height)

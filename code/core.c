@@ -100,23 +100,28 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
 
 /**
  * \fn Field *createCustomField(char *customFieldName)
- * \brief function that create a field using a custom field (custom fields are located in ../custom_field)
+ * \brief function that create a field using a custom field (custom fields are located in CUSTOM_FIELD_PATH (prototype/h)
+ *          and must have the CUSTOM_FIELD_EXTENSION (prototype/h))
  *
- * \param char *customFieldName : the name of the .bmp of our custom field
+ * \param char *customFieldName : the name of our custom field
  * 
  * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
 Field *createCustomField(char *customFieldName)
-{
+{    
     Field *oneField = (Field*)malloc(sizeof(Field));
 
     int widthIndex, heightIndex;
     int compteur = 0;
-    
-    strcpy(customFieldName, ".bmp");
-    strcpy("../custom_field/", customFieldName);
 
-    DonneesImageRGB *imageCustomField = lisBMPRGB(customFieldName);
+    char completeNameBuffer[50] = CUSTOM_FIELD_PATH;
+
+    char extensionBuffer[5] = CUSTOM_FIELD_EXTENSION;
+
+    strcat(completeNameBuffer, customFieldName);
+    strcat(completeNameBuffer, extensionBuffer);
+
+    DonneesImageRGB *imageCustomField = lisBMPRGB(completeNameBuffer);
 
     if(imageCustomField == NULL)
     {
@@ -131,25 +136,22 @@ Field *createCustomField(char *customFieldName)
     //Copie des valeurs
 	for(heightIndex = (oneField->height-1); heightIndex >= 0; heightIndex--)
 	{
-		for(widthIndex = 0; widthIndex < oneField->width; oneField->width++)
+		for(widthIndex = 0; widthIndex < oneField->width; widthIndex++)
 		{
-			if(imageCustomField->donneesRGB[compteur] == 0)
-            {
-                oneField->data[widthIndex][heightIndex] = WALL;
-            }
             if(imageCustomField->donneesRGB[compteur] == 255)
             {
                 oneField->data[widthIndex][heightIndex] = EMPTY;
             }
             else
             {
-                oneField->data[widthIndex][heightIndex] = -1;
+                oneField->data[widthIndex][heightIndex] = WALL;
             }
 			compteur = compteur + 3;
 		}
 	}
 
     return oneField;
+    
 }
 
 /**
