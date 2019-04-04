@@ -271,7 +271,7 @@ Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange)
     if (map != NULL && visionRange > 0)
     {
         // We initialize the foeld of view
-        fieldOfView = initialiseField(visionRange*2 + 1, visionRange*2 + 1, WALL);
+        fieldOfView = initialiseField(visionRange*2 + 1, visionRange*2 + 1, UNDEFINED);
         int radiusSquare = visionRange * visionRange; // use to know the maximum distance a tile can have to be in the vision range
         float distanceSquare; // use to know the distance of a tile from the x and y coordinate
         //For each tile that could be in the vision range (a square around the x and y coordinate)
@@ -412,7 +412,7 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
 }
 
 /**
- * \fn void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd)
+ * \fn void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
  * \brief function that change the values in an interest field according to the labelisation function
  *
  * \param InterestField* interestField : the interest field that will be update
@@ -420,9 +420,11 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
  * \param int xEnd : x coordinate of the ending point
  * \param int yEnd : y coordinate of the ending point
  * \param int visionRange : the vision range of the entity
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+
  * \return void
  */
-void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange)
+void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
 {
     if (interestField != NULL && mentalMap != NULL)
     {
@@ -433,7 +435,7 @@ void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, in
             {
                 Field* fieldOfView = getFieldOfViewFromMap(mentalMap, width, height, visionRange);
                 
-                interestField->data[width][height] = labeling(fieldOfView, width, height, xEnd, yEnd);
+                interestField->data[width][height] = labeling3(fieldOfView, width, height, xEnd, yEnd, labelingWeights);
                 
                 destructField(&fieldOfView);
             }

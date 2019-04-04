@@ -35,28 +35,6 @@ int **create2DIntArray(int width, int height)
 }
 
 /**
- * \fn int **create2DIntArray(int width, int height)
- * \brief function that creates a 2 dimension array of int
- *
- * \param width : width of the array
- * \param height : height of the array
- * \return int** : A pointer to the created array
- */
-float **create2DFloatArray(int width, int height)
-{
-    float **array = (float**)malloc(sizeof(float*) * width);
-    
-    int widthIndex;
-    for(widthIndex = 0; widthIndex < width; widthIndex++)
-    {
-        array[widthIndex] = (float*)malloc(sizeof(float) * height);
-    }
-
-    return array;
-}
-
-
-/**
  * \fn Field initialiseField(int width, int height)
  * \brief function that initialise our field to make our environment
  *
@@ -155,35 +133,6 @@ Field *createCustomField(char *customFieldName)
 }
 
 /**
- * \fn Field initialiseInterestField(int width, int height)
- * \brief function that initialise our field to make our environment
- *
- * \param width : width of the interest field
- * \param height : height of the interest field
- * \return Field : Pointer to an InterestField
- */
-InterestField *initialiseInterestField(int width, int height)
-{
-    InterestField *oneField = (InterestField*)malloc(sizeof(InterestField));
-
-    oneField->width = width;
-    oneField->height = height;
-    oneField->data = create2DFloatArray(width, height);
-
-    int widthIndex, heightIndex;
-
-    for(widthIndex = 0; widthIndex < width; widthIndex++)
-    {
-        for(heightIndex = 0; heightIndex < height; heightIndex++)
-        {
-            oneField->data[widthIndex][heightIndex] = 0;
-        }
-    }
-
-    return oneField;
-}
-
-/**
  * \fn void generateEnv(field oneField)
  * \brief function that generate our field to make our environment
  *
@@ -270,27 +219,6 @@ void destruct2DIntArray(int **array, int width)
 }
 
 /**
- * \fn void destruct2DFloatArray(int **array, int width)
- * \brief function that free the 2D array out of memory
- *
- * \param **array : The array to free
- * \param width : width of the array
- * \return void
- */
-void destruct2DFloatArray(float **array, int width)
-{
-    int i;
-    if(array != NULL)
-    {
-        for(i = 0; i < width; i++)
-        {
-            free(array[i]);
-        }
-        free(array);
-    }
-}
-
-/**
  * \fn void destructField(Field oneField)
  * \brief function that free the field out of memory
  *
@@ -304,27 +232,6 @@ void destructField(Field **oneField)
         if(*oneField != NULL)
         {
             destruct2DIntArray((*oneField)->data, (*oneField)->width);
-            (*oneField)->data = NULL;
-            free(*oneField);
-            *oneField = NULL;
-        }
-    }
-}
-
-/**
- * \fn void destructInterestField(InterestField **oneField)
- * \brief function that free the field out of memory
- *
- * \param **oneField : A double pointer on an InterestField
- * \return void
- */
-void destructInterestField(InterestField **oneField)
-{
-    if(oneField != NULL)
-    {
-        if(*oneField != NULL)
-        {
-            destruct2DFloatArray((*oneField)->data, (*oneField)->width);
             (*oneField)->data = NULL;
             free(*oneField);
             *oneField = NULL;
@@ -391,125 +298,6 @@ Field* generateRandomFieldOfView(int visionRange, bool isValid)
         fieldOfView->data[visionRange][visionRange] = rand()%2 + 1;
     }
     return fieldOfView;
-}
-
-/**
- * \fn Field* labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \return float
- */
-float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
-{
-    int emptyPoint = 0;
-    int wallPoint = 0;
-    int fogPoint = 0;
-    int visitedPoint = 0;
-    int distPoint = 0;
-    float value = 0;
-    float finalValue = 0;
-
-    if (fieldOfView->data[(fieldOfView->height-1)/2][(fieldOfView->width-1)/2] != EMPTY) 
-    {
-        return 0;
-    }
-    
-    for(int width = 0; width < fieldOfView->width; width++)
-    {
-        for(int height = 0; height < fieldOfView->height; height++)
-        {
-            switch (fieldOfView->data[width][height])
-            {
-                case EMPTY:
-                    emptyPoint++;
-                    break;
-                case WALL:
-                    wallPoint++;
-                    break;
-                case FOG:
-                    fogPoint++;
-                    break;
-                case VISITED:
-                    visitedPoint++;
-                    break;
-            }
-        }
-    }
-
-    distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-yPosition)*(yFinalPosition-yPosition);
-
-    value = fogPoint/(distPoint*0.1);
-
-    finalValue = (1.0/(1+exp(-value)));
-
-    return finalValue;
-}
-
-/**
- * \fn Field* labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \return float
- */
-float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
-{
-    int emptyPoint = 0;
-    int wallPoint = 0;
-    int fogPoint = 0;
-    int visitedPoint = 0;
-    int distPoint = 0;
-    float value = 0;
-    float finalValue = 0;
-
-    if (fieldOfView->data[(fieldOfView->height-1)/2][(fieldOfView->width-1)/2] != EMPTY) 
-    {
-        return 0;
-    }
-    
-    for(int width = 0; width < fieldOfView->width; width++)
-    {
-        for(int height = 0; height < fieldOfView->height; height++)
-        {
-            switch (fieldOfView->data[width][height])
-            {
-                case EMPTY:
-                    emptyPoint++;
-                    break;
-                case WALL:
-                    wallPoint++;
-                    break;
-                case FOG:
-                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
-                    {
-                        fogPoint++;
-                    }
-                    break;
-                case VISITED:
-                    visitedPoint++;
-                    break;
-            }
-        }
-    }
-
-    distPoint = (xFinalPosition-xPosition)*(xFinalPosition-xPosition) + (yFinalPosition-yPosition)*(yFinalPosition-yPosition);
-
-    value = fogPoint/(distPoint*0.1);
-
-    finalValue = (1.0/(1+exp(-value)));
-
-    return finalValue;
 }
 
 /**

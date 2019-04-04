@@ -16,15 +16,6 @@
 #include "prototype.h"
 #include "neuralNetwork.h"
 
-//Typedef of field
-// use to know how interesting each point of the field are
-typedef struct InterestField
-{
-    int width;
-    int height;
-    float** data;
-}InterestField;
-
 /**
  * \fn int **create2DIntArray(int width, int height)
  * \brief function that creates a 2 dimension array of int
@@ -34,16 +25,6 @@ typedef struct InterestField
  * \return int** : A pointer to the created array
  */
 int **create2DIntArray(int width, int height);
-
-/**
- * \fn float **create2DIntArray(int width, int height)
- * \brief function that creates a 2 dimension array of float
- *
- * \param width : width of the array
- * \param height : height of the array
- * \return float** : A pointer to the created array
- */
-float **create2DFloatArray(int width, int height);
 
 /**
  * \fn Field initialiseField(int width, int height, pointEnum defaultValue)
@@ -67,16 +48,6 @@ Field *initialiseField(int width, int height, pointEnum defaultValue);
 Field* createCustomField(char *customFieldName);
 
 /**
- * \fn Field initialiseInterestField(int width, int height)
- * \brief function that initialise our field to make our environment
- *
- * \param width : width of the interest field
- * \param height : height of the interest field
- * \return Field : Pointer to an InterestField
- */
-InterestField *initialiseInterestField(int width, int height);
-
-/**
  * \fn void generateEnv(field oneField)
  * \brief function that generate our field to make our environment
  *
@@ -96,16 +67,6 @@ void generateEnv(Field *oneField);
 void destruct2DIntArray(int **array, int width);
 
 /**
- * \fn void destruct2DFloatArray(int **array, int width)
- * \brief function that free the 2D array out of memory
- *
- * \param **array : The array to free
- * \param width : width of the array
- * \return void
- */
-void destruct2DFloatArray(float **array, int width);
-
-/**
  * \fn void destructField(Field* oneField)
  * \brief function that free the field out of memory
  *
@@ -113,15 +74,6 @@ void destruct2DFloatArray(float **array, int width);
  * \return void
  */
 void destructField(Field **oneField);
-
-/**
- * \fn void destructInterestField(InterestField **oneField)
- * \brief function that free the field out of memory
- *
- * \param **oneField : A double pointer on an InterestField
- * \return void
- */
-void destructInterestField(InterestField **oneField);
 
 /**
  * \fn int surface2DCircle(int radius)
@@ -144,34 +96,6 @@ int surface2DCircle(int radius);
 Field* generateRandomFieldOfView(int visionRange, bool isValid);
 
 /**
- * \fn Field* labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \return float
- */
-float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
-
-/**
- * \fn Field* labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \return float
- */
-float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
-
-/**
  * \fn bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition)
  * \brief function that returns true if a given position is visible from actual position
  *
@@ -183,7 +107,5 @@ float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
  * \return bool
  */
 bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition);
-
-
 
 #endif
