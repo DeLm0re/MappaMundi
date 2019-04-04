@@ -177,16 +177,17 @@ int main(int argc, char** argv)
 			saveNeuralNetwork(neuralNetwork, savingPath);
 		}
 		
+		LabelingWeights* labelingWeights = initialiseLabelingWeights();
 	
 		//--- Main loop
 		
 		while(data->endEvent == false)
 		{
 			//Initialisation and generation of a field :
-				//theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-				//generateEnv(theField);
+				theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+				generateEnv(theField);
 			//Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
-				theField = createCustomField("myField");
+				//theField = createCustomField("myField");
 
 			//Initialise the entity
 			entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
@@ -211,8 +212,8 @@ int main(int argc, char** argv)
 				//We initialize an interest field
 				InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
 				//We update each values of the interest field with what our neural network think
-				updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
-				//updateInterestFieldCheat(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+				//updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+				updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, labelingWeights);
 				//We set a default wanted node
 				wantedPosition = cpyNode(endNode);
 				//We update the start node of the pathfinding
@@ -343,6 +344,9 @@ int main(int argc, char** argv)
 
 		//Free the neural network from the memory
 		destructNeuralNetwork(&neuralNetwork);
+		
+		//Free the labeling weights from the memory
+		destructLabelingWeights(&labelingWeights);
 
 		//Ending the thread
 		data->endEvent = true;

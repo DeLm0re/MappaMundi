@@ -13,7 +13,7 @@
 	#define H_PATHFINDING
 
 //Header file
-#include "core.h"
+#include "geneticAlgorithm.h"
 
 //The structure node used in the A* algorithme (used in core.c)
 typedef struct node 

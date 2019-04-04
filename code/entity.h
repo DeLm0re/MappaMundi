@@ -174,7 +174,7 @@ void destructInput(InputNeuralNetwork** input);
 void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange);
 
 /**
- * \fn void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd)
+ * \fn void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
  * \brief function that change the values in an interest field according to the labelisation function
  *
  * \param InterestField* interestField : the interest field that will be update
@@ -182,9 +182,11 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
  * \param int xEnd : x coordinate of the ending point
  * \param int yEnd : y coordinate of the ending point
  * \param int visionRange : the vision range of the entity
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+
  * \return void
  */
-void updateInterestFieldCheat(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange);
+void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights);
 
 /**
  * \fn void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
