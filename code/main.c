@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 {
 	if (argc < 2) 
 	{
-		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n");
+		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 : Start a new genetic network and train it\n 4 : Load an existing genetic network");
 	}
 	else
 	{
@@ -89,23 +89,32 @@ int main(int argc, char** argv)
 		char savingPath[256] = "../NN/Reseau1.nn";
 
 		NeuralNetwork* neuralNetwork = NULL;
+		LabelingWeights* labelingWeights = NULL;
+		
+		int menuChoice = atoi(argv[1]);
 
-		switch (atoi(argv[1]))
+		switch (menuChoice)
 		{
 			//New neural network
-			case 1:			
-				neuralNetwork = NULL;
+			case TRAIN_NN:			
 				break;
 			//Load neural network
-			case 2:
+			case LOAD_NN:
 				neuralNetwork = loadNeuralNetwork(savingPath);
 				break;
+			//New genetic network
+			case TRAIN_GN:
+			    break;
+			//Load genetic network
+			case LOAD_GN:
+			    labelingWeights = initialiseLabelingWeights();
+			    break;
 			default:
 				printf("Error : Invalid arguments");
 				break;
 		}
-	
-		if (neuralNetwork == NULL) 
+	    
+		if (menuChoice == TRAIN_NN)
 		{
 			//We create a neural network
 			int neuronsPerLayers[5] = {surface2DCircle(RADIUS_VIEWPOINT) + 1, (surface2DCircle(RADIUS_VIEWPOINT) + 1)*2, surface2DCircle(RADIUS_VIEWPOINT) + 1, 2, 1};
@@ -177,7 +186,10 @@ int main(int argc, char** argv)
 			saveNeuralNetwork(neuralNetwork, savingPath);
 		}
 		
-		LabelingWeights* labelingWeights = initialiseLabelingWeights();
+		if (menuChoice == TRAIN_GN)
+		{
+		    // Insert code here
+		}
 	
 		//--- Main loop
 		
@@ -211,9 +223,17 @@ int main(int argc, char** argv)
 				
 				//We initialize an interest field
 				InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
-				//We update each values of the interest field with what our neural network think
-				//updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
-				updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, labelingWeights);
+				if ((menuChoice == TRAIN_NN || menuChoice == LOAD_NN) && neuralNetwork != NULL)
+				{
+				    //We update each values of the interest field with what our neural network think
+				    updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+				}
+				else if (labelingWeights != NULL)
+				{
+				    //We update each values of the interest field with what our genetic network think
+				    updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, labelingWeights);
+				}
+				
 				//We set a default wanted node
 				wantedPosition = cpyNode(endNode);
 				//We update the start node of the pathfinding

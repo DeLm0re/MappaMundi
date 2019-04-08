@@ -231,18 +231,11 @@ float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
 LabelingWeights* initialiseLabelingWeights(void)
 {
     LabelingWeights* labelingWeights = (LabelingWeights*)malloc(sizeof(LabelingWeights));
-
-    // random between -0.5 & 0.5
-    labelingWeights->distance=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->nbEmpty=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->nbWall=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->nbFog=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->nbVisited=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->avgDistEmpty=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->avgDistWall=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->avgDistFog=((float)(rand()%1000))/1000-0.5;
-    labelingWeights->avgDistVisited=((float)(rand()%1000))/1000-0.5;
-
+    int i;
+    for(i = 0; i < 9; i++)
+    {
+        labelingWeights->weights[i] = ((float)(rand()%1000))/1000-0.5;
+    }
     return labelingWeights;
 }
 
@@ -336,17 +329,148 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
     avgDistFog /= fogPoint;
     avgDistVisited /= visitedPoint;
 
-    value = dist*labelingWeights->distance+
-            emptyPoint*labelingWeights->nbEmpty+
-            wallPoint*labelingWeights->nbWall+
-            fogPoint*labelingWeights->nbFog+
-            visitedPoint*labelingWeights->nbVisited+
-            avgDistEmpty*labelingWeights->avgDistEmpty+
-            avgDistWall*labelingWeights->avgDistWall+
-            avgDistFog*labelingWeights->avgDistFog+
-            avgDistVisited*labelingWeights->avgDistVisited;
+    value = dist*labelingWeights->weights[DIST]+
+            emptyPoint*labelingWeights->weights[NB_EMPTY]+
+            wallPoint*labelingWeights->weights[NB_WALL]+
+            fogPoint*labelingWeights->weights[NB_FOG]+
+            visitedPoint*labelingWeights->weights[NB_VISITED]+
+            avgDistEmpty*labelingWeights->weights[AVG_DIST_EMPTY]+
+            avgDistWall*labelingWeights->weights[AVG_DIST_WALL]+
+            avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
+            avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED];
 
     finalValue = (1.0/(1+exp(-value)));
 
     return finalValue;
 }
+
+/**
+ * \fn GeneticNetworks *initialiseInterestField(int size)
+ * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
+ *
+ * \param size : the number of genetic networks to load in the structure
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *initialiseGeneticNetworks(int size)
+{
+    GeneticNetworks* geneticNetworks = (GeneticNetworks*) malloc(sizeof(GeneticNetworks));
+    geneticNetworks->size = size;
+    geneticNetworks->list = (LabelingWeights**) malloc(sizeof(LabelingWeights*) * size);
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        geneticNetworks->list[i] = initialiseLabelingWeights();
+    }
+    geneticNetworks->score = (float*) malloc(sizeof(float) * size);
+    for (i = 0; i < size; i++)
+    {
+        geneticNetworks->score[i] = 0;
+    }
+    return geneticNetworks;
+}
+
+/**
+ * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder)
+ * \brief function that create a new list of genetic network based on a previous one
+ *
+ * \param numberOfBreeder : the number of genetic networks that will be selected to reproduce among the best
+ * \param mutationChance : the mutation chance of each member of the new generation
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder, float mutationChance)
+{
+    GeneticNetworks* newGeneticNetworks = NULL;
+    if (numberOfBreeder <= geneticNetworks->size)
+    {
+        newGeneticNetworks = initialiseGeneticNetworks(geneticNetworks->size);
+        sortGeneticNetworks(geneticNetworks);
+        int i;
+        for(i = 0; i < newGeneticNetworks->size; i++)
+        {
+            int indexParent1 = rand()%numberOfBreeder;
+            int indexParent2 = rand()%numberOfBreeder;
+            if (indexParent2 >= indexParent1)
+            {
+                indexParent2++;
+                indexParent2 %= numberOfBreeder;
+            }
+            
+            int j;
+            for(j = 0; j < 9; j++)
+            {
+                float randomMutation;
+                if (((float) (rand()%1000)) / 1000 < mutationChance)
+                {
+                    randomMutation = ((float) (rand()%1000)) / 1000 - 0.5;
+                }
+                else
+                {
+                    randomMutation = 0;
+                }
+                newGeneticNetworks->list[i]->weights[j] = 
+                    (geneticNetworks->list[indexParent1]->weights[j] + geneticNetworks->list[indexParent2]->weights[j])/2 + randomMutation;
+               }
+        }
+    }
+    return newGeneticNetworks;
+}
+
+/**
+ * \fn void destructGeneticNetworks(GeneticNetworks **geneticNetworks)
+ * \brief function that free a list of genetic network
+ *
+ * \param **geneticNetworks : A double pointer on a GeneticNetworks
+ * \return void
+ */
+void destructGeneticNetworks(GeneticNetworks **geneticNetworks)
+{
+    if(geneticNetworks != NULL)
+    {
+        if(*geneticNetworks != NULL)
+        {
+            int i;
+            for (i = 0; i < (*geneticNetworks)->size; i++)
+            {
+                destructLabelingWeights(&(*geneticNetworks)->list[i]);
+            }
+            free((*geneticNetworks)->list);
+            free(*geneticNetworks);
+            *geneticNetworks = NULL;
+        }
+    }
+}
+
+/**
+ * \fn sortGeneticNetworks(GeneticNetworks* geneticNetworks);
+ * \brief function that sort genetic networks based on their score
+ *
+ * \param **geneticNetworks : A double pointer on the GeneticNetworks we want to sort
+ * \return void
+ */
+void sortGeneticNetworks(GeneticNetworks* geneticNetworks)
+{
+    bool sortingDone = false;
+    int i = 0;
+    while(i < geneticNetworks->size && !sortingDone)
+    {
+        sortingDone = true;
+        int j;
+        for(j = i; j < geneticNetworks->size-1; j++)
+        {
+            if (geneticNetworks->score[j + 1] > geneticNetworks->score[j])
+            {
+                // We swap the two values
+                LabelingWeights* tempWeights = geneticNetworks->list[j + 1];
+                float tempScore = geneticNetworks->score[j + 1];
+                geneticNetworks->list[j + 1] = geneticNetworks->list[j];
+                geneticNetworks->score[j + 1] = geneticNetworks->score[j];
+                geneticNetworks->list[j] = tempWeights;
+                geneticNetworks->score[j] = tempScore;
+                
+                sortingDone = false;
+            }
+        }
+        i++;
+    }
+}
+
