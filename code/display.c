@@ -101,10 +101,11 @@ int drawField(SDL_Renderer *renderer, Field *oneField, int size)
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
  * \param oneEntity : Pointer to a field of view of an entity, which is a tydef declared in entity.h (2D array structure)
+ * \param theField : Pointer to a field
  * \param size : the size of a single unique obstacle
  * \return int, can return an error during the drawing
  */
-int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size)
+int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theField, int size)
 {
     int w, h;
 
@@ -154,7 +155,7 @@ int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size)
                 break;
             }
 
-            square.x = size*w + (50*size) + 20;
+            square.x = size*w + ((theField->width) * size) + 20;
             square.y = size*h;
             square.h = size;
             square.w = size;
