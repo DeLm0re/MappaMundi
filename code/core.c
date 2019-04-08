@@ -129,7 +129,6 @@ Field *createCustomField(char *customFieldName)
 	}
 
     return oneField;
-    
 }
 
 /**

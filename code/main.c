@@ -29,9 +29,22 @@ int main(int argc, char** argv)
 		SDL_Color entityColor = {80, 160, 160, 255};
 		SDL_Color wantedPositionColor = {160, 80, 80, 255};
 
+		//Initialisation and generation of a field :
+			//theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+			//generateEnv(theField);
+		//Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
+			Field *theField = createCustomField("grande");
+		
+		//Declaration of basic constants
+		const int fieldHeight = theField->height;
+		const int fieldWidth = theField->width;
+
+		//Size of a tile (ex: wall)
+		const int tileSize = 10;
+
 		// init a width and height for the windows
-		int windowWidth = 800;
-		int windowHeight = 500;
+		int windowWidth = ((fieldWidth*tileSize) + 40 + (RADIUS_VIEWPOINT*2*tileSize));
+		int windowHeight = fieldHeight*tileSize;
 		
 		// Set some basic variables for the SDL to work
 		SDL_Event event;
@@ -66,14 +79,9 @@ int main(int argc, char** argv)
 		dataType* data = initData(&event);
 		pthread_create(&thread1, NULL, eventHandlerFunction, (void*) data);
 
-		//Declaration of basic constants
-		const int fieldHeight = 50;
-		const int fieldWidth = 50;
-		const int tileSize = 10;
 		//Used to know if we're waiting for an instruction (keyboard input, etc)
 		bool waitForInstruction = true;
-		//Declaration of the field
-		Field *theField = NULL;
+
 		//Declaration of the nodes where the entity will start and where it wants to go
 		node* startNode = NULL;
 		node* endNode = NULL;
@@ -183,12 +191,6 @@ int main(int argc, char** argv)
 		
 		while(data->endEvent == false)
 		{
-			//Initialisation and generation of a field :
-				theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-				generateEnv(theField);
-			//Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
-				//theField = createCustomField("myField");
-
 			//Initialise the entity
 			entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 			//Initialisation of the nodes
@@ -276,7 +278,7 @@ int main(int argc, char** argv)
 						//Draw the field
 						drawField(renderer, entity->mentalMap, tileSize);
 						//Draw the field of view
-						drawFieldOfViewEntity(renderer, entity, tileSize);
+						drawFieldOfViewEntity(renderer, entity, theField,tileSize);
 						//We draw the wanted position
 						viewNodes(&wantedPosition, renderer, wantedPositionColor, tileSize);
 						//Draw the entity
