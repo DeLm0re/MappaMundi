@@ -474,3 +474,64 @@ void sortGeneticNetworks(GeneticNetworks* geneticNetworks)
     }
 }
 
+/**
+ * \fn void saveGeneticNetwork(LabelingWeights* labelingWeights, char* path)
+ * \brief function that save a genetic network 
+ *
+ * \param *LabelingWeights : A pointer on the LabelingWeights (genetic network) we want to save
+ * \param *path : The path to the save file
+ * \return void
+ */
+bool saveGeneticNetwork(LabelingWeights* labelingWeights, char* path)
+{
+    FILE* file; // use to store the file where the game will be save
+	// If we managed to open the file
+	if((file = fopen(path, "wb+")))
+	{
+		// We write down the weights
+		fwrite(&(labelingWeights->weights), sizeof(float), 9, file);
+		
+		// We close the file
+		fclose(file);
+		// We return true to indicate that everything worked correctly
+		return true;
+	}
+	else
+	{
+		// We return false because the file has not been read correctly
+		return false;
+	}
+}
+
+/**
+ * \fn LabelingWeights* loadGeneticNetwork(char* path);
+ * \brief function that load a genetic network 
+ *
+ * \param *path : The path to the file
+ * \return LabelingWeights*
+ */
+LabelingWeights* loadGeneticNetwork(char* path)
+{
+	FILE* file;
+	if((file = fopen(path, "rb")))
+	{
+        LabelingWeights* labelingWeights = NULL;
+		int statut = 0;
+
+        // We read the waights from the file
+        statut = fread(&(labelingWeights->weights), sizeof(float), 9, file);
+        if (statut == 0) 
+        {
+            return NULL;
+        }
+		
+		// We close the file
+		fclose(file);
+		// We return the neural network
+		return labelingWeights;
+	}
+	else
+	{
+		return NULL;
+	}
+}

@@ -163,12 +163,33 @@ GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numbe
 void destructGeneticNetworks(GeneticNetworks **geneticNetworks);
 
 /**
- * \fn sortGeneticNetworks(GeneticNetworks* geneticNetworks);
+ * \fn void sortGeneticNetworks(GeneticNetworks* geneticNetworks)
  * \brief function that sort genetic networks based on their score
  *
  * \param **geneticNetworks : A double pointer on the GeneticNetworks we want to sort
  * \return void
  */
 void sortGeneticNetworks(GeneticNetworks* geneticNetworks);
+
+/**
+ * \fn void saveGeneticNetwork(LabelingWeights* labelingWeights, char* path)
+ * \brief function that save a genetic network 
+ *
+ * \param *LabelingWeights : A pointer on the LabelingWeights (genetic network) we want to save
+ * \param *path : The path to the save file
+ * \return bool
+ */
+bool saveGeneticNetwork(LabelingWeights* labelingWeights, char* path);
+
+/**
+ * \fn LabelingWeights* loadGeneticNetwork(char* path);
+ * \brief function that load a genetic network 
+ *
+ * \param *path : The path to the file
+ * \return LabelingWeights*
+ */
+LabelingWeights* loadGeneticNetwork(char* path);
+
+
 
 #endif
