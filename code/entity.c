@@ -213,7 +213,7 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
 
     float angle;
     float stepAngle = 0.1; //tan(1 / entity->visionRange);
-    float stepDistance = 0.5;
+    float stepDistance = 0.4;
     float distance;
     bool aWall;
 
@@ -230,8 +230,8 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
 
                 if( ((entity->x + x) >= 0) && ((entity->x + x) < aField->width) && ((entity->y + y) >= 0) && ((entity->y + y) < aField->height) )
                 {
-                    int widthFieldOfView = entity->visionRange + 1 + x;
-                    int heightFieldOfView = entity->visionRange + 1 + y;
+                    int widthFieldOfView = entity->visionRange + x;
+                    int heightFieldOfView = entity->visionRange + y;
 
                     if( (widthFieldOfView >= 0) && (widthFieldOfView < 2*entity->visionRange + 1) 
                         &&  (heightFieldOfView >= 0) && (heightFieldOfView < 2*entity->visionRange + 1) )
