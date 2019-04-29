@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 {
 	if (argc < 2) 
 	{
-		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n");
+		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 : Start a new genetic network and train it\n 4 : Load an existing genetic network\n");
 	}
 	else
 	{
@@ -97,23 +97,32 @@ int main(int argc, char** argv)
 		char savingPath[256] = "../NN/Reseau1.nn";
 
 		NeuralNetwork* neuralNetwork = NULL;
+		LabelingWeights* labelingWeights = NULL;
+		
+		int menuChoice = atoi(argv[1]);
 
-		switch (atoi(argv[1]))
+		switch (menuChoice)
 		{
 			//New neural network
-			case 1:			
-				neuralNetwork = NULL;
+			case TRAIN_NN:			
 				break;
 			//Load neural network
-			case 2:
+			case LOAD_NN:
 				neuralNetwork = loadNeuralNetwork(savingPath);
 				break;
+			//New genetic network
+			case TRAIN_GN:
+			    break;
+			//Load genetic network
+			case LOAD_GN:
+			    labelingWeights = initialiseLabelingWeights();
+			    break;
 			default:
 				printf("Error : Invalid arguments");
 				break;
 		}
-	
-		if (neuralNetwork == NULL) 
+	    
+		if (menuChoice == TRAIN_NN)
 		{
 			//We create a neural network
 			int neuronsPerLayers[5] = {surface2DCircle(RADIUS_VIEWPOINT) + 1, (surface2DCircle(RADIUS_VIEWPOINT) + 1)*2, surface2DCircle(RADIUS_VIEWPOINT) + 1, 2, 1};
@@ -185,7 +194,122 @@ int main(int argc, char** argv)
 			saveNeuralNetwork(neuralNetwork, savingPath);
 		}
 		
-		LabelingWeights* labelingWeights = initialiseLabelingWeights();
+		if (menuChoice == TRAIN_GN)
+		{
+		    //Initialisation and generation of a field :
+			theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+			generateEnv(theField);
+			
+			//We create a random batch of genetic network
+			GeneticNetworks* geneticNetworks = initialiseGeneticNetworks(100);
+			
+			//For each generation
+			int generationIndex;
+			for (generationIndex = 0; generationIndex < 20; generationIndex++)
+			{
+			    //For each genetic networks of the generation
+			    int networkIndex;
+			    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
+			    {
+			        printf("Generation : %d, member : %d\n", generationIndex, networkIndex);
+			        //Initialise the entity
+			        entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
+			        //Initialisation of the nodes
+			        startNode = nearestNode(theField, entity->x, entity->y);
+			        //Updates the position of the entity for the nearest starting node
+			        entity->x = startNode->x;
+			        entity->y = startNode->y;
+			        endNode = nearestNode(theField, fieldWidth, fieldHeight);
+			
+			        //While the entity hasn't arrived
+			        while (
+			            (entity->x != endNode->x || entity->y != endNode->y) && 
+			            geneticNetworks->score[networkIndex] < fieldHeight*fieldWidth)
+			        {
+
+				        //--- Pathfinding algorithm and movement along it
+				
+				        //Updates the field of view of our entity
+				        updateFieldOfViewEntity(theField, entity);
+				        //Updates the mental map of our entity with its new field of view
+				        updateMentalMapEntity(entity);
+				
+				        //We initialize an interest field
+				        InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
+				        //We update each values of the interest field with what our genetic network think
+				        updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, geneticNetworks->list[networkIndex]);
+				
+				        //We set a default wanted node
+				        wantedPosition = cpyNode(endNode);
+				        //We update the start node of the pathfinding
+				        startNode->x = entity->x;
+				        startNode->y = entity->y;
+				        //We try to find a path
+				        while((path == startNode || path == NULL))
+				        {
+					        destructNodes(&path);
+					        //We try to find a path
+					        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+					        //If we haven't find a path
+					        if ((path == startNode || path == NULL))
+					        {
+						        //We change our wanted node to the best position found by the neural network
+						        updateBestWantedPosition(wantedPosition, interestField);
+					        }
+				        }
+				        //We free the interest field from the memory
+				        destructInterestField(&interestField);
+				        //We reset the path position
+				        positionInPath = 0;
+				        //Move the entity along the path
+				        do
+				        {
+					        //get the next position
+					        positionInPath++;
+					        nodePosition = getNode(&path, positionInPath);
+					        //If we find the next nodePosition
+					        if (nodePosition != NULL)
+					        {
+						        //Updates the position of the entity for the nearest starting node
+						        entity->x = nodePosition->x;
+						        entity->y = nodePosition->y;
+						        
+						        //Increase the score of the genetic network
+						        geneticNetworks->score[networkIndex]++;
+
+						        //Updates the field of view of our entity
+						        updateFieldOfViewEntity(theField, entity);
+
+						        //Updates the mental map of our entity with its new field of view
+						        updateMentalMapEntity(entity);
+					        }
+				        }while(nodePosition != NULL);
+				        //Free the memory of all the nodes use for the pathfinding
+				        destructNodes(&path);
+				        path = NULL;
+				        destructNodes(&startNode);
+				        destructNodes(&endNode);
+				        // We free the wantedPosition from the memory
+				        destructNodes(&wantedPosition);
+			        }
+			        //We create a new generation absed on half the best individuals
+			        GeneticNetworks* temp = createNewGeneration(geneticNetworks, 50, 0.01);
+			        destructGeneticNetworks(&geneticNetworks);
+			        geneticNetworks = temp;
+			    }
+			}
+			//Free the memory of the field
+			destructField(&theField);
+			//We sort the last generation
+			sortGeneticNetworks(geneticNetworks);
+			//Then, we get the best of the generation to be the labeling weights
+			labelingWeights = geneticNetworks->list[0];
+			int indexWeights;
+			for(indexWeights = 0; indexWeights < 9; indexWeights++)
+			{
+			    printf("poid : %d = %f\n", indexWeights, labelingWeights->weights[indexWeights]);
+			}
+		}
 	
 		//--- Main loop
 		
@@ -213,9 +337,17 @@ int main(int argc, char** argv)
 				
 				//We initialize an interest field
 				InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
-				//We update each values of the interest field with what our neural network think
-				//updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
-				updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, labelingWeights);
+				if ((menuChoice == TRAIN_NN || menuChoice == LOAD_NN) && neuralNetwork != NULL)
+				{
+				    //We update each values of the interest field with what our neural network think
+				    updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+				}
+				else if (labelingWeights != NULL)
+				{
+				    //We update each values of the interest field with what our genetic network think
+				    updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, labelingWeights);
+				}
+				
 				//We set a default wanted node
 				wantedPosition = cpyNode(endNode);
 				//We update the start node of the pathfinding

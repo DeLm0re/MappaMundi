@@ -25,17 +25,15 @@ typedef struct InterestField
 
 typedef struct 
 {
-    float distance;
-    float nbEmpty;
-    float nbWall;
-    float nbFog;
-    float nbVisited;
-    float avgDistEmpty;
-    float avgDistWall;
-    float avgDistFog;
-    float avgDistVisited;
+    float weights[9];
+} LabelingWeights;
 
-}LabelingWeights;
+typedef struct
+{
+    int size;
+    LabelingWeights** list;
+    float* score;
+} GeneticNetworks;
 
 /**
  * \fn float **create2DIntArray(int width, int height)
@@ -135,6 +133,63 @@ void destructLabelingWeights(LabelingWeights **labelingWeights);
  * \return float
  */
 float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, LabelingWeights* labelingWeights);
+
+/**
+ * \fn GeneticNetworks *initialiseInterestField(int size)
+ * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
+ *
+ * \param size : the number of genetic networks to load in the structure
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *initialiseGeneticNetworks(int size);
+
+/**
+ * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder)
+ * \brief function that create a new list of genetic network based on a previous one
+ *
+ * \param numberOfBreeder : the number of genetic networks that will be selected to reproduce among the best
+ * \param mutationChance : the mutation chance of each member of the new generation
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder, float mutationChance);
+
+/**
+ * \fn void destructGeneticNetworks(GeneticNetworks **geneticNetworks)
+ * \brief function that free a list of genetic network
+ *
+ * \param **geneticNetworks : A double pointer on a GeneticNetworks
+ * \return void
+ */
+void destructGeneticNetworks(GeneticNetworks **geneticNetworks);
+
+/**
+ * \fn void sortGeneticNetworks(GeneticNetworks* geneticNetworks)
+ * \brief function that sort genetic networks based on their score
+ *
+ * \param **geneticNetworks : A double pointer on the GeneticNetworks we want to sort
+ * \return void
+ */
+void sortGeneticNetworks(GeneticNetworks* geneticNetworks);
+
+/**
+ * \fn void saveGeneticNetwork(LabelingWeights* labelingWeights, char* path)
+ * \brief function that save a genetic network 
+ *
+ * \param *LabelingWeights : A pointer on the LabelingWeights (genetic network) we want to save
+ * \param *path : The path to the save file
+ * \return bool
+ */
+bool saveGeneticNetwork(LabelingWeights* labelingWeights, char* path);
+
+/**
+ * \fn LabelingWeights* loadGeneticNetwork(char* path);
+ * \brief function that load a genetic network 
+ *
+ * \param *path : The path to the file
+ * \return LabelingWeights*
+ */
+LabelingWeights* loadGeneticNetwork(char* path);
+
 
 
 #endif
