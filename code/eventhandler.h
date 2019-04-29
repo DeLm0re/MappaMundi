@@ -24,6 +24,8 @@ typedef struct dataType
 {
 	SDL_Event* event;
 	bool endEvent;
+	int statut;
+	bool waitForInstruction;
 } dataType;
 
 /**

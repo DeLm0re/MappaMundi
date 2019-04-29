@@ -489,7 +489,7 @@ bool saveGeneticNetwork(LabelingWeights* labelingWeights, char* path)
 	if((file = fopen(path, "wb+")))
 	{
 		// We write down the weights
-		fwrite(&(labelingWeights->weights), sizeof(float), 9, file);
+		fwrite(labelingWeights->weights, sizeof(float), 9, file);
 		
 		// We close the file
 		fclose(file);
@@ -515,11 +515,11 @@ LabelingWeights* loadGeneticNetwork(char* path)
 	FILE* file;
 	if((file = fopen(path, "rb")))
 	{
-        LabelingWeights* labelingWeights = NULL;
+        LabelingWeights* labelingWeights = initialiseLabelingWeights();
 		int statut = 0;
 
         // We read the waights from the file
-        statut = fread(&(labelingWeights->weights), sizeof(float), 9, file);
+        statut = fread(labelingWeights->weights, sizeof(float), 9, file);
         if (statut == 0) 
         {
             return NULL;

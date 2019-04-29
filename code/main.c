@@ -50,8 +50,8 @@ int main(int argc, char** argv)
 		SDL_Event event;
 		SDL_Window *window = NULL;
 		SDL_Renderer *renderer = NULL;
-		int statut = EXIT_FAILURE;
-
+		dataType* data = initData(&event);
+		
 		// Initialisation de la SDL
 		if(SDL_Init(SDL_INIT_VIDEO) != 0)
 		{
@@ -76,11 +76,7 @@ int main(int argc, char** argv)
 
 		//Declaration of the thread and the data for the events
 		pthread_t thread1;
-		dataType* data = initData(&event);
 		pthread_create(&thread1, NULL, eventHandlerFunction, (void*) data);
-
-		//Used to know if we're waiting for an instruction (keyboard input, etc)
-		bool waitForInstruction = true;
 
 		//Declaration of the nodes where the entity will start and where it wants to go
 		node* startNode = NULL;
@@ -94,7 +90,8 @@ int main(int argc, char** argv)
 		node* nodePosition = NULL; //The position of the entity
 		node* wantedPosition = NULL; //The position the entity want to explore
 	
-		char savingPath[256] = "../NN/Reseau1.nn";
+		char savingPathNN[256] = "../NN/Reseau1.nn";
+		char savingPathGN[256] = "../GN/genome.gn";
 
 		NeuralNetwork* neuralNetwork = NULL;
 		LabelingWeights* labelingWeights = NULL;
@@ -108,14 +105,14 @@ int main(int argc, char** argv)
 				break;
 			//Load neural network
 			case LOAD_NN:
-				neuralNetwork = loadNeuralNetwork(savingPath);
+				neuralNetwork = loadNeuralNetwork(savingPathNN);
 				break;
 			//New genetic network
 			case TRAIN_GN:
 			    break;
 			//Load genetic network
 			case LOAD_GN:
-			    labelingWeights = initialiseLabelingWeights();
+                labelingWeights = loadGeneticNetwork(savingPathGN);
 			    break;
 			default:
 				printf("Error : Invalid arguments");
@@ -175,23 +172,9 @@ int main(int argc, char** argv)
 				//We free the inputs for the next loop
 				destructInput(&inputs);
 				destructField(&fieldInput);
-
-				//If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
-				if (event.type == SDL_QUIT ||
-				(event.type == SDL_TEXTINPUT && 
-				(*event.text.text == 'q' || 
-				*event.text.text == 'Q')))
-				{
-					//We put an end to the program
-					data->endEvent = true;
-					//We update the exit statut
-					statut = EXIT_SUCCESS;
-					//We set the waiting flag to false (not waiting for inputs anymore)
-					waitForInstruction = false;
-				}
 			}
 			
-			saveNeuralNetwork(neuralNetwork, savingPath);
+			saveNeuralNetwork(neuralNetwork, savingPathNN);
 		}
 		
 		if (menuChoice == TRAIN_GN)
@@ -304,11 +287,6 @@ int main(int argc, char** argv)
 			sortGeneticNetworks(geneticNetworks);
 			//Then, we get the best of the generation to be the labeling weights
 			labelingWeights = geneticNetworks->list[0];
-			int indexWeights;
-			for(indexWeights = 0; indexWeights < 9; indexWeights++)
-			{
-			    printf("poid : %d = %f\n", indexWeights, labelingWeights->weights[indexWeights]);
-			}
 		}
 	
 		//--- Main loop
@@ -374,20 +352,6 @@ int main(int argc, char** argv)
 						//We change our wanted node to the best position found by the neural network
 						updateBestWantedPosition(wantedPosition, interestField);
 					}
-					
-					//If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
-					if (event.type == SDL_QUIT ||
-					(event.type == SDL_TEXTINPUT && 
-					(*event.text.text == 'q' || 
-					*event.text.text == 'Q')))
-					{
-						//We put an end to the program
-						data->endEvent = true;
-						//We update the exit statut
-						statut = EXIT_SUCCESS;
-						//We set the waiting flag to false (not waiting for inputs anymore)
-						waitForInstruction = false;
-					}
 				}
 				//We free the interest field from the memory
 				destructInterestField(&interestField);
@@ -428,20 +392,6 @@ int main(int argc, char** argv)
 						SDL_RenderPresent(renderer);
 						//We wait 30ms at each step to see the entity moving
 						SDL_Delay(30);
-						
-						//If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
-						if (event.type == SDL_QUIT ||
-						(event.type == SDL_TEXTINPUT && 
-						(*event.text.text == 'q' || 
-						*event.text.text == 'Q')))
-						{
-							//We put an end to the program
-							data->endEvent = true;
-							//We update the exit statut
-							statut = EXIT_SUCCESS;
-							//We set the waiting flag to false (not waiting for inputs anymore)
-							waitForInstruction = false;
-						}
 					}
 				}while(nodePosition != NULL && !data->endEvent);
 				//Free the memory of all the nodes use for the pathfinding
@@ -453,33 +403,19 @@ int main(int argc, char** argv)
 				destructNodes(&wantedPosition);
 			}
 			//While the waiting flag is set to true (waiting for inputs)
-			while(waitForInstruction)
+			while(data->waitForInstruction)
 			{
 				SDL_Delay(50);
-				//If we want to quit the program (the cross in the top right corner or the "q" key on the keyboard)
-				if (event.type == SDL_QUIT ||
-					(event.type == SDL_TEXTINPUT && 
-					(*event.text.text == 'q' || 
-					*event.text.text == 'Q')))
-				{
-					//We put an end to the program
-					data->endEvent = true;
-					//We update the exit statut
-					statut = EXIT_SUCCESS;
-					//We set the waiting flag to false (not waiting for inputs anymore)
-					waitForInstruction = false;
-				}
-				//If we want to do a new simulation ("r" key on the keyboard)
-				else if(event.type == SDL_TEXTINPUT && 
+				if(event.type == SDL_TEXTINPUT && 
 					(*event.text.text == 'r' || 
 					*event.text.text == 'R'))
 				{
 					//We set the waiting flag to false (not waiting for inputs anymore)
-					waitForInstruction = false;
+					data->waitForInstruction = false;
 				}
 			}
 			//We put the waiting flag back to true
-			waitForInstruction = true;
+			data->waitForInstruction = true;
 
 			//Free the memory of the field
 			destructField(&theField);
@@ -494,7 +430,6 @@ int main(int argc, char** argv)
 		//Ending the thread
 		data->endEvent = true;
 		pthread_join(thread1, NULL);
-		free(data);
 
 		//Process that end the window and the renderer
 	Quit:
@@ -503,6 +438,8 @@ int main(int argc, char** argv)
 		if(NULL != window)
 			SDL_DestroyWindow(window);
 		SDL_Quit();
+		int statut = data->statut;
+		free(data);
 		return statut;
 	}
 }
