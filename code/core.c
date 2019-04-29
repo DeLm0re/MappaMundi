@@ -132,7 +132,7 @@ Field *createCustomField(char *customFieldName)
 }
 
 /**
- * \fn void generateEnv(field oneField)
+ * \fn void generateEnv(Field *oneField)
  * \brief function that generate our field to make our environment
  *
  * \param oneField : Poiter to a field, which is a tydef declared in core.h (2D array structure)
