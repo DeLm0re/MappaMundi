@@ -1,5 +1,5 @@
 /**
- * \file neuralNetwork.h
+ * \file neuralNetwork.c
  * \brief Neural network functions
  * \author Louis Schuck
  * \version 0.1

@@ -13,10 +13,10 @@
 #include "entity.h"
 
 /**
- * \fn node* initialiseEntity(int x, int y, int visionRange)
+ * \fn Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight)
  * \brief function that initialise an Entity. An Entity is used by the neural network to navigate in a Field
  *
- * \param x, y : the coordinate of the Entity
+ * \param x, y : the coordinates of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
  * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
@@ -34,7 +34,7 @@ Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fiel
 }
 
 /**
- * \fn void initializeMentalMap(Entity *entity)
+ * \fn initializeMentalMapEntity(Entity *entity, int width, int height)
  * \brief function that initialize the mental map of an entity
  * 
  * \param *entity : the entity which have the mental map to be updated
@@ -48,7 +48,7 @@ void initializeMentalMapEntity(Entity *entity, int width, int height)
 }
 
 /**
- * \fn void* initialiseFieldOfView(Entity *entity);
+ * \fn void initialiseFieldOfViewEntity(Entity *entity)
  * \brief function that initialise the field of view of an entity
  *
  * \param *entity : the entity which have the field of view we want to update
@@ -127,7 +127,7 @@ void destructFieldOfViewEntity(Entity *entity)
 }
 
 /**
- * \fn void showEntity(Entity* entity, SDL_Color color, int tileSize)
+ * \fn void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize)
  * \brief function used to free an Entity
  *
  * \param entity : the Entity to display
@@ -152,7 +152,7 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
 	}
 }
 
-/*
+/**
  * \fn void updateMentalMapEntity(Entity *entity)
  * \brief function that update the mental map of an entity
  *
@@ -187,8 +187,8 @@ void updateMentalMapEntity(Entity *entity)
     }
 }
 
-/*
- * \fn void updateFieldOfViewEntity(Entity *entity)
+/**
+ * \fn void updateFieldOfViewEntity(Field *aField, Entity *entity)
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
@@ -299,8 +299,8 @@ Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange)
     return fieldOfView;
 }
 
-/*
- * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
+/**
+ * \fn createInput(Field* fieldOfView, int x, int y, int xEnd, int yEnd)
  * \brief function that create the inputs for the neural network based on the mental map, the vision range,
  *      the coordinate of the point we want to test and the coordinate the entity wants to get to
  *
@@ -356,6 +356,14 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
     return input;
 }
 
+/**
+ * \fn void destructInput(InputNeuralNetwork** input)
+ * \brief free a structure InputNeuralNetwork from the memory
+ *
+ * \param InputNeuralNetwork** input : a double pointer to the structure wwe want to free
+ *      
+ * \return void
+ */
 void destructInput(InputNeuralNetwork** input)
 {
     if (input != NULL)
@@ -370,7 +378,7 @@ void destructInput(InputNeuralNetwork** input)
 }
 
 /**
- * \fn void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd);
+ * \fn void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange)
  * \brief function that change the values in an interest field according to the output of a trained neural network
  * will be used for labelisation
  *

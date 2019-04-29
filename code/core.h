@@ -67,7 +67,7 @@ void generateEnv(Field *oneField);
 void destruct2DIntArray(int **array, int width);
 
 /**
- * \fn void destructField(Field* oneField)
+ * \fn void destructField(Field **oneField)
  * \brief function that free the field out of memory
  *
  * \param **oneField : A double pointer on a field, which is a tydef declared in core.h (2D array structure)
@@ -85,7 +85,7 @@ void destructField(Field **oneField);
 int surface2DCircle(int radius);
 
 /**
- * \fn Field* generateRandomFieldOfView(int visionRange)
+ * \fn Field* generateRandomFieldOfView(int visionRange, bool isValid)
  * \brief function that returns a random field of view
  * will be used for labelization
  *

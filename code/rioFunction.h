@@ -29,7 +29,8 @@
 	#define DT_DIR 4
 #endif
 
-/* \fn nmap(float value, float vmin, float vmax, float min, float max);
+/** 
+ * \fn nmap(float value, float vmin, float vmax, float min, float max)
  * \brief function that transforms a value which vary between vmin and vmax, to an other one that vary between min and max
  * 
  * \param value :	the reference value that we want to transform
@@ -43,7 +44,8 @@
  */
 float nmap(float value, float vmin, float vmax, float min, float max);
 
-/* \fn cpyList(float* list, int size);
+/** 
+ * \fn cpyList(float* list, int size)
  * \brief function that copies an existing list of float
  *
  * \param list : 	the original list we want to copy
@@ -54,7 +56,8 @@ float nmap(float value, float vmin, float vmax, float min, float max);
  */
 float* cpyList(float* list, int size);
 
-/* \fn destructMatrice2D(void** matrice, int size);
+/** 
+ * \fn destructMatrice2D(void** matrice, int size)
  * \brief function that frees a 2D matrice from the memory
  *
  * \param matrice : the matrice we want to free from the memory
@@ -65,7 +68,8 @@ float* cpyList(float* list, int size);
  */
 void destructMatrice2D(void** matrice, int size);
 
-/* \fn shuffleList(float* list, int size);
+/** 
+ * \fn shuffleList(float* list, int size)
  * \brief function that shuffles the values in a given list
  *
  * \param list : the list we want to shuffle
@@ -75,24 +79,24 @@ void destructMatrice2D(void** matrice, int size);
  */
 void shuffleList(float* list, int size);
 
-/* \fn getNumberOfFilesInDirectory(char* path);
+/** 
+ * \fn getNumberOfFilesInDirectory(char* path)
  * \brief function that gets the number of files in a given directory
  *
  * \param
  *		path : 	the path of the directory
  *
- * \return
- 		the number of files in the given directory
+ * \return int : the number of files in the given directory
  */
 int getNumberOfFilesInDirectory(char* path);
 
-/* \fn getAllFileNameInDirectory(char* path);
+/** 
+ * \fn getAllFileNameInDirectory(char* path)
  * \brief function that gets the name of each files in the given directory
  *
  * \param
  *		path : 	the path of the directory
  *
- * \return
- 		a list of string containing the names of each files
+ * \return a list of string containing the names of each files
  */
 char** getAllFileNameInDirectory(char* path);

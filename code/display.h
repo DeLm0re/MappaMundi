@@ -17,7 +17,7 @@
 #include "entity.h"
 
 /**
- * \fn int drawField(SDL_Renderer *renderer, field oneField, int size)
+ * \fn int drawField(SDL_Renderer *renderer, Field *oneField, int size)
  * \brief function that draw our field in a graphical display
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
@@ -28,7 +28,7 @@
 int drawField(SDL_Renderer *renderer, Field *oneField, int size);
 
 /**
- * \fn int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, int size)
+ * \fn int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theField, int size)
  * \brief function that draw the field of view of an entity in a graphical display
  *
  * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL

@@ -39,7 +39,7 @@ typedef struct node
 node* initNode(int x, int y, int cost, int heuristic);
 
 /**
- * \fn node* nearestNode(Field oneField, int x, int y)
+ * \fn node* nearestNode(Field *oneField, int x, int y)
  * \brief function that return the nearest and safest node around the node which is used as a starting point for the pathfinding
  * But this node can be a WALL. A node is a structure used in the A* algorithme
  * A node can be used to create a chain list of node
@@ -108,7 +108,7 @@ node* cpyNode(node* nodeToCpy);
 void insertFrontNode(node** frontNode, node* newNode);
 
 /**
- * \fn void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color col)
+ * \fn void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize)
  * \brief function used to draw a chain list of nodes on the screen using SDL
  *
  * \param frontNode : the top node of a chain list of node
@@ -169,7 +169,7 @@ bool isNextTo(node* nodeToCheck, int x, int y);
 node* getLowestNode(node** openSet);
 
 /**
- * \fn node* getPath(node** closedSet)
+ * \fn node* getPath(node** closedSet, node* endNode)
  * \brief function which create a chain list of nodes which represent the obtimised path
  * using the closedSet of a A* algorithme
  * 
@@ -180,7 +180,7 @@ node* getLowestNode(node** openSet);
 node* getPath(node** closedSet, node* endNode);
 
 /**
- * \fn node* getPath(node** closedSet)
+ * \fn node* getNode(node** path, int index)
  * \brief function which create a chain list of nodes which represent the obtimised path
  * using the closedSet of a A* algorithme
  * 
@@ -191,7 +191,7 @@ node* getPath(node** closedSet, node* endNode);
 node* getNode(node** path, int index);
 
 /**
- * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode)
+ * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField)
  * \brief function which adds and create the neighboors of a given node in the openSet of the A* algorithme
  * It adds neighbors only if they are not in the closedSet or the openSet
  * 
@@ -205,7 +205,7 @@ node* getNode(node** path, int index);
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField);
 
 /**
- * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode)
+ * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField)
  * \brief function which do one step of the A* algorithme
  * once the path has been found, returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  * 
@@ -219,7 +219,7 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField);
 
 /**
- * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field theField, bool* endEvent)
+ * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field *theField, bool* endEvent)
  * \brief function that finds the path between two points (start, end)
  * returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  * 
