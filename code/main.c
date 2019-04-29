@@ -36,11 +36,11 @@ int main(int argc, char** argv)
 			Field *theField = createCustomField("grande");
 		
 		//Declaration of basic constants
-		const int fieldHeight = theField->height;
-		const int fieldWidth = theField->width;
+		int fieldHeight = theField->height;
+		int fieldWidth = theField->width;
 
 		//Size of a tile (ex: wall)
-		const int tileSize = 10;
+		const int tileSize = 5;
 
 		// init a width and height for the windows
 		int windowWidth = ((fieldWidth*tileSize) + 40 + (RADIUS_VIEWPOINT*2*tileSize));
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 			float successRate = 0;
 			int nbLearning = 0;
 			// While the neural network is not correct 100% of the time
-			while (successRate < 0.95 && data->endEvent == false)
+			while ((successRate < 0.95 && data->endEvent == false) || nbLearning < 100000)
 			{
 				//We create a new field of view
 				fieldInput = generateRandomFieldOfView(RADIUS_VIEWPOINT, true);
@@ -315,6 +315,15 @@ int main(int argc, char** argv)
 		
 		while(data->endEvent == false)
 		{
+		    //Initialisation and generation of a field :
+			    //theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+			    //generateEnv(theField);
+		    //Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
+			    theField = createCustomField("grande");
+			//Declaration of basic constants
+		    fieldHeight = theField->height;
+		    fieldWidth = theField->width;
+			    
 			//Initialise the entity
 			entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 			//Initialisation of the nodes

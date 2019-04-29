@@ -145,10 +145,10 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
 		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
         //We draw a rectangle at the correct coordiante
         SDL_RenderFillRect(renderer, &((SDL_Rect) {
-            entity->x*tileSize + 2,
-            entity->y*tileSize + 2,
-            tileSize-4,
-            tileSize-4}));
+            entity->x*tileSize + 1,
+            entity->y*tileSize + 1,
+            tileSize-2,
+            tileSize-2}));
 	}
 }
 
