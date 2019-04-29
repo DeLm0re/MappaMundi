@@ -46,10 +46,10 @@ typedef struct InputNeuralNetwork
 } InputNeuralNetwork;
 
 /**
- * \fn node* initialiseEntity(int x, int y, int visionRange)
+ * \fn Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight);
  * \brief function that initialise an Entity. An Entity is used by the neural network to navigate in a Field
  *
- * \param x, y : the coordinate of the Entity
+ * \param x, y : the coordinates of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
  * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
@@ -57,7 +57,7 @@ typedef struct InputNeuralNetwork
 Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight);
 
 /**
- * \fn void initializeMentalMap(Entity *entity)
+ * \fn initializeMentalMapEntity(Entity *entity, int width, int height)
  * \brief function that initialize the mental map of an entity
  * 
  * \param *entity : the entity which have the mental map to be updated
@@ -68,7 +68,7 @@ Entity* initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fiel
 void initializeMentalMapEntity(Entity *entity, int width, int height);
 
 /**
- * \fn void initialiseFieldOfView(Entity *entity);
+ * \fn void initialiseFieldOfViewEntity(Entity *entity)
  * \brief function that initialise the field of view of an entity
  *
  * \param *entity : the entity which have the field of view we want to update
@@ -106,7 +106,7 @@ void destructFieldOfViewEntity(Entity *entity);
  */
 void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int tileSize);
 
-/*
+/**
  * \fn void updateMentalMapEntity(Entity *entity)
  * \brief function that update the mental map of an entity
  *
@@ -115,8 +115,8 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  */
 void updateMentalMapEntity(Entity *entity);
 
-/*
- * \fn void updateFieldOfViewEntity(Entity *entity)
+/**
+ * \fn void updateFieldOfViewEntity(Field *aField, Entity *entity)
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
@@ -130,18 +130,19 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity);
  * \brief function that return the field of view from a map on a given coordinate
  *
  * \param *mentalMap : a pointer to the map from which we want to extrat the field of view
- * \param x, y : the coordinate in the map from wihc we will extract the field of view
+ * \param x, y : the coordinates in the map from wihc we will extract the field of view
  * \param visionRange : the radius of the field of view
  * \return Field* : the field of view
  */
 Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange);
 
-/*
- * \fn createInput(Field* mentalMap, int visionRange, int x, int y, int xEnd, int yEnd)
- * \brief function that create the inputs for the neural network based on the fieldOfView,
+/**
+ * \fn createInput(Field* fieldOfView, int x, int y, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on the mental map, the vision range,
  *      the coordinate of the point we want to test and the coordinate the entity wants to get to
  *
- * \param fieldOfView* : A pointer to a field of the mental map of the entity
+ * \param mentalMap* : A pointer to the mental map of the entity
+ * \param visionRange : the vision range of the entity
  * \param x, y : the coordinate of the point we want to test in the neural network
  * \param xEnd, yEnd : the coordinate the entity wants to get to
  *      
@@ -149,26 +150,26 @@ Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange);
  */
 InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int yEnd);
 
-/*
+/**
  * \fn void destructInput(InputNeuralNetwork** input)
  * \brief free a structure InputNeuralNetwork from the memory
  *
- * \param input** : a double pointer to the structure wwe want to free
+ * \param InputNeuralNetwork** input : a double pointer to the structure wwe want to free
  *      
  * \return void
  */
 void destructInput(InputNeuralNetwork** input);
 
 /**
- * \fn void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd)
+ * \fn void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange)
  * \brief function that change the values in an interest field according to the output of a trained neural network
+ * will be used for labelisation
  *
  * \param InterestField* interestField : the interest field that will be update
  * \param NeuralNetwork* neuralNetwork : the neural network that will give their values to the point in the interest field
  * \param Field* mentalMap : the mental map on wich the updated values will be based on
  * \param int xEnd : x coordinate of the ending point
  * \param int yEnd : y coordinate of the ending point
- * \param int visionRange : the vision range of the entity
  * \return void
  */
 void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange);

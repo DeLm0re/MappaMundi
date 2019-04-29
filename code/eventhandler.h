@@ -1,5 +1,5 @@
 /**
- * \file eventhandler.c
+ * \file eventhandler.h
  * \brief Functions prototypes that are used for dealing with the interactions the user might make
  * \author Louis Schuck
  * \version 0.1
@@ -32,7 +32,7 @@ typedef struct dataType
  * \fn void* eventHandlerFunction(void* data)
  * \brief function that raise a event
  *
- * \param data : the data which define the kind of event we have to raise
+ * \param data : data which define the kind of event we have to raise
  * \return void*
  */
 void* eventHandlerFunction(void* data);

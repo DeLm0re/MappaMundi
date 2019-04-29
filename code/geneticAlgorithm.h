@@ -36,7 +36,7 @@ typedef struct
 } GeneticNetworks;
 
 /**
- * \fn float **create2DIntArray(int width, int height)
+ * \fn float **create2DFloatArray(int width, int height)
  * \brief function that creates a 2 dimension array of float
  *
  * \param width : width of the array
@@ -56,7 +56,7 @@ float **create2DFloatArray(int width, int height);
 InterestField *initialiseInterestField(int width, int height);
 
 /**
- * \fn void destruct2DFloatArray(int **array, int width)
+ * \fn void destruct2DFloatArray(float **array, int width)
  * \brief function that free the 2D array out of memory
  *
  * \param **array : The array to free
@@ -135,7 +135,7 @@ void destructLabelingWeights(LabelingWeights **labelingWeights);
 float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, LabelingWeights* labelingWeights);
 
 /**
- * \fn GeneticNetworks *initialiseInterestField(int size)
+ * \fn GeneticNetworks *initialiseGeneticNetworks(int size)
  * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
  *
  * \param size : the number of genetic networks to load in the structure
@@ -144,7 +144,7 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
 GeneticNetworks *initialiseGeneticNetworks(int size);
 
 /**
- * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder)
+ * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder, float mutationChance)
  * \brief function that create a new list of genetic network based on a previous one
  *
  * \param numberOfBreeder : the number of genetic networks that will be selected to reproduce among the best
