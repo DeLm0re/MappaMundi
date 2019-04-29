@@ -49,7 +49,7 @@ typedef struct InputNeuralNetwork
  * \fn node* initialiseEntity(int x, int y, int visionRange)
  * \brief function that initialise an Entity. An Entity is used by the neural network to navigate in a Field
  *
- * \param x, y : the coordinate of the Entity
+ * \param x, y : the coordinates of the Entity
  * \param visionRange : the maximum distance at which the entity can see the Field
  * \param fieldWidth, fieldHeight : dimention of the field of the environment
  * \return Entity*
@@ -130,7 +130,7 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity);
  * \brief function that return the field of view from a map on a given coordinate
  *
  * \param *mentalMap : a pointer to the map from which we want to extrat the field of view
- * \param x, y : the coordinate in the map from wihc we will extract the field of view
+ * \param x, y : the coordinates in the map from wihc we will extract the field of view
  * \param visionRange : the radius of the field of view
  * \return Field* : the field of view
  */
@@ -142,8 +142,8 @@ Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange);
  *      the coordinate of the point we want to test and the coordinate the entity wants to get to
  *
  * \param fieldOfView* : A pointer to a field of the mental map of the entity
- * \param x, y : the coordinate of the point we want to test in the neural network
- * \param xEnd, yEnd : the coordinate the entity wants to get to
+ * \param x, y : the coordinates of the point we want to test in the neural network
+ * \param xEnd, yEnd : the coordinates the entity wants to get to
  *      
  * \return InputNeuralNetwork*
  */

@@ -192,7 +192,7 @@ void updateMentalMapEntity(Entity *entity)
  * \brief function that update the field of view of an entity
  *
  * \param entity : the Entity to update
- *        field* : A pointer to the field on which we are based
+ * \param field* : A pointer to the field on which we are based
  * \return void
  */
 void updateFieldOfViewEntity(Field *aField, Entity *entity)
@@ -260,7 +260,7 @@ void updateFieldOfViewEntity(Field *aField, Entity *entity)
  * \brief function that return the field of view from a map on a given coordinate
  *
  * \param *mentalMap : a pointer to the map from which we want to extrat the field of view
- * \param x, y : the coordinate in the map from wihc we will extract the field of view
+ * \param x, y : the coordinates in the map from wihc we will extract the field of view
  * \param visionRange : the radius of the field of view
  * \return Field* : the field of view
  */

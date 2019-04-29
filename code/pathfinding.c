@@ -40,7 +40,7 @@ node* initNode(int x, int y, int cost, int heuristic)
  * But this node can be a WALL. A node is a structure used in the A* algorithme
  * A node can be used to create a chain list of node
  *
- * \param x, y : the coordinate of the node used as a starting point for the pathfinding
+ * \param x, y : the coordinates of the node used as a starting point for the pathfinding
  * \param oneField* : poiter to the field in which we search a safe node
  * \return node*
  */
