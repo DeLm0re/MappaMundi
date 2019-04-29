@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 {
 	if (argc < 2) 
 	{
-		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 : Start a new genetic network and train it\n 4 : Load an existing genetic network\n");
+		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 : Start a new genetic network and train it\n 4 [path] : Load an existing genetic network\n");
 	}
 	else
 	{
@@ -30,10 +30,10 @@ int main(int argc, char** argv)
 		SDL_Color wantedPositionColor = {160, 80, 80, 255};
 
 		//Initialisation and generation of a field :
-			//theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-			//generateEnv(theField);
+			Field *theField = initialiseField(50, 50, EMPTY);
+			generateEnv(theField);
 		//Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
-			Field *theField = createCustomField("grande");
+			//Field *theField = createCustomField("grande");
 		
 		//Declaration of basic constants
 		int fieldHeight = theField->height;
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 		node* wantedPosition = NULL; //The position the entity want to explore
 	
 		char savingPathNN[256] = "../NN/Reseau1.nn";
-		char savingPathGN[256] = "../GN/genome.gn";
+		char savingPathGN[256] = "../GN";
 
 		NeuralNetwork* neuralNetwork = NULL;
 		LabelingWeights* labelingWeights = NULL;
@@ -112,10 +112,13 @@ int main(int argc, char** argv)
 			    break;
 			//Load genetic network
 			case LOAD_GN:
-                labelingWeights = loadGeneticNetwork(savingPathGN);
+		        if (argc == 3)
+                    labelingWeights = loadGeneticNetwork(argv[2]);
+                else
+                    printf("Error : Invalid arguments\n");
 			    break;
 			default:
-				printf("Error : Invalid arguments");
+				printf("Error : Invalid arguments\n");
 				break;
 		}
 	    
@@ -184,12 +187,22 @@ int main(int argc, char** argv)
 			generateEnv(theField);
 			
 			//We create a random batch of genetic network
-			GeneticNetworks* geneticNetworks = initialiseGeneticNetworks(100);
+			int nbMember = 100;
+			int nbGeneration = 5;
+			GeneticNetworks* geneticNetworks = NULL;
+			if (argc == 2)
+			    geneticNetworks = initialiseGeneticNetworks(nbMember);
+			else if (argc == 3)
+			    geneticNetworks = initialiseGeneticNetworksFrom_(nbMember, argv[2], 0.01);
 			
 			//For each generation
 			int generationIndex;
-			for (generationIndex = 0; generationIndex < 20; generationIndex++)
+			for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
 			{
+		        //We create a new generation absed on half the best individuals
+		        GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.01);
+		        destructGeneticNetworks(&geneticNetworks);
+		        geneticNetworks = temp;
 			    //For each genetic networks of the generation
 			    int networkIndex;
 			    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
@@ -275,11 +288,8 @@ int main(int argc, char** argv)
 				        // We free the wantedPosition from the memory
 				        destructNodes(&wantedPosition);
 			        }
-			        //We create a new generation absed on half the best individuals
-			        GeneticNetworks* temp = createNewGeneration(geneticNetworks, 50, 0.01);
-			        destructGeneticNetworks(&geneticNetworks);
-			        geneticNetworks = temp;
 			    }
+			    
 			}
 			//Free the memory of the field
 			destructField(&theField);
@@ -287,6 +297,11 @@ int main(int argc, char** argv)
 			sortGeneticNetworks(geneticNetworks);
 			//Then, we get the best of the generation to be the labeling weights
 			labelingWeights = geneticNetworks->list[0];
+			//We save the neural network
+			int nbGN = getNumberOfFilesInDirectory(savingPathGN);
+			char strBuffer[256] = "";
+			sprintf(strBuffer, "%s/genome%ds%fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], nbGeneration, nbMember);
+			saveGeneticNetwork(labelingWeights, strBuffer);
 		}
 	
 		//--- Main loop
@@ -294,10 +309,10 @@ int main(int argc, char** argv)
 		while(data->endEvent == false)
 		{
 		    //Initialisation and generation of a field :
-			    //theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-			    //generateEnv(theField);
+			    theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+			    generateEnv(theField);
 		    //Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
-			    theField = createCustomField("grande");
+			    //theField = createCustomField("grande");
 			//Declaration of basic constants
 		    fieldHeight = theField->height;
 		    fieldWidth = theField->width;

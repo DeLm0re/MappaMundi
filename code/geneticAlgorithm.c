@@ -370,6 +370,39 @@ GeneticNetworks *initialiseGeneticNetworks(int size)
 }
 
 /**
+ * \fn GeneticNetworks *initialiseGeneticNetworksFrom_(int size, LabelingWeights* labelingWeights)
+ * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
+ *  based on an existing genetic network
+ *
+ * \param size : the number of genetic networks to load in the structure
+ * \param *pathOfGeneticNetwork : a pointer to the path of a genetic network
+ * \param variation : variation from the original genetic network. Must be superior to 0
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *initialiseGeneticNetworksFrom_(int size, char* pathOfGeneticNetwork, float variation)
+{
+    GeneticNetworks* geneticNetworks = (GeneticNetworks*) malloc(sizeof(GeneticNetworks));
+    geneticNetworks->size = size;
+    geneticNetworks->list = (LabelingWeights**) malloc(sizeof(LabelingWeights*) * size);
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        geneticNetworks->list[i] = loadGeneticNetwork(pathOfGeneticNetwork);
+    }
+    geneticNetworks->score = (float*) malloc(sizeof(float) * size);
+    for (i = 0; i < size; i++)
+    {
+        geneticNetworks->score[i] = 0;
+        int j;
+        for(j = 0; j < 9; j++)
+        {
+            geneticNetworks->list[i]->weights[j] += nmap(rand()%1000, 0, 1000, -variation, variation);
+        }
+    }
+    return geneticNetworks;
+}
+
+/**
  * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder)
  * \brief function that create a new list of genetic network based on a previous one
  *

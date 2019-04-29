@@ -144,6 +144,18 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
 GeneticNetworks *initialiseGeneticNetworks(int size);
 
 /**
+ * \fn GeneticNetworks *initialiseGeneticNetworksFrom_(int size, LabelingWeights* labelingWeights)
+ * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
+ *  based on an existing genetic network
+ *
+ * \param size : the number of genetic networks to load in the structure
+ * \param *pathOfGeneticNetwork : a pointer to the path of a genetic network
+ * \param variation : variation from the original genetic network. Must be superior to 0
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *initialiseGeneticNetworksFrom_(int size, char* pathOfGeneticNetwork, float variation);
+
+/**
  * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder)
  * \brief function that create a new list of genetic network based on a previous one
  *
