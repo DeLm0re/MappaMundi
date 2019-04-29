@@ -13,7 +13,7 @@
 #include "eventhandler.h"
 
 /**
- * \fn void* eventHandlerFunction(void* data)
+ * \fn eventHandlerFunction(void* data)
  * \brief function that raise a event
  *
  * \param data : data which define the kind of event we have to raise
@@ -31,7 +31,7 @@ void* eventHandlerFunction(void* data)
 }
 
 /**
- * \fn dataType* initData(SDL_Event* event)
+ * \fn initData(SDL_Event* event)
  * \brief function that initialise a structure dataType with a event and return it
  *
  * \param event : event which will be store in the new dataType structure we want to return
