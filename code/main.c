@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 		const int tileSize = 5;
 
 		// init a width and height for the windows
-		int windowWidth = ((fieldWidth*tileSize) + 40 + (RADIUS_VIEWPOINT*2*tileSize));
+		int windowWidth = (fieldWidth*tileSize) + /*offset*/ 2*tileSize + (RADIUS_VIEWPOINT*2*tileSize) + 2*tileSize;
 		int windowHeight = fieldHeight*tileSize;
 		
 		// Set some basic variables for the SDL to work

@@ -116,9 +116,32 @@ int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theF
 
     SDL_Rect square = {0, 0, 0, 0};
 
-    for(w = 0; w < (2*oneEntity->visionRange +1); w++)
+    for(w = 0; w < 2*oneEntity->visionRange + 2; w++)
     {
-        for(h = 0; h < (2*oneEntity->visionRange +1); h++)
+        for(h = 0; h < 2*oneEntity->visionRange + 2; h++)
+        {
+            //Set fog color
+            if(SDL_SetRenderDrawColor(renderer, fogColor.r, fogColor.g, fogColor.b, fogColor.a) < 0)
+            {
+                return -1;
+            }
+
+            square.x = size*w + ((theField->width) * size) + /*(offset)*/ 2*size;
+            square.y = size*h;
+            square.h = size;
+            square.w = size;
+
+            //We draw a square at the same position.
+            if(SDL_RenderFillRect(renderer, &square) < 0)
+            {
+		        return -1;
+            }
+        }
+    }
+
+    for(w = 0; w < 2*oneEntity->visionRange; w++)
+    {
+        for(h = 0; h < 2*oneEntity->visionRange; h++)
         {
             switch(oneEntity->fieldOfView[w][h].pointValue)
             {
@@ -155,8 +178,8 @@ int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theF
                 break;
             }
 
-            square.x = size*w + ((theField->width) * size) + 20;
-            square.y = size*h;
+            square.x = size*(w+1) + ((theField->width) * size) + /*(offset)*/ 2*size;
+            square.y = size*(h+1);
             square.h = size;
             square.w = size;
 
@@ -167,6 +190,7 @@ int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theF
             }
         }
     }
+
     return 0;
 }
 

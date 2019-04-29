@@ -81,12 +81,12 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
  * \brief function that create a field using a custom field (custom fields are located in CUSTOM_FIELD_PATH (prototype/h)
  *          and must have the CUSTOM_FIELD_EXTENSION (prototype/h))
  *
- * \param char *customFieldName : the name of our custom field
+ * \param char *customFieldName : the name of our custom field (without the extension)
  * 
  * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
 Field *createCustomField(char *customFieldName)
-{    
+{
     Field *oneField = (Field*)malloc(sizeof(Field));
 
     int widthIndex, heightIndex;
