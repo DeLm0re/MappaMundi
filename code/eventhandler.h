@@ -9,14 +9,7 @@
  *
  */
 
-//Header files
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
-#include <math.h>
 #include <stdbool.h>
-#include <pthread.h>
 #include <SDL2/SDL.h>
 
 //The structure dataType which define what is the kind of event which is happening
