@@ -32,7 +32,7 @@
 #include <stdbool.h>
 
 #include "BmpLib.h"
-
+#include "eventhandler.h"
 
 //Typedef of field
 typedef struct Field

@@ -6,7 +6,7 @@ WARNING_FLAGS = -Wall -Wextra -Werror -pedantic -Wformat\
 CFLAGS = -std=c99 -m64 -O3 $(WARNING_FLAGS)
 CLIBS = -lpthread -lm `sdl2-config --cflags --libs`
 CC = gcc
-DEP = pathfinding.o core.o display.o eventhandler.o entity.o neuralNetwork.o rioFunction.o BmpLib.o OutilsLib.o geneticAlgorithm.o
+DEP = wrapper.o pathfinding.o core.o display.o eventhandler.o entity.o neuralNetwork.o rioFunction.o BmpLib.o OutilsLib.o geneticAlgorithm.o
 EXE = main
 
 all: $(EXE)
