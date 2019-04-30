@@ -9,6 +9,7 @@
  *
  */
 
+#include <pthread.h>
 #include "prototype.h"
 #include "eventhandler.h"
 #include "rioFunction.h"

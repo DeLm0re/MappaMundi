@@ -9,9 +9,7 @@
  *
  */
 
-//Header file
 #include "wrapper.h"
-
 
 //Main of the programme
 int main(int argc, char** argv)
