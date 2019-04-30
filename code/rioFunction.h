@@ -9,18 +9,12 @@
  *
  */
 
-//Header file containing the prototypes
-#include <stdio.h>
+#ifndef H_RIOFUNCTION
+	#define H_RIOFUNCTION
+
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
-#include <math.h>
-
 #include <dirent.h>
-
-#ifndef M_PI
-	#define M_PI 3.14159265358979323846
-#endif
 
 #ifndef DT_REG
 	#define DT_REG 8
@@ -100,3 +94,5 @@ int getNumberOfFilesInDirectory(char* path);
  		a list of string containing the names of each files
  */
 char** getAllFileNameInDirectory(char* path);
+
+#endif
