@@ -232,7 +232,7 @@ int main(int argc, char** argv)
 				        {
 					        destructNodes(&path);
 					        //We try to find a path
-					        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+					        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
 					        //If we haven't find a path
 					        if ((path == startNode || path == NULL))
 					        {
@@ -345,7 +345,7 @@ int main(int argc, char** argv)
 				{
 					destructNodes(&path);
 					//We try to find a path
-					path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+					path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
 					//If we haven't find a path
 					if ((path == startNode || path == NULL))
 					{

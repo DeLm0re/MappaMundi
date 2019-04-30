@@ -565,7 +565,7 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
 }
 
 /**
- * \fn node* findPathFrom_To_(node* startNode, node* endNode, Field *theField, bool* endEvent)
+ * \fn findPathFromStartEnd(node* startNode, node* endNode, Field *theField, bool* endEvent)
  * \brief function that finds the path between two points (start, end)
  * returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  * 
@@ -575,7 +575,7 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
  * \param endEvent : pointer to boolean that will trigger the end of the function. Put NULL if there is none
  * \return node*
  */
-node* findPathFrom_To_(node* startNode, node* endNode, Field *theField, bool* endEvent)
+node* findPathFromStartEnd(node* startNode, node* endNode, Field *theField, bool* endEvent)
 {
 	node* path = NULL; //Used to store a path
 	node* openSet = NULL; //Used to store the openSet for the A* algorithm
