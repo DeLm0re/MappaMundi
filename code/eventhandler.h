@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_EVENTHANDLER
+	#define H_EVENTHANDLER
+
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
@@ -38,3 +41,5 @@ void* eventHandlerFunction(void* data);
  * \return dataType* : the new structure dataType initialise with our event
  */
 dataType* initData(SDL_Event* event);
+
+#endif
