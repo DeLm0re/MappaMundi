@@ -15,8 +15,12 @@
 //Define the maximum number of points a field of view can have
 #define RADIUS_VIEWPOINT (5)
 
-//Header file for core functions
+#include <stdlib.h>
+#include <SDL2/SDL.h>
+#include "eventhandler.h"
 #include "pathfinding.h"
+#include "neuralNetwork.h"
+#include "geneticAlgorithm.h"
 
 //The structure point used as a point of a field which can be a wall, empty or fog
 typedef struct Point
