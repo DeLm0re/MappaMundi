@@ -12,9 +12,14 @@
 #ifndef H_CORE
     #define H_CORE
 
-//Header file for graphical display
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "BmpLib.h"
 #include "prototype.h"
-#include "neuralNetwork.h"
 
 /**
  * \fn int **create2DIntArray(int width, int height)

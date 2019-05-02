@@ -12,8 +12,8 @@
 #ifndef H_DISPLAY
     #define H_DISPLAY
 
-//Header file containing the prototypes
-#include "pathfinding.h"
+#include <SDL2/SDL.h>
+#include "prototype.h"
 #include "entity.h"
 
 /**

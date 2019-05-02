@@ -485,3 +485,47 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
         interestField->data[wantedPosition->x][wantedPosition->y] = 0;
     }
 }
+
+/**
+ * \fn node *findNextPathNN(Entity *entity, node *startNode, node *endNode, dataType *data, NeuralNetwork *neuralNetwork)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param endNode : position of destination
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \neuralNetwork : neural network used to take the decision
+ *  
+ * \return node*
+ */
+node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwork *neuralNetwork)
+{
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    //We initialize an interest field
+    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
+
+    //We update each values of the interest field with what our neural network think
+    updateInterestField(interestField, neuralNetwork, entity->mentalMap, endNode->x, endNode->y, entity->visionRange);
+    
+    //We set a default wanted node
+    node *wantedPosition = cpyNode(endNode);
+    
+    //Use to store the path found by the pathfinding
+    node* path = NULL;
+    //We try to find a path
+    while((path == startNode || path == NULL) && !data->endEvent)
+    {
+        destructNodes(&path);
+        //We try to find a path
+        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+        //If we haven't find a path
+        if ((path == startNode || path == NULL))
+        {
+            //We change our wanted node to the best position found by the neural network
+            updateBestWantedPosition(wantedPosition, interestField);
+        }
+    }
+    destructInterestField(&interestField);
+    destructNodes(&wantedPosition);
+
+    return path;
+}

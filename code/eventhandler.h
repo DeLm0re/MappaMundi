@@ -9,14 +9,10 @@
  *
  */
 
-//Header files
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
-#include <math.h>
+#ifndef H_EVENTHANDLER
+	#define H_EVENTHANDLER
+
 #include <stdbool.h>
-#include <pthread.h>
 #include <SDL2/SDL.h>
 
 //The structure dataType which define what is the kind of event which is happening
@@ -45,3 +41,5 @@ void* eventHandlerFunction(void* data);
  * \return dataType* : the new structure dataType initialise with our event
  */
 dataType* initData(SDL_Event* event);
+
+#endif

@@ -12,6 +12,11 @@
 #ifndef H_GENETICALGORITHM
     #define H_GENETICALGORITHM
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
+#include "prototype.h"
 #include "core.h"
 
 //Typedef of field

@@ -12,8 +12,10 @@
 #ifndef H_PATHFINDING
 	#define H_PATHFINDING
 
-//Header file
-#include "geneticAlgorithm.h"
+#include <stdlib.h>
+#include <stdbool.h>
+#include <SDL2/SDL.h>
+#include "prototype.h"
 
 //The structure node used in the A* algorithme (used in core.c)
 typedef struct node 

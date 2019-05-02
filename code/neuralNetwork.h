@@ -9,7 +9,13 @@
  *
  */
 
-//Header file
+#ifndef H_NEURALNETWORK
+	#define H_NEURALNETWORK
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
 #include "rioFunction.h"
 
 // Structure Neurone
@@ -217,3 +223,4 @@ bool saveNeuralNetwork(NeuralNetwork* neuralNetwork, const char* path);
  */
 NeuralNetwork* loadNeuralNetwork(const char* path);
 
+#endif

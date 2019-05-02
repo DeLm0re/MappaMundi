@@ -19,21 +19,6 @@
 #define CUSTOM_FIELD_PATH "../custom_field/"
 #define CUSTOM_FIELD_EXTENSION ".bmp"
 
-//General header files
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-//More specific headers files
-#include <SDL2/SDL.h>
-#include <time.h>
-#include <math.h>
-#include <string.h>
-#include <stdbool.h>
-
-#include "BmpLib.h"
-
-
 //Typedef of field
 typedef struct Field
 {
