@@ -17,10 +17,10 @@ int main(int argc, char** argv)
 	if (argc < 2) 
 	{
 		printf("Please, enter an argument : \n");
-		printf(" 1 [pathMap] : Create a new neural network and train it on a random map or on an existing map\n");
-		printf(" 2 [pathMap] : Load an existing neural network and test it on a random map or on an existing map\n");
-		printf(" 3 [pathGeneticNetwork] : Start a new genetic network and train it or use an existing one as reference\n");
-		printf(" 4 pathGeneticNetwork [pathMap] : Load an existing genetic network and test it on a random map or on an existing map\n");
+		printf(" 1 [pathMap] : \n\tCreate a new neural network and train it on a random map or on an existing map\n");
+		printf(" 2 [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
+		printf(" 3 [pathGeneticNetwork] : \n\tStart a new genetic network and train it or use an existing one as reference\n");
+		printf(" 4 pathGeneticNetwork [pathMap] : \n\tLoad an existing genetic network and test it on a random map or on an existing map\n");
 	}
 	else
 	{
