@@ -178,7 +178,7 @@ int main(int argc, char** argv)
 				        {
 					        destructNodes(&path);
 					        //We try to find a path
-					        path = findPathFrom_To_(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+					        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
 					        //If we haven't find a path
 					        if ((path == startNode || path == NULL))
 					        {
@@ -270,8 +270,12 @@ int main(int argc, char** argv)
 				updateFieldOfViewEntity(theField, entity);
 				//Updates the mental map of our entity with its new field of view
 				updateMentalMapEntity(entity);
-
-				node *path = findNextPathNN(entity, endNode, data, neuralNetwork);
+				
+				node *path = NULL;
+                if (menuChoice == LOAD_NN)
+				    path = findNextPathNN(entity, endNode, data, neuralNetwork);
+				else if (menuChoice == LOAD_GN)
+				    path = findNextPathGN(entity, endNode, data, labelingWeights);
 				
 				//We set the path position
 				int positionInPath = 0;

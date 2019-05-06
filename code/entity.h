@@ -219,4 +219,17 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
  */
 node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwork *neuralNetwork);
 
+/**
+ * \fn node *findNextPathGN(Entity *entity, node *startNode, node *endNode, dataType *data, LabelingWeights* labelingWeights)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param endNode : position of destination
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \labelingWeights : genetic network used to take the decision
+ *  
+ * \return node*
+ */
+node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeights* labelingWeights);
+
 #endif
