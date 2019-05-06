@@ -18,6 +18,7 @@
 #include <math.h>
 #include "prototype.h"
 #include "core.h"
+#include "rioFunction.h"
 
 //Typedef of field
 // use to know how interesting each point of the field are
