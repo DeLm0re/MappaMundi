@@ -81,6 +81,7 @@ int main(int argc, char** argv)
 		
 		int menuChoice = atoi(argv[1]);
 
+        // We extract the path pf the image if it exist
         switch (menuChoice)
 		{
 			//New neural network
