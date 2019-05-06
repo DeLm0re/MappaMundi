@@ -77,40 +77,29 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
 }
 
 /**
- * \fn Field *createCustomField(char *customFieldName)
- * \brief function that create a field using a custom field (custom fields are located in CUSTOM_FIELD_PATH (prototype/h)
- *          and must have the CUSTOM_FIELD_EXTENSION (prototype/h))
+ * \fn Field *createCustomField(char *pathImageField)
+ * \brief function that create a field using a custom field
  *
- * \param char *customFieldName : the name of our custom field (without the extension)
+ * \param char *pathImageField : the path for the bmp image of the custom field
  * 
  * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
-Field *createCustomField(char *customFieldName)
+Field *createCustomField(char *pathImageField)
 {
-    Field *oneField = (Field*)malloc(sizeof(Field));
-
-    int widthIndex, heightIndex;
-    int compteur = 0;
-
-    char completeNameBuffer[50] = CUSTOM_FIELD_PATH;
-
-    char extensionBuffer[5] = CUSTOM_FIELD_EXTENSION;
-
-    strcat(completeNameBuffer, customFieldName);
-    strcat(completeNameBuffer, extensionBuffer);
-
-    DonneesImageRGB *imageCustomField = lisBMPRGB(completeNameBuffer);
+    DonneesImageRGB *imageCustomField = lisBMPRGB(pathImageField);
 
     if(imageCustomField == NULL)
     {
-        printf("ERROR : Imposible to read the custom field... \n");
+        return NULL;
     }
-
+    
+    Field *oneField = (Field*)malloc(sizeof(Field));
     oneField->width = imageCustomField->largeurImage;
     oneField->height = imageCustomField->hauteurImage;
-
     oneField->data = create2DIntArray(oneField->width, oneField->height);
 
+    int widthIndex, heightIndex;
+    int compteur = 0;
     //Copie des valeurs
 	for(heightIndex = (oneField->height-1); heightIndex >= 0; heightIndex--)
 	{
