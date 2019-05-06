@@ -150,7 +150,7 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
 GeneticNetworks *initialiseGeneticNetworks(int size);
 
 /**
- * \fn GeneticNetworks *initialiseGeneticNetworksFrom_(int size, LabelingWeights* labelingWeights)
+ * \fn GeneticNetworks *initialiseGeneticNetworksFrom(int size, LabelingWeights* labelingWeights)
  * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
  *  based on an existing genetic network
  *
@@ -159,7 +159,7 @@ GeneticNetworks *initialiseGeneticNetworks(int size);
  * \param variation : variation from the original genetic network. Must be superior to 0
  * \return GeneticNetworks : Pointer to a GeneticNetworks
  */
-GeneticNetworks *initialiseGeneticNetworksFrom_(int size, char* pathOfGeneticNetwork, float variation);
+GeneticNetworks *initialiseGeneticNetworksFrom(int size, char* pathOfGeneticNetwork, float variation);
 
 /**
  * \fn GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numberOfBreeder, float mutationChance)
