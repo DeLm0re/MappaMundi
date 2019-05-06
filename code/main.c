@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 		int fieldWidth = theField->width;
 
 		//Size of a tile (ex: wall)
-		const int tileSize = 5;
+		const int tileSize = 15;
 
 		// init a width and height for the windows
 		int windowWidth = (fieldWidth*tileSize) + /*offset*/ 2*tileSize + (RADIUS_VIEWPOINT*2*tileSize) + 2*tileSize;
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 		pthread_t thread1;
 		pthread_create(&thread1, NULL, eventHandlerFunction, (void*) data);
 
-	
+		char trainingMapNN[256] = "petite";
 		char savingPathNN[256] = "../NN/Reseau1.nn";
 		char savingPathGN[256] = "../GN/genome.gn";
 
@@ -87,8 +87,9 @@ int main(int argc, char** argv)
 		switch (menuChoice)
 		{
 			//New neural network
-			case TRAIN_NN:	
-				neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, savingPathNN);	
+			case TRAIN_NN:
+				//neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, savingPathNN);
+				neuralNetwork = trainingNN2(data, trainingMapNN, savingPathNN, renderer, tileSize, entityColor);
 				break;
 			//Load neural network
 			case LOAD_NN:

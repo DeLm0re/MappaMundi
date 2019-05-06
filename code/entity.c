@@ -357,6 +357,40 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
 }
 
 /**
+ * \fn createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on a field,
+ *      the coordinate of the entity and the coordinate the entity wants to get to
+ *
+ * \param field : A pointer to the field we want to convert
+ * \param visionRange : the vision range of the entity
+ * \param entityX, entityY : the coordinate of the entity
+ * \param xEnd, yEnd : the coordinate the entity wants to get to
+ *      
+ * \return InputNeuralNetwork*
+ */
+float* createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd)
+{
+    int widthIndex, heightIndex;
+    int inputIndex = 0;
+    float *input = (float*)malloc(( 4 + field->height * field->width) * sizeof(float));
+    for(widthIndex = 0; widthIndex < field->width; widthIndex++)
+    {
+        for(heightIndex = 0; heightIndex < field->height; heightIndex++)
+        {
+            input[inputIndex] = field->data[widthIndex][heightIndex];
+            inputIndex++;
+        }
+    }
+
+    input[inputIndex] = entityX;
+    input[inputIndex + 1] = entityY;
+    input[inputIndex + 2] = xEnd;
+    input[inputIndex + 3] = yEnd;
+
+    return input;
+}
+
+/**
  * \fn void destructInput(InputNeuralNetwork** input)
  * \brief free a structure InputNeuralNetwork from the memory
  *
@@ -528,4 +562,89 @@ node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwor
     destructNodes(&wantedPosition);
 
     return path;
+}
+
+
+/**
+ * \fn node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \param neuralNetwork : neural network used to take the decision
+ * \param input : input of the neuralNetwork
+ *  
+ * \return node*
+ */
+node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork, float *input)
+{
+    float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    node *endnode = initNode((int)output[0], (int)output[1], 0, 0);
+    
+    //We set a default wanted node
+    node *wantedPosition = cpyNode(endnode);
+    
+    //Use to store the path found by the pathfinding
+    node* path = NULL;
+    //We try to find a path
+    while((path == startNode || path == NULL) && !data->endEvent)
+    {
+        destructNodes(&path);
+        //We try to find a path
+        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+        //If we haven't find a path
+        if ((path == startNode || path == NULL))
+        {
+            //We change our wanted node to the nearest position available
+            int x = wantedPosition->x;
+            int y = wantedPosition->y;
+            destructNodes(&wantedPosition);
+            wantedPosition = nearestNode(entity->mentalMap, x, y);
+        }
+    }
+
+    return path;
+}
+
+/**
+ * \fn InputNeuralNetwork* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+ * \brief function that returns the expected choice for the neural network
+ *
+ * \param entity : entity that is moving
+ * \param xEnd, yEnd : coordinates of the destination
+ * \param field : the complete field for the supervised learning
+ * \param data : the structure we use to raise a flag for interruption
+ * 
+ * \return float*
+ */
+float *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+{
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    node *endNode = initNode(xEnd, yEnd, 0, 0);
+    node *completePath = findPathFromStartEnd(startNode, endNode, field, &data->endEvent);
+    node *destination = popNode(&completePath);
+
+    while(destination->x != endNode->x && destination->y != endNode->y)
+    {
+        int xPath = completePath->x;
+        int yPath = completePath->y;
+        int xEntity = startNode->x;
+        int yEntity = startNode->y;
+
+        if(pow((xEntity - xPath), 2) + pow((yEntity - yPath), 2) >= pow(entity->visionRange, 2))
+            break;
+        else
+        {
+            destructNodes(&destination);
+            destination = popNode(&completePath);
+        }
+    }
+
+    float *label = (float*)malloc(2*sizeof(float));
+    label[0] = destination->x;
+    label[1] = destination->y;
+    
+    return label;
 }

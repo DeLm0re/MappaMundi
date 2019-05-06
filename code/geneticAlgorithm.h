@@ -80,7 +80,7 @@ void destruct2DFloatArray(float **array, int width);
 void destructInterestField(InterestField **oneField);
 
 /**
- * \fn Field* labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
+ * \fn Field* labeling1(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
  * \brief function that returns the labeling of the points
  * will be used for labelisation
  *
@@ -91,21 +91,7 @@ void destructInterestField(InterestField **oneField);
  * \param int yFinalPosition : y coordinate of the end point
  * \return float
  */
-float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
-
-/**
- * \fn Field* labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \return float
- */
-float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
+float labeling1(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
 
 /**
  * \fn LabelingWeights* initialiseLabelingWeights()

@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <math.h>
 #include "eventhandler.h"
 #include "pathfinding.h"
 #include "neuralNetwork.h"
@@ -39,7 +40,6 @@ typedef struct Entity
     Point** fieldOfView;
 
     Field* mentalMap;
-    //The neural network structure is to be added
 } Entity;
 
 //The structure used to store the inputs of the neural network
@@ -155,6 +155,20 @@ Field* getFieldOfViewFromMap(Field* map, int x, int y, int visionRange);
 InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int yEnd);
 
 /**
+ * \fn createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on a field,
+ *      the coordinate of the entity and the coordinate the entity wants to get to
+ *
+ * \param field : A pointer to the field we want to convert
+ * \param visionRange : the vision range of the entity
+ * \param entityX, entityY : the coordinate of the entity
+ * \param xEnd, yEnd : the coordinate the entity wants to get to
+ *      
+ * \return InputNeuralNetwork*
+ */
+float* createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd);
+
+/**
  * \fn void destructInput(InputNeuralNetwork** input)
  * \brief free a structure InputNeuralNetwork from the memory
  *
@@ -218,5 +232,31 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
  * \return node*
  */
 node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwork *neuralNetwork);
+
+/**
+ * \fn node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \param neuralNetwork : neural network used to take the decision
+ * \param input : input of the neuralNetwork
+ *  
+ * \return node*
+ */
+node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork, float *input);
+
+/**
+ * \fn InputNeuralNetwork* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+ * \brief function that returns the expected choice for the neural network
+ *
+ * \param entity : entity that is moving
+ * \param xEnd, yEnd : coordinates of the destination
+ * \param field : the complete field for the supervised learning
+ * \param data : the structure we use to raise a flag for interruption
+ * 
+ * \return float*
+ */
+float *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data);
 
 #endif
