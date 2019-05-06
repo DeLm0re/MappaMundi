@@ -466,7 +466,7 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
 {
     if (wantedPosition != NULL && interestField != NULL)
     {
-        float bestPoint = 0;
+        float bestPoint = -INFINITY;
         wantedPosition->x = 0;
         wantedPosition->y = 0;
         int width, height;
@@ -474,6 +474,7 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
         {
             for(height = 0; height < interestField->height; height++)
             {
+                
                 if (interestField->data[width][height] > bestPoint)
                 {
                     bestPoint = interestField->data[width][height];
@@ -482,7 +483,7 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
                 }
             }
         }
-        interestField->data[wantedPosition->x][wantedPosition->y] = 0;
+        interestField->data[wantedPosition->x][wantedPosition->y] = -INFINITY;
     }
 }
 

@@ -283,14 +283,13 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
     float avgDistFog = 0;
     float avgDistVisited = 0;
     float value = 0;
-    float finalValue = 0;
     float centerPointx = (fieldOfView->width-1)/2;
     float centerPointy = (fieldOfView->height-1)/2;
 
 
     if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
     {
-        return 0;
+        return -INFINITY;
     }
     
     for(int width = 0; width < fieldOfView->width; width++)
@@ -339,9 +338,7 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
             avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
             avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED];
 
-    finalValue = (1.0/(1+exp(-value)));
-
-    return finalValue;
+    return value;
 }
 
 /**
@@ -365,6 +362,39 @@ GeneticNetworks *initialiseGeneticNetworks(int size)
     for (i = 0; i < size; i++)
     {
         geneticNetworks->score[i] = 0;
+    }
+    return geneticNetworks;
+}
+
+/**
+ * \fn GeneticNetworks *initialiseGeneticNetworksFrom_(int size, LabelingWeights* labelingWeights)
+ * \brief function that initialise a list of genetic networks (presented as LabelingWeights structures)
+ *  based on an existing genetic network
+ *
+ * \param size : the number of genetic networks to load in the structure
+ * \param *pathOfGeneticNetwork : a pointer to the path of a genetic network
+ * \param variation : variation from the original genetic network. Must be superior to 0
+ * \return GeneticNetworks : Pointer to a GeneticNetworks
+ */
+GeneticNetworks *initialiseGeneticNetworksFrom_(int size, char* pathOfGeneticNetwork, float variation)
+{
+    GeneticNetworks* geneticNetworks = (GeneticNetworks*) malloc(sizeof(GeneticNetworks));
+    geneticNetworks->size = size;
+    geneticNetworks->list = (LabelingWeights**) malloc(sizeof(LabelingWeights*) * size);
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        geneticNetworks->list[i] = loadGeneticNetwork(pathOfGeneticNetwork);
+    }
+    geneticNetworks->score = (float*) malloc(sizeof(float) * size);
+    for (i = 0; i < size; i++)
+    {
+        geneticNetworks->score[i] = 0;
+        int j;
+        for(j = 0; j < 9; j++)
+        {
+            geneticNetworks->list[i]->weights[j] += nmap(rand()%1000, 0, 1000, -variation, variation);
+        }
     }
     return geneticNetworks;
 }
