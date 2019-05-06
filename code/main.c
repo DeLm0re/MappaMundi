@@ -16,7 +16,11 @@ int main(int argc, char** argv)
 {
 	if (argc < 2) 
 	{
-		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 [path] : Start a new genetic network and train it or use an existing one as reference\n 4 [path] : Load an existing genetic network\n");
+		printf("Please, enter an argument : \n");
+		printf(" 1 [pathMap] : \n\tCreate a new neural network and train it on a random map or on an existing map\n");
+		printf(" 2 [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
+		printf(" 3 [pathGeneticNetwork] : \n\tStart a new genetic network and train it or use an existing one as reference\n");
+		printf(" 4 pathGeneticNetwork [pathMap] : \n\tLoad an existing genetic network and test it on a random map or on an existing map\n");
 	}
 	else
 	{
@@ -26,17 +30,10 @@ int main(int argc, char** argv)
 		// Create a color for the entity that will move
 		SDL_Color entityColor = {80, 160, 160, 255};
 
-		//Initialisation and generation of a field :
-			Field *theField = initialiseField(50, 50, EMPTY);
-			generateEnv(theField);
-		//Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
-			//Field *theField = createCustomField("grande");
-		//Declaration of basic constants
-		int fieldHeight = theField->height;
-		int fieldWidth = theField->width;
+		
 		const int tileSize = 5;
-		int windowWidth = (fieldWidth*tileSize) + /*offset*/ 2*tileSize + (RADIUS_VIEWPOINT*2*tileSize) + 2*tileSize;
-		int windowHeight = fieldHeight*tileSize;
+		int windowWidth = 640;
+		int windowHeight = 480;
 		
 		// Set some basic variables for the SDL to work
 		SDL_Event event;
@@ -69,7 +66,6 @@ int main(int argc, char** argv)
 		//Declaration of the thread and the data for the events
 		pthread_t thread1;
 		pthread_create(&thread1, NULL, eventHandlerFunction, (void*) data);
-
 	
 		char savingPathNN[256] = "../NN/Reseau1.nn";
 		char savingPathGN[256] = "../GN";
@@ -77,13 +73,50 @@ int main(int argc, char** argv)
 		NeuralNetwork* neuralNetwork = NULL;
 		LabelingWeights* labelingWeights = NULL;
 		
+		Field *theField = NULL;
+		int fieldHeight = 50;
+		int fieldWidth = 50;
+		
+		char pathImageField[256] = "";
+		
 		int menuChoice = atoi(argv[1]);
 
+        // We extract the path pf the image if it exist
+        switch (menuChoice)
+		{
+			//New neural network
+			case TRAIN_NN:
+			    if (argc == 3)
+	                strcpy(pathImageField, argv[2]);
+				break;
+			//Load neural network
+			case LOAD_NN:
+			    if (argc == 3)
+	                strcpy(pathImageField, argv[2]);
+				break;
+			//Load genetic network
+			case LOAD_GN:
+			    if (argc == 4)
+	                strcpy(pathImageField, argv[3]);
+			    break;
+		}
+		
+	    theField = createCustomField(pathImageField);
+	    bool fieldIsLoad = true;
+	    if (theField == NULL)
+	    {
+	        theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+	        generateEnv(theField);
+	        fieldIsLoad = false;
+	    }
+        fieldHeight = theField->height;
+        fieldWidth = theField->width;
+		        
 		switch (menuChoice)
 		{
 			//New neural network
-			case TRAIN_NN:	
-				neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, savingPathNN);	
+			case TRAIN_NN:
+				neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, savingPathNN);
 				break;
 			//Load neural network
 			case LOAD_NN:
@@ -91,14 +124,14 @@ int main(int argc, char** argv)
 				break;
 			//New genetic network
 			case TRAIN_GN:
-			    if (argc == 3)
+			    if (argc >= 3)
 			        labelingWeights = trainingGN1(data, fieldHeight, fieldWidth, savingPathGN, argv[2], 20, 50);
 			    else
 			        labelingWeights = trainingGN1(data, fieldHeight, fieldWidth, savingPathGN, NULL, 20, 50);
 			    break;
 			//Load genetic network
 			case LOAD_GN:
-		        if (argc == 3)
+		        if (argc >= 3)
                     labelingWeights = loadGeneticNetwork(argv[2]);
                 else
                     printf("Error : Invalid arguments\n");
@@ -108,18 +141,14 @@ int main(int argc, char** argv)
 				break;
 		}
 		
+		windowWidth = (fieldWidth*tileSize) + /*offset*/ 2*tileSize + (RADIUS_VIEWPOINT*2*tileSize) + 2*tileSize;
+		windowHeight = fieldHeight*tileSize;
+		SDL_SetWindowSize(window, windowWidth, windowHeight);
+		
 		//--- Main loop
 		
 		while(data->endEvent == false)
-		{
-		    //Initialisation and generation of a field :
-			    theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-			    generateEnv(theField);
-		    //Creation of a field by using a custom field in CUSTOM_FIELD_PATH (prototype/h)
-			    //theField = createCustomField("grande");
-		    fieldHeight = theField->height;
-		    fieldWidth = theField->width;
-		    
+		{   
 			//Initiate the entity, the start and end of the route according to the field
 			Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 			node* startNode = nearestNode(theField, entity->x, entity->y);
@@ -172,6 +201,14 @@ int main(int argc, char** argv)
 			}
 			destructNodes(&endNode);
 			
+			// We load a new field if we use a random map
+			if(!fieldIsLoad)
+		    {
+		        destructField(&theField);
+		        theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+	            generateEnv(theField);
+		    }
+			
 			while(data->waitForInstruction)
 			{
 				SDL_Delay(50);
@@ -183,8 +220,6 @@ int main(int argc, char** argv)
 				}
 			}
 			data->waitForInstruction = true;
-
-			destructField(&theField);
 		}
 
 		destructNeuralNetwork(&neuralNetwork);

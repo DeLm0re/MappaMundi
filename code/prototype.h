@@ -16,9 +16,6 @@
 	#define M_PI 3.14159265358979323846
 #endif
 
-#define CUSTOM_FIELD_PATH "../custom_field/"
-#define CUSTOM_FIELD_EXTENSION ".bmp"
-
 //Typedef of field
 typedef struct Field
 {

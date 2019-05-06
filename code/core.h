@@ -43,14 +43,14 @@ int **create2DIntArray(int width, int height);
 Field *initialiseField(int width, int height, pointEnum defaultValue);
 
 /**
- * \fn Field *createCustomField(char *customFieldName)
- * \brief function that create a field using a custom field (custom fields are located in ../custom_field)
+ * \fn Field *createCustomField(char *pathImageField)
+ * \brief function that create a field using a custom field
  *
- * \param char *customFieldName : the name of the .bmp of our custom field
+ * \param char *pathImageField : the path for the bmp image of the custom field
  * 
  * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
  */
-Field* createCustomField(char *customFieldName);
+Field *createCustomField(char *pathImageField);
 
 /**
  * \fn void generateEnv(Field *oneField)
