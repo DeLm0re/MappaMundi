@@ -283,14 +283,13 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
     float avgDistFog = 0;
     float avgDistVisited = 0;
     float value = 0;
-    float finalValue = 0;
     float centerPointx = (fieldOfView->width-1)/2;
     float centerPointy = (fieldOfView->height-1)/2;
 
 
     if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
     {
-        return 0;
+        return -INFINITY;
     }
     
     for(int width = 0; width < fieldOfView->width; width++)
@@ -339,9 +338,7 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
             avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
             avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED];
 
-    finalValue = (1.0/(1+exp(-value)));
-
-    return finalValue;
+    return value;
 }
 
 /**

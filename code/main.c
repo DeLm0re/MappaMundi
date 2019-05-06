@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 {
 	if (argc < 2) 
 	{
-		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 : Start a new genetic network and train it\n 4 [path] : Load an existing genetic network\n");
+		printf("Please, enter an argument : \n 1 : Create a new neural network and train it\n 2 : Load an existing neural network\n 3 [path] : Start a new genetic network and train it or use an existing one as reference\n 4 [path] : Load an existing genetic network\n");
 	}
 	else
 	{
@@ -187,8 +187,8 @@ int main(int argc, char** argv)
 			generateEnv(theField);
 			
 			//We create a random batch of genetic network
-			int nbMember = 100;
-			int nbGeneration = 5;
+			int nbMember = 30;
+			int nbGeneration = 20;
 			GeneticNetworks* geneticNetworks = NULL;
 			if (argc == 2)
 			    geneticNetworks = initialiseGeneticNetworks(nbMember);
@@ -222,8 +222,6 @@ int main(int argc, char** argv)
 			            (entity->x != endNode->x || entity->y != endNode->y) && 
 			            geneticNetworks->score[networkIndex] < fieldHeight*fieldWidth)
 			        {
-
-				        //--- Pathfinding algorithm and movement along it
 				
 				        //Updates the field of view of our entity
 				        updateFieldOfViewEntity(theField, entity);
