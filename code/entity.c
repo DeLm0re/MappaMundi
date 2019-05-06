@@ -630,10 +630,8 @@ float *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *dat
     {
         int xPath = completePath->x;
         int yPath = completePath->y;
-        int xEntity = startNode->x;
-        int yEntity = startNode->y;
 
-        if(pow((xEntity - xPath), 2) + pow((yEntity - yPath), 2) >= pow(entity->visionRange, 2))
+        if(entity->mentalMap->data[xPath][yPath] == FOG)
             break;
         else
         {
