@@ -114,6 +114,13 @@ int main(int argc, char** argv)
 			theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 			generateEnv(theField);
 			
+			Entity* entity = NULL;
+			node* startNode = NULL;
+			node* endNode = NULL;
+			node* wantedPosition = NULL;
+			node* path = NULL;
+			node* nodePosition = NULL;
+			
 			//We create a random batch of genetic network
 			int nbMember = 30;
 			int nbGeneration = 20;
@@ -182,7 +189,7 @@ int main(int argc, char** argv)
 				        //We free the interest field from the memory
 				        destructInterestField(&interestField);
 				        //We reset the path position
-				        positionInPath = 0;
+				        int positionInPath = 0;
 				        //Move the entity along the path
 				        do
 				        {
