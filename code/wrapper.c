@@ -85,3 +85,141 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
 
 	return neuralNetwork;
 }
+
+/**
+ * \fn NeuralNetwork* trainingGN1(int visionRange, dataType *data, int fieldHeight, int fieldWidth, char *savingPathGN)
+ * \brief creates a neural network and trains it on randomly generated fields of view, then saves it
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		fieldHeight : height of the field
+ * 		fieldWidth : width of the field
+ * 		savingPathGN : path where to save the genetic network
+ *      basePathGN : path to a genetic network from which the first generation will be based on.
+ *                  If NULL, then a default first generation will be created
+ *      nbGeneration : the number of generation the training wil go throught
+ *      nbMember : the number of member tested by generation
+ * \return
+ * 		LabelingWeights*
+ */
+LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, char *savingPathGN, char* basePathGN, int nbGeneration, int nbMember)
+{
+    //Initialisation and generation of a field :
+	Field* theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+	generateEnv(theField);
+	
+	GeneticNetworks* geneticNetworks = NULL;
+	if (basePathGN == NULL)
+	    geneticNetworks = initialiseGeneticNetworks(nbMember);
+	else
+	    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.01);
+	
+	//For each generation
+	int generationIndex;
+	for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
+	{
+        //We create a new generation absed on half the best individuals
+        GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.01);
+        destructGeneticNetworks(&geneticNetworks);
+        geneticNetworks = temp;
+	    //For each genetic networks of the generation
+	    int networkIndex;
+	    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
+	    {
+	        printf("Generation : %d, member : %d\n", generationIndex, networkIndex);
+	        //Initialise the entity
+	        Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
+	        //Initialisation of the nodes
+	        node* startNode = nearestNode(theField, entity->x, entity->y);
+	        //Updates the position of the entity for the nearest starting node
+	        entity->x = startNode->x;
+	        entity->y = startNode->y;
+	        node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
+	
+	        //While the entity hasn't arrived
+	        while (
+	            (entity->x != endNode->x || entity->y != endNode->y) && 
+	            geneticNetworks->score[networkIndex] < fieldHeight*fieldWidth)
+	        {
+		
+		        //Updates the field of view of our entity
+		        updateFieldOfViewEntity(theField, entity);
+		        //Updates the mental map of our entity with its new field of view
+		        updateMentalMapEntity(entity);
+		
+		        //We initialize an interest field
+		        InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
+		        //We update each values of the interest field with what our genetic network think
+		        updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, geneticNetworks->list[networkIndex]);
+		
+		        //We set a default wanted node
+		        node* wantedPosition = cpyNode(endNode);
+		        node* path = NULL;
+		        //We update the start node of the pathfinding
+		        startNode->x = entity->x;
+		        startNode->y = entity->y;
+		        //We try to find a path
+		        while((path == startNode || path == NULL))
+		        {
+			        destructNodes(&path);
+			        //We try to find a path
+			        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+			        //If we haven't find a path
+			        if ((path == startNode || path == NULL))
+			        {
+				        //We change our wanted node to the best position found by the neural network
+				        updateBestWantedPosition(wantedPosition, interestField);
+			        }
+		        }
+		        //We free the interest field from the memory
+		        destructInterestField(&interestField);
+		        //We reset the path position
+		        int positionInPath = 0;
+		        node* nodePosition = NULL;
+		        //Move the entity along the path
+		        do
+		        {
+			        //get the next position
+			        positionInPath++;
+			        nodePosition = getNode(&path, positionInPath);
+			        //If we find the next nodePosition
+			        if (nodePosition != NULL)
+			        {
+				        //Updates the position of the entity for the nearest starting node
+				        entity->x = nodePosition->x;
+				        entity->y = nodePosition->y;
+				        
+				        //Increase the score of the genetic network
+				        geneticNetworks->score[networkIndex]++;
+
+				        //Updates the field of view of our entity
+				        updateFieldOfViewEntity(theField, entity);
+
+				        //Updates the mental map of our entity with its new field of view
+				        updateMentalMapEntity(entity);
+			        }
+		        }while(nodePosition != NULL);
+		        //Free the memory of all the nodes use for the pathfinding
+		        destructNodes(&path);
+		        // We free the wantedPosition from the memory
+		        destructNodes(&wantedPosition);
+	        }
+	        destructEntity(&entity);
+	        destructNodes(&startNode);
+		    destructNodes(&endNode);
+	    }
+	}
+	//Free the memory of the field
+	destructField(&theField);
+	//We sort the last generation
+	sortGeneticNetworks(geneticNetworks);
+	//Then, we get the best of the generation to be the labeling weights
+	LabelingWeights* labelingWeights = geneticNetworks->list[0];
+	//We save the neural network
+	int nbGN = getNumberOfFilesInDirectory(savingPathGN);
+	char strBuffer[256] = "";
+	sprintf(strBuffer, "%s/genome%ds%fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], nbGeneration, nbMember);
+	saveGeneticNetwork(labelingWeights, strBuffer);
+	
+	return labelingWeights;
+}

@@ -96,6 +96,10 @@ int main(int argc, char** argv)
 				break;
 			//New genetic network
 			case TRAIN_GN:
+			    if (argc == 2)
+			        labelingWeights = trainingGN1(data, fieldHeight, fieldWidth, savingPathGN, NULL, 20, 50);
+			    else if (argc == 3)
+			        labelingWeights = trainingGN1(data, fieldHeight, fieldWidth, savingPathGN, argv[2], 20, 50);
 			    break;
 			//Load genetic network
 			case LOAD_GN:
@@ -108,7 +112,7 @@ int main(int argc, char** argv)
 				printf("Error : Invalid arguments\n");
 				break;
 		}
-		if (menuChoice == TRAIN_GN)
+		/*if (menuChoice == TRAIN_GN)
 		{
 		    //Initialisation and generation of a field :
 			theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
@@ -128,7 +132,7 @@ int main(int argc, char** argv)
 			if (argc == 2)
 			    geneticNetworks = initialiseGeneticNetworks(nbMember);
 			else if (argc == 3)
-			    geneticNetworks = initialiseGeneticNetworksFrom_(nbMember, argv[2], 0.01);
+			    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, argv[2], 0.01);
 			
 			//For each generation
 			int generationIndex;
@@ -235,7 +239,7 @@ int main(int argc, char** argv)
 			char strBuffer[256] = "";
 			sprintf(strBuffer, "%s/genome%ds%fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], nbGeneration, nbMember);
 			saveGeneticNetwork(labelingWeights, strBuffer);
-		}
+		}*/
 	
 		//--- Main loop
 		
@@ -262,7 +266,7 @@ int main(int argc, char** argv)
 			entity->y = startNode->y;
 			destructNodes(&startNode);
 			node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
-			
+		    
 			//While the entity hasn't arrived
 			while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
 			{	
