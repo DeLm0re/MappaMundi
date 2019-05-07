@@ -125,9 +125,9 @@ int main(int argc, char** argv)
 			//New genetic network
 			case TRAIN_GN:
 			    if (argc >= 3)
-			        labelingWeights = trainingGN1(data, fieldHeight, fieldWidth, savingPathGN, argv[2], 20, 50);
+			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, argv[2], 20, 50);
 			    else
-			        labelingWeights = trainingGN1(data, fieldHeight, fieldWidth, savingPathGN, NULL, 20, 50);
+			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, NULL, 20, 50);
 			    break;
 			//Load genetic network
 			case LOAD_GN:
@@ -169,35 +169,32 @@ int main(int argc, char** argv)
 				else if (menuChoice == LOAD_GN)
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
 				
-				int positionInPath = 0;
-				node *nodePosition = NULL;
-				//Move the entity along the path
-				do
-				{
-					//get the next position
-					positionInPath++;
-					nodePosition = getNode(&path, positionInPath);
-					if (nodePosition != NULL)
-					{
-						entity->x = nodePosition->x;
-						entity->y = nodePosition->y;
 
-						updateFieldOfViewEntity(theField, entity);
-						updateMentalMapEntity(entity);
-						
-						//Clear the screen
-						SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-						SDL_RenderClear(renderer);
-						//Draw
-						drawField(renderer, entity->mentalMap, tileSize);
-						drawFieldOfViewEntity(renderer, entity, theField,tileSize);
-						showEntity(entity, renderer, entityColor, tileSize);
-						//Refresh the window
-						SDL_RenderPresent(renderer);
-						SDL_Delay(30);
-					}
-				}while(nodePosition != NULL && !data->endEvent);
-				destructNodes(&path);
+		        node* nodePosition = popNode(&path);
+		        //Move the entity along the path
+		        while(nodePosition != NULL)
+		        {
+			        entity->x = nodePosition->x;
+			        entity->y = nodePosition->y;
+
+			        updateFieldOfViewEntity(theField, entity);
+			        updateMentalMapEntity(entity);
+			        
+			        free(nodePosition);
+			        nodePosition = popNode(&path);
+			        
+			        //Clear the screen
+					SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+					SDL_RenderClear(renderer);
+					//Draw
+					drawField(renderer, entity->mentalMap, tileSize);
+					drawFieldOfViewEntity(renderer, entity, theField,tileSize);
+					showEntity(entity, renderer, entityColor, tileSize);
+					//Refresh the window
+					SDL_RenderPresent(renderer);
+					SDL_Delay(30);
+		        }
+				
 			}
 			destructNodes(&endNode);
 			

@@ -106,6 +106,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 {
     //Initialisation and generation of a field
 	Field* theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
+	InterestField* interestField = initialiseInterestField(fieldWidth, fieldHeight);
 	generateEnv(theField);
 	
 	//Creation of the first generation
@@ -117,11 +118,14 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	
 	int generationIndex;
 	for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
-	{
-        //We create a new generation based on half the best individuals of the previous one
-        GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.01);
-        destructGeneticNetworks(&geneticNetworks);
-        geneticNetworks = temp;
+	{   
+	    if (generationIndex > 0)
+	    {
+	        //We create a new generation based on half the best individuals of the previous one
+            GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.01);
+            destructGeneticNetworks(&geneticNetworks);
+            geneticNetworks = temp;
+        }
         
 	    int networkIndex;
 	    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
@@ -142,7 +146,6 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        updateFieldOfViewEntity(theField, entity);
 		        updateMentalMapEntity(entity);
 		        
-		        InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
 		        updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, geneticNetworks->list[networkIndex]);
 		
 		        //We set a default node to which the entity will try to move to
@@ -156,36 +159,28 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        {
 			        destructNodes(&path);
 			        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
-			        //If we haven't find a path
 			        if ((path == startNode || path == NULL))
 			        {
-				        //We change our wanted node to the best position found by the neural network
 				        updateBestWantedPosition(wantedPosition, interestField);
 			        }
 		        }
-		        destructInterestField(&interestField);
+		        free(wantedPosition);
 		        
-		        int positionInPath = 0;
-		        node* nodePosition = NULL;
+		        node* nodePosition = popNode(&path);
 		        //Move the entity along the path
-		        do
+		        while(nodePosition != NULL)
 		        {
-			        //get the next position on the path
-			        positionInPath++;
-			        nodePosition = getNode(&path, positionInPath);
-			        if (nodePosition != NULL)
-			        {
-				        entity->x = nodePosition->x;
-				        entity->y = nodePosition->y;
-				        
-				        geneticNetworks->score[networkIndex]++;
+			        entity->x = nodePosition->x;
+			        entity->y = nodePosition->y;
+			        
+			        geneticNetworks->score[networkIndex]++;
 
-				        updateFieldOfViewEntity(theField, entity);
-				        updateMentalMapEntity(entity);
-			        }
-		        }while(nodePosition != NULL);
-		        destructNodes(&path);
-		        destructNodes(&wantedPosition);
+			        updateFieldOfViewEntity(theField, entity);
+			        updateMentalMapEntity(entity);
+			        
+			        free(nodePosition);
+			        nodePosition = popNode(&path);
+		        }
 	        }
 	        destructEntity(&entity);
 	        destructNodes(&startNode);
@@ -193,6 +188,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	    }
 	}
 	destructField(&theField);
+    destructInterestField(&interestField);
 	
 	sortGeneticNetworks(geneticNetworks);
 	LabelingWeights* labelingWeights = geneticNetworks->list[0];
