@@ -359,9 +359,11 @@ GeneticNetworks *initialiseGeneticNetworks(int size)
         geneticNetworks->list[i] = initialiseLabelingWeights();
     }
     geneticNetworks->score = (float*) malloc(sizeof(float) * size);
+    geneticNetworks->time = (float*) malloc(sizeof(float) * size);
     for (i = 0; i < size; i++)
     {
         geneticNetworks->score[i] = 0;
+        geneticNetworks->time[i] = 0;
     }
     return geneticNetworks;
 }
@@ -387,9 +389,11 @@ GeneticNetworks *initialiseGeneticNetworksFrom(int size, char* pathOfGeneticNetw
         geneticNetworks->list[i] = loadGeneticNetwork(pathOfGeneticNetwork);
     }
     geneticNetworks->score = (float*) malloc(sizeof(float) * size);
+    geneticNetworks->time = (float*) malloc(sizeof(float) * size);
     for (i = 0; i < size; i++)
     {
         geneticNetworks->score[i] = 0;
+        geneticNetworks->time[i] = 0;
         int j;
         for(j = 0; j < 9; j++)
         {
@@ -464,6 +468,8 @@ void destructGeneticNetworks(GeneticNetworks **geneticNetworks)
                 destructLabelingWeights(&(*geneticNetworks)->list[i]);
             }
             free((*geneticNetworks)->list);
+            free((*geneticNetworks)->score);
+            free((*geneticNetworks)->time);
             free(*geneticNetworks);
             *geneticNetworks = NULL;
         }
@@ -480,27 +486,30 @@ void destructGeneticNetworks(GeneticNetworks **geneticNetworks)
 void sortGeneticNetworks(GeneticNetworks* geneticNetworks)
 {
     bool sortingDone = false;
-    int i = 0;
-    while(i < geneticNetworks->size && !sortingDone)
+    int i = geneticNetworks->size-1;
+    while(i >= 0 && !sortingDone)
     {
         sortingDone = true;
         int j;
-        for(j = i; j < geneticNetworks->size-1; j++)
+        for(j = i; j > 0; j--)
         {
-            if (geneticNetworks->score[j + 1] > geneticNetworks->score[j])
+            if (geneticNetworks->score[j] < geneticNetworks->score[j - 1])
             {
                 // We swap the two values
-                LabelingWeights* tempWeights = geneticNetworks->list[j + 1];
-                float tempScore = geneticNetworks->score[j + 1];
-                geneticNetworks->list[j + 1] = geneticNetworks->list[j];
-                geneticNetworks->score[j + 1] = geneticNetworks->score[j];
+                LabelingWeights* tempWeights = geneticNetworks->list[j - 1];
+                float tempScore = geneticNetworks->score[j - 1];
+                float tempTime = geneticNetworks->time[j - 1];
+                geneticNetworks->list[j - 1] = geneticNetworks->list[j];
+                geneticNetworks->score[j - 1] = geneticNetworks->score[j];
+                geneticNetworks->time[j - 1] = geneticNetworks->time[j];
                 geneticNetworks->list[j] = tempWeights;
                 geneticNetworks->score[j] = tempScore;
+                geneticNetworks->time[j] = tempTime;
                 
                 sortingDone = false;
             }
         }
-        i++;
+        i--;
     }
 }
 

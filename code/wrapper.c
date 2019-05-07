@@ -107,33 +107,37 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
     //Initialisation and generation of a field
 	Field* theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 	generateEnv(theField);
+	InterestField* interestField = initialiseInterestField(fieldWidth, fieldHeight);
 	
 	//Creation of the first generation
 	GeneticNetworks* geneticNetworks = NULL;
 	if (basePathGN == NULL)
 	    geneticNetworks = initialiseGeneticNetworks(nbMember);
 	else
-	    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.01);
+	    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.05);
 	
 	int generationIndex;
 	for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
-	{
-        //We create a new generation based on half the best individuals of the previous one
-        GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.01);
-        destructGeneticNetworks(&geneticNetworks);
-        geneticNetworks = temp;
+	{   
+	    if (generationIndex > 0)
+	    {
+	        //We create a new generation based on half the best individuals of the previous one
+            GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.05);
+            destructGeneticNetworks(&geneticNetworks);
+            geneticNetworks = temp;
+        }
         
+	    int timeStartGeneration = clock();
 	    int networkIndex;
 	    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
 	    {
-	        printf("Generation : %d, member : %d\n", generationIndex, networkIndex);
 	        //Initiate the entity, the start and end of the route according to the field
 	        Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 	        node* startNode = nearestNode(theField, entity->x, entity->y);
 	        entity->x = startNode->x;
 	        entity->y = startNode->y;
 	        node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
-	
+	        int timeStartMember = clock();
 	        //While the entity hasn't arrived
 	        while (
 	            (entity->x != endNode->x || entity->y != endNode->y) && 
@@ -142,7 +146,6 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        updateFieldOfViewEntity(theField, entity);
 		        updateMentalMapEntity(entity);
 		        
-		        InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
 		        updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, geneticNetworks->list[networkIndex]);
 		
 		        //We set a default node to which the entity will try to move to
@@ -156,50 +159,50 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        {
 			        destructNodes(&path);
 			        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
-			        //If we haven't find a path
 			        if ((path == startNode || path == NULL))
 			        {
-				        //We change our wanted node to the best position found by the neural network
 				        updateBestWantedPosition(wantedPosition, interestField);
 			        }
 		        }
-		        destructInterestField(&interestField);
+		        free(wantedPosition);
 		        
-		        int positionInPath = 0;
-		        node* nodePosition = NULL;
+		        node* nodePosition = popNode(&path);
 		        //Move the entity along the path
-		        do
+		        while(nodePosition != NULL)
 		        {
-			        //get the next position on the path
-			        positionInPath++;
-			        nodePosition = getNode(&path, positionInPath);
-			        if (nodePosition != NULL)
-			        {
-				        entity->x = nodePosition->x;
-				        entity->y = nodePosition->y;
-				        
-				        geneticNetworks->score[networkIndex]++;
+			        entity->x = nodePosition->x;
+			        entity->y = nodePosition->y;
+			        
+			        geneticNetworks->score[networkIndex]++;
 
-				        updateFieldOfViewEntity(theField, entity);
-				        updateMentalMapEntity(entity);
-			        }
-		        }while(nodePosition != NULL);
-		        destructNodes(&path);
-		        destructNodes(&wantedPosition);
+			        updateFieldOfViewEntity(theField, entity);
+			        updateMentalMapEntity(entity);
+			        
+			        free(nodePosition);
+			        nodePosition = popNode(&path);
+		        }
 	        }
-	        destructEntity(&entity);
+	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
+	        printf("Gen : %d, member : %d, time : %.3f sec, score : %.0f\n", generationIndex, networkIndex, geneticNetworks->time[networkIndex], geneticNetworks->score[networkIndex]);
+	        
+            destructEntity(&entity);
 	        destructNodes(&startNode);
 		    destructNodes(&endNode);
 	    }
+	    printf("\taverage time : %.3f sec\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC)/nbMember);
+	    sortGeneticNetworks(geneticNetworks);
+	    printf("\tbest : score : %.3f, time : %.3f\n", geneticNetworks->score[0], geneticNetworks->time[0]);
+	    
 	}
 	destructField(&theField);
+    destructInterestField(&interestField);
 	
 	sortGeneticNetworks(geneticNetworks);
 	LabelingWeights* labelingWeights = geneticNetworks->list[0];
 	
 	int nbGN = getNumberOfFilesInDirectory(savingPathGN);
 	char strBuffer[256] = "";
-	sprintf(strBuffer, "%s/genome%ds%fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], nbGeneration, nbMember);
+	sprintf(strBuffer, "%s/genome%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
 	saveGeneticNetwork(labelingWeights, strBuffer);
 	
 	return labelingWeights;

@@ -128,19 +128,45 @@ void setHeuristic(node* nodeToSet, node* endNode)
  */
 node* popNode(node** frontNode)
 {
-	//The node that will be extract is the top node of the chain list
-	node* popedNode = *frontNode;
-	//If the list isn't empty
+    node* popedNode = NULL;
+    //If the list isn't empty
 	if(frontNode != NULL)
 	{
-		//We change the frontNode by the next node
-		*frontNode = (*frontNode)->linkedNode;
+	    if(*frontNode != NULL)
+	    {
+	        popedNode = *frontNode;
+		    //We change the frontNode by the next node
+		    *frontNode = (*frontNode)->linkedNode;
+	        //Then we delink the poped node before returning it
+	        popedNode->linkedNode = NULL;
+	    }
 	}
-	//Then we delink the poped node before returning it
-	popedNode->linkedNode = NULL;
 	return popedNode;
-	/*If at any moment their is a NULL pointer their is no problem. The poped node could be NULL (no node is poped)
-	And the chain list could become NULL after the node was extract*/ 
+}
+
+/**
+ * \fn node* getLastNode(node** frontNode)
+ * \brief function which return the bottom node of a chain list of node
+ *
+ * \param frontNode : the top node of a chain list of node
+ * \return node*
+ */
+node* getLastNode(node** frontNode)
+{
+    node* cursor = NULL;
+    //If the list isn't empty
+	if(frontNode != NULL)
+	{
+	    if(*frontNode != NULL)
+	    {
+	        cursor = *frontNode;
+	        while(cursor->linkedNode != NULL)
+	        {
+	            cursor = cursor->linkedNode;
+	        }
+	    }
+	}
+	return cursor;
 }
 
 /**
