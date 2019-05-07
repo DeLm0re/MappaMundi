@@ -114,7 +114,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	if (basePathGN == NULL)
 	    geneticNetworks = initialiseGeneticNetworks(nbMember);
 	else
-	    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.01);
+	    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.05);
 	
 	int generationIndex;
 	for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
@@ -122,7 +122,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	    if (generationIndex > 0)
 	    {
 	        //We create a new generation based on half the best individuals of the previous one
-            GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.01);
+            GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.05);
             destructGeneticNetworks(&geneticNetworks);
             geneticNetworks = temp;
         }

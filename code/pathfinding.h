@@ -72,13 +72,22 @@ void destructNodes(node** frontNode);
 void setHeuristic(node* nodeToSet, node* endNode);
 
 /**
- * \fn node* popNode(node** frontNode)
+ * \fn node* getLastNode(node** frontNode)
  * \brief function which pop the top node out of a chain list of node and returns it
  *
  * \param frontNode : the top node of a chain list of node
  * \return node*
  */
 node* popNode(node** frontNode);
+
+/**
+ * \fn node* popNode(node** frontNode)
+ * \brief function which return the bottom node of a chain list of node
+ *
+ * \param frontNode : the top node of a chain list of node
+ * \return node*
+ */
+node* getLastNode(node** frontNode);
 
 /**
  * \fn void rmvNode(node** frontNode, node* nodeToRemove)

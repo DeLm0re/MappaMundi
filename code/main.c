@@ -125,9 +125,9 @@ int main(int argc, char** argv)
 			//New genetic network
 			case TRAIN_GN:
 			    if (argc >= 3)
-			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, argv[2], 20, 50);
+			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, argv[2], 20, 100);
 			    else
-			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, NULL, 20, 50);
+			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, NULL, 20, 100);
 			    break;
 			//Load genetic network
 			case LOAD_GN:
@@ -171,6 +171,7 @@ int main(int argc, char** argv)
 				
 
 		        node* nodePosition = popNode(&path);
+		        node* lastNodeInPath = getLastNode(&path);
 		        //Move the entity along the path
 		        while(nodePosition != NULL)
 		        {
@@ -188,8 +189,10 @@ int main(int argc, char** argv)
 					SDL_RenderClear(renderer);
 					//Draw
 					drawField(renderer, entity->mentalMap, tileSize);
-					drawFieldOfViewEntity(renderer, entity, theField,tileSize);
+					drawFieldOfViewEntity(renderer, entity, theField, tileSize);
 					showEntity(entity, renderer, entityColor, tileSize);
+					SDL_Color colorLastNodeInPath = {255, 0, 0, 255};
+					viewNodes(&lastNodeInPath, renderer, colorLastNodeInPath, tileSize);
 					//Refresh the window
 					SDL_RenderPresent(renderer);
 					SDL_Delay(30);
