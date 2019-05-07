@@ -55,7 +55,7 @@ node* nearestNode(Field *oneField, int x, int y)
 
 	if((x >= 0) && (x < oneField->width) && (y >= 0) && (y <  oneField->height))
 	{
-		if(oneField->data[x][y] == EMPTY)
+		if(oneField->data[x][y] == EMPTY || oneField->data[x][y] == VISITED)
 		{
 			return initNode(x, y, 0, 0);
 		}
@@ -68,7 +68,7 @@ node* nearestNode(Field *oneField, int x, int y)
 			{
 				if((i >= 0) && (i < oneField->width) && (j >= 0) && (j <  oneField->height))
 				{
-					if(oneField->data[i][j] == EMPTY)
+					if(oneField->data[i][j] == EMPTY || oneField->data[i][j] == VISITED)
 					{
 						xNode = i;
 						yNode = j;

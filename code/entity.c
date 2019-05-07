@@ -377,15 +377,18 @@ float* createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd
     {
         for(heightIndex = 0; heightIndex < field->height; heightIndex++)
         {
-            input[inputIndex] = field->data[widthIndex][heightIndex];
+            if(field->data[widthIndex][heightIndex] == EMPTY || field->data[widthIndex][heightIndex] == VISITED)
+                input[inputIndex] = 1;
+            else
+                input[inputIndex] = 0;
             inputIndex++;
         }
     }
 
-    input[inputIndex] = entityX;
-    input[inputIndex + 1] = entityY;
-    input[inputIndex + 2] = xEnd;
-    input[inputIndex + 3] = yEnd;
+    input[inputIndex] = nmap(entityX, 0, field->width - 1, 0, 1);
+    input[inputIndex + 1] = nmap(entityY, 0, field->height - 1, 0, 1);
+    input[inputIndex + 2] = nmap(xEnd, 0, field->width - 1, 0, 1);
+    input[inputIndex + 3] = nmap(yEnd, 0, field->height - 1, 0, 1);
 
     return input;
 }
@@ -564,24 +567,37 @@ node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwor
     return path;
 }
 
-
 /**
  * \fn node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork)
  * \brief returns the next path chosen by a given neural network
  *
  * \param entity : entity to move
  * \param data : structure which define the kind of event we have to raise for interruption
- * \param neuralNetwork : neural network used to take the decision
- * \param input : input of the neuralNetwork
+ * \param output : output of the neuralNetwork
  *  
  * \return node*
  */
-node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork, float *input)
+node *findNextPathNN2(Entity *entity, dataType *data, float *output)
 {
-    float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+    //Find the max value in the outputs
+    float max = -INFINITY;
+    int index, indexMax = 0;
+    int fieldWidth = entity->mentalMap->width;
+    int fieldHeight = entity->mentalMap->height;
+    for(index = 0; index < fieldWidth * fieldHeight; index++)
+    {
+        if(output[index] > max)
+        {
+            max = output[index];
+            indexMax = index;
+        }
+    }
+
+    int outputX = indexMax / fieldHeight;
+    int outputY = indexMax % fieldHeight;
 
     node *startNode = initNode(entity->x, entity->y, 0, 0);
-    node *endnode = initNode((int)output[0], (int)output[1], 0, 0);
+    node *endnode = initNode(outputX, outputY, 0, 0);
     
     //We set a default wanted node
     node *wantedPosition = cpyNode(endnode);
@@ -590,7 +606,7 @@ node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwo
     node* path = NULL;
     //We try to find a path
     while((path == startNode || path == NULL) && !data->endEvent)
-    {
+    {   
         destructNodes(&path);
         //We try to find a path
         path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
@@ -604,7 +620,7 @@ node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwo
             wantedPosition = nearestNode(entity->mentalMap, x, y);
         }
     }
-
+    printf("\tDecision : %d %d\n", path->x, path->y);
     return path;
 }
 
@@ -617,9 +633,9 @@ node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwo
  * \param field : the complete field for the supervised learning
  * \param data : the structure we use to raise a flag for interruption
  * 
- * \return float*
+ * \return node*
  */
-float *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
 {
     node *startNode = initNode(entity->x, entity->y, 0, 0);
     node *endNode = initNode(xEnd, yEnd, 0, 0);
@@ -639,10 +655,29 @@ float *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *dat
             destination = popNode(&completePath);
         }
     }
+    printf("\tExpected : %d %d\n", destination->x, destination->y);
+    return destination;
+}
 
-    float *label = (float*)malloc(2*sizeof(float));
-    label[0] = destination->x;
-    label[1] = destination->y;
+/**
+ * \fn float* convertLabeling2(int fieldWidth, int fieldHeight, node *label)
+ * \brief function that converts a label2 into a valid output of neural network
+ *
+ * \param fieldWidth, fieldHeight : dimensions of the field
+ * \param label : node found by function labeling2
+ * 
+ * \return float*
+ */
+float *convertLabeling2(int fieldWidth, int fieldHeight, node *label)
+{
+    int index;
+    int outputSize = fieldWidth * fieldHeight;
+    float *output = (float*)malloc(outputSize*sizeof(float));
     
-    return label;
+    for(index = 0; index < outputSize; index++)
+        output[index] = 0;
+
+    output[label->y + label->x * fieldHeight] = 1;
+
+    return output;
 }

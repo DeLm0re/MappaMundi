@@ -10,6 +10,7 @@
  */
 
 #include "wrapper.h"
+#include <time.h>
 
 //Main of the programme
 int main(int argc, char** argv)

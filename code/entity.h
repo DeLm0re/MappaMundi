@@ -239,12 +239,11 @@ node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwor
  *
  * \param entity : entity to move
  * \param data : structure which define the kind of event we have to raise for interruption
- * \param neuralNetwork : neural network used to take the decision
- * \param input : input of the neuralNetwork
+ * \param output : output of the neuralNetwork
  *  
  * \return node*
  */
-node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork, float *input);
+node *findNextPathNN2(Entity *entity, dataType *data, float *output);
 
 /**
  * \fn InputNeuralNetwork* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
@@ -255,8 +254,19 @@ node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwo
  * \param field : the complete field for the supervised learning
  * \param data : the structure we use to raise a flag for interruption
  * 
+ * \return node*
+ */
+node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data);
+
+/**
+ * \fn float* convertLabeling2(int fieldWidth, int fieldHeight, node *label)
+ * \brief function that converts a label2 into a valid output of neural network
+ *
+ * \param fieldWidth, fieldHeight : dimensions of the field
+ * \param label : node found by function labeling2
+ * 
  * \return float*
  */
-float *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data);
+float *convertLabeling2(int fieldWidth, int fieldHeight, node *label);
 
 #endif
