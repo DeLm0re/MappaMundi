@@ -114,9 +114,8 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 	int correctAnswer = 0;
 	float successRate = 0;
 	int nbLearning = 0;
-	int nbLearningThisMap = 0;
 	// While the neural network is not correct 100% of the time
-	while ((successRate < 0.95 && !data->endEvent))
+	while ((successRate < 0.95 && !data->endEvent) && nbLearning <= 700)
 	{
 		//Initialise the entity
 		Entity *entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, field->width, field->height);
@@ -127,8 +126,6 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 		entity->y = startNode->y;
 		destructNodes(&startNode);
 		node* endNode = nearestNode(field, field->width, field->height);
-		
-		nbLearningThisMap = 0;
 
 		//While the entity hasn't arrived
 		while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
@@ -140,11 +137,12 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 
 			float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);
 			float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
-			node *path = findNextPathNN2(entity, data, output);
-
+			node *choice = findNextPathNN2(entity, data, output);
+			
 			//Find the expected choice
 			node *expectedNode = labeling2(entity, endNode->x, endNode->y, field, data);
 			float *expectedOutput = convertLabeling2(field->width, field->height, expectedNode);
+			node *expectedPath = findNextPathNN2(entity, data, expectedOutput);
 
 			//We make the neural network learn and if he andswered correctly
 			if(superviseLearningNeuralNetwork(neuralNetwork, input, expectedOutput, 0.2, 0.1))
@@ -152,10 +150,8 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 				// We count it as a new correct answer
 				correctAnswer++;
 			}
-			printf("Learning... step %d\n", nbLearning);
 			//We increment the number of learning
 			nbLearning++;
-			nbLearningThisMap++;
 
 
 			//We set the path position
@@ -167,7 +163,7 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 			{
 				//get the next position
 				positionInPath++;
-				nodePosition = getNode(&path, positionInPath);
+				nodePosition = getNode(&expectedPath, positionInPath);
 				//If we find the next nodePosition
 				if (nodePosition != NULL)
 				{
@@ -188,7 +184,7 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 					drawFieldOfViewEntity(renderer, entity, field,tileSize);
 
 					SDL_Color decisionColor = {255, 255, 0, 255};
-					viewNodes(&path, renderer, decisionColor, tileSize);
+					viewNodes(&choice, renderer, decisionColor, tileSize);
 
 					SDL_Color expectedColor = {255, 0, 0, 255};
 					viewNodes(&expectedNode, renderer, expectedColor, tileSize);
@@ -197,15 +193,15 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 
 					//Refresh the window
 					SDL_RenderPresent(renderer);
-					//SDL_Delay(30);
+					SDL_Delay(100);
 				}
 			}while(nodePosition != NULL && !data->endEvent);
-			destructNodes(&path);
+			destructNodes(&expectedPath);
 		}
 		
 		//At the end of this map we calculate the average success
 		successRate = (float)(correctAnswer/nbLearning);
-		printf("successRate : %f, steps : %d, total :%d\n", successRate, nbLearningThisMap, nbLearning);
+		printf("successRate : %f, steps :%d\n", successRate, nbLearning);
 		//We reset the number of learning and the number of success
 		correctAnswer = 0;
 	}

@@ -620,7 +620,6 @@ node *findNextPathNN2(Entity *entity, dataType *data, float *output)
             wantedPosition = nearestNode(entity->mentalMap, x, y);
         }
     }
-    printf("\tDecision : %d %d\n", path->x, path->y);
     return path;
 }
 
@@ -642,20 +641,21 @@ node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data
     node *completePath = findPathFromStartEnd(startNode, endNode, field, &data->endEvent);
     node *destination = popNode(&completePath);
 
-    while(destination->x != endNode->x && destination->y != endNode->y)
+    bool endLoop = false;
+    while(!(destination->x == endNode->x && destination->y == endNode->y) && endLoop == false)
     {
         int xPath = completePath->x;
         int yPath = completePath->y;
+        pointEnum tileValue = entity->mentalMap->data[xPath][yPath];
 
-        if(entity->mentalMap->data[xPath][yPath] == FOG)
-            break;
+        if (tileValue != EMPTY && tileValue != VISITED)
+            endLoop = true;
         else
         {
             destructNodes(&destination);
             destination = popNode(&completePath);
         }
     }
-    printf("\tExpected : %d %d\n", destination->x, destination->y);
     return destination;
 }
 
