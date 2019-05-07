@@ -124,10 +124,11 @@ int main(int argc, char** argv)
 				break;
 			//New genetic network
 			case TRAIN_GN:
+			    // 5 generation seems to be enought and 100 member is maybe a bit too much
 			    if (argc >= 3)
-			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, argv[2], 20, 100);
+			        labelingWeights = trainingGN1(data, 30, 30, savingPathGN, argv[2], 10, 100);
 			    else
-			        labelingWeights = trainingGN1(data, 20, 20, savingPathGN, NULL, 20, 100);
+			        labelingWeights = trainingGN1(data, 30, 30, savingPathGN, NULL, 10, 100);
 			    break;
 			//Load genetic network
 			case LOAD_GN:

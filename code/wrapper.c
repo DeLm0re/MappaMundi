@@ -196,9 +196,18 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	}
 	destructField(&theField);
     destructInterestField(&interestField);
-	
-	sortGeneticNetworks(geneticNetworks);
+    
 	LabelingWeights* labelingWeights = geneticNetworks->list[0];
+
+    printf("\tDIST : %f\n", labelingWeights->weights[DIST]);
+    printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
+    printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
+    printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
+    printf("\tnbVisited : %f\n", labelingWeights->weights[NB_VISITED]);
+    printf("\tavgEmpty : %f\n", labelingWeights->weights[AVG_DIST_EMPTY]);
+    printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
+    printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
+    printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
 	
 	int nbGN = getNumberOfFilesInDirectory(savingPathGN);
 	char strBuffer[256] = "";
