@@ -106,8 +106,8 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 {
     //Initialisation and generation of a field
 	Field* theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
-	InterestField* interestField = initialiseInterestField(fieldWidth, fieldHeight);
 	generateEnv(theField);
+	InterestField* interestField = initialiseInterestField(fieldWidth, fieldHeight);
 	
 	//Creation of the first generation
 	GeneticNetworks* geneticNetworks = NULL;
@@ -127,17 +127,17 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
             geneticNetworks = temp;
         }
         
+	    int timeStartGeneration = clock();
 	    int networkIndex;
 	    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
 	    {
-	        printf("Generation : %d, member : %d\n", generationIndex, networkIndex);
 	        //Initiate the entity, the start and end of the route according to the field
 	        Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 	        node* startNode = nearestNode(theField, entity->x, entity->y);
 	        entity->x = startNode->x;
 	        entity->y = startNode->y;
 	        node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
-	
+	        int timeStartMember = clock();
 	        //While the entity hasn't arrived
 	        while (
 	            (entity->x != endNode->x || entity->y != endNode->y) && 
@@ -182,10 +182,17 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 			        nodePosition = popNode(&path);
 		        }
 	        }
-	        destructEntity(&entity);
+	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
+	        printf("Gen : %d, member : %d, time : %.3f sec, score : %.0f\n", generationIndex, networkIndex, geneticNetworks->time[networkIndex], geneticNetworks->score[networkIndex]);
+	        
+            destructEntity(&entity);
 	        destructNodes(&startNode);
 		    destructNodes(&endNode);
 	    }
+	    printf("\taverage time : %.3f sec\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC)/nbMember);
+	    sortGeneticNetworks(geneticNetworks);
+	    printf("\tbest : score : %.3f, time : %.3f\n", geneticNetworks->score[0], geneticNetworks->time[0]);
+	    
 	}
 	destructField(&theField);
     destructInterestField(&interestField);
@@ -195,7 +202,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	
 	int nbGN = getNumberOfFilesInDirectory(savingPathGN);
 	char strBuffer[256] = "";
-	sprintf(strBuffer, "%s/genome%ds%fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], nbGeneration, nbMember);
+	sprintf(strBuffer, "%s/genome%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
 	saveGeneticNetwork(labelingWeights, strBuffer);
 	
 	return labelingWeights;

@@ -39,6 +39,7 @@ typedef struct
     int size;
     LabelingWeights** list;
     float* score;
+    float* time;
 } GeneticNetworks;
 
 /**

@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 		SDL_Color entityColor = {80, 160, 160, 255};
 
 		
-		const int tileSize = 5;
+		const int tileSize = 10;
 		int windowWidth = 640;
 		int windowHeight = 480;
 		
@@ -74,8 +74,8 @@ int main(int argc, char** argv)
 		LabelingWeights* labelingWeights = NULL;
 		
 		Field *theField = NULL;
-		int fieldHeight = 50;
-		int fieldWidth = 50;
+		int fieldHeight = 20;
+		int fieldWidth = 20;
 		
 		char pathImageField[256] = "";
 		
