@@ -612,12 +612,19 @@ node *findNextPathNN2(Entity *entity, dataType *data, float *output)
         path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
         //If we haven't find a path
         if ((path == startNode || path == NULL))
-        {
+        {            
             //We change our wanted node to the nearest position available
-            int x = wantedPosition->x;
-            int y = wantedPosition->y;
-            destructNodes(&wantedPosition);
-            wantedPosition = nearestNode(entity->mentalMap, x, y);
+            node *tmp = nearestNode(entity->mentalMap, wantedPosition->x, wantedPosition->y);
+            if(tmp->x == wantedPosition->x && tmp->y == wantedPosition->y)
+            {
+                destructNodes(&tmp);
+                break;
+            }
+            else
+            {
+                destructNodes(&wantedPosition);
+                wantedPosition = tmp;
+            }
         }
     }
     return path;
