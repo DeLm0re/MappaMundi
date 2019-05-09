@@ -434,7 +434,7 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
  */
 void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
 {
-    if (interestField != NULL && mentalMap != NULL)
+    if (interestField != NULL && mentalMap != NULL && labelingWeights != NULL)
     {
         int width, height;
         for(width = 0; width < interestField->width; width++)

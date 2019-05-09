@@ -42,7 +42,7 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
 	float successRate = 0;
 	int nbLearning = 0;
 	// While the neural network is not correct 100% of the time
-	while ((successRate < 0.95 && data->endEvent == false) || nbLearning < 100000)
+	while ((successRate < 0.95 && !data->endEvent) || nbLearning < 100000)
 	{
 		//We create a new field of view
 		fieldInput = generateRandomFieldOfView(visionRange, true);
@@ -110,11 +110,9 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	InterestField* interestField = initialiseInterestField(fieldWidth, fieldHeight);
 	
 	//Creation of the first generation
-	GeneticNetworks* geneticNetworks = NULL;
-	if (basePathGN == NULL)
+	GeneticNetworks* geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.05);
+	if (geneticNetworks == NULL)
 	    geneticNetworks = initialiseGeneticNetworks(nbMember);
-	else
-	    geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.05);
 	
 	int generationIndex;
 	for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
@@ -141,7 +139,8 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	        //While the entity hasn't arrived
 	        while (
 	            (entity->x != endNode->x || entity->y != endNode->y) && 
-	            geneticNetworks->score[networkIndex] < fieldHeight*fieldWidth)
+	            geneticNetworks->score[networkIndex] < fieldHeight*fieldWidth &&
+	            !data->endEvent)
 	        {
 		        updateFieldOfViewEntity(theField, entity);
 		        updateMentalMapEntity(entity);
@@ -155,7 +154,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        startNode->x = entity->x;
 		        startNode->y = entity->y;
 		        //We search for a path based on the interest field
-		        while((path == startNode || path == NULL))
+		        while((path == startNode || path == NULL) && !data->endEvent)
 		        {
 			        destructNodes(&path);
 			        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
@@ -166,22 +165,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        }
 		        free(wantedPosition);
 		        
-		        node* nodePosition = popNode(&path);
-		        //Move the entity along the path
-		        while(nodePosition != NULL)
-		        {
-			        entity->x = nodePosition->x;
-			        entity->y = nodePosition->y;
-			        
-			        geneticNetworks->score[networkIndex]++;
-
-			        updateFieldOfViewEntity(theField, entity);
-			        updateMentalMapEntity(entity);
-			        
-			        free(nodePosition);
-			        nodePosition = popNode(&path);
-		        }
-		        free(nodePosition);
+		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0);
 	        }
 	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
 	        printf("Gen : %d, member : %d, time : %.3f sec, score : %.0f\n", generationIndex, networkIndex, geneticNetworks->time[networkIndex], geneticNetworks->score[networkIndex]);
@@ -210,10 +194,13 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
     printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
     printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
 	
-	int nbGN = getNumberOfFilesInDirectory(savingPathGN);
-	char strBuffer[256] = "";
-	sprintf(strBuffer, "%s/genome%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
-	saveGeneticNetwork(labelingWeights, strBuffer);
+	if (!data->endEvent)
+	{
+	    int nbGN = getNumberOfFilesInDirectory(savingPathGN);
+	    char strBuffer[256] = "";
+	    sprintf(strBuffer, "%s/genome%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
+	    saveGeneticNetwork(labelingWeights, strBuffer);
+	}
 	
 	return labelingWeights;
 }
@@ -223,19 +210,18 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
  * \brief make an entity follow a path and update its mental map
  * 
  * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
  *      entity : the entity that wil follow the path and wil update its mental map
  *      pathToFollow : the path that the entity will follow
  *      theField : the field where the entity is moving
  *      renderer : the SDL renderer, use to visualize the entity on the map
  *      tileSize : the size of one tile on the map
  *      animationDelay : the amount of milliseconds the function will wait before each step of the entity
- * 		data : structure which define the kind of event we have to raise for interruption
- *      displayOn : if true, the entity will be shown on the map and the delay will be set. Otherwise, everything will be done as fast as possible and without visual feedback
  *
  * \return
  * 		LabelingWeights*
  */
-void moveEntityAlongPath(Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay, dataType* data, bool displayOn)
+void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay)
 {
     node* nodePosition = popNode(&pathToFollow);
     node* lastNodeInPath = getLastNode(&pathToFollow);
@@ -251,7 +237,7 @@ void moveEntityAlongPath(Entity* entity, node* pathToFollow, Field* theField, SD
         free(nodePosition);
         nodePosition = popNode(&pathToFollow);
         
-        if (displayOn)
+        if (renderer != NULL)
         {
             //Clear the screen
 		    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -270,4 +256,21 @@ void moveEntityAlongPath(Entity* entity, node* pathToFollow, Field* theField, SD
     }
     free(nodePosition);
 }
+
+/**
+ * \fn void waitForInstruction(dataType *data)
+ * \brief wait until the repeat key is pressed (R) or the quit key is pressed (Q)
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ *
+ * \return
+ * 		void
+ */
+void waitForInstruction(dataType *data)
+{
+    data->waitForInstruction = true;
+	while(data->waitForInstruction && !data->endEvent){SDL_Delay(50);}
+}
+
 

@@ -110,12 +110,21 @@ float labeling(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosit
 float labeling2(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition);
 
 /**
- * \fn LabelingWeights* initialiseLabelingWeights()
+ * \fn LabelingWeights* initialiseLabelingWeights(void)
  * \brief function that returns the initialized labeling weights structure
  *
  * \return LabelingWeights*
  */
 LabelingWeights* initialiseLabelingWeights(void);
+
+/**
+ * \fn LabelingWeights* copyLabelingWeights(LabelingWeights* labelingWeights)
+ * \brief function that returns the copy of the given labeling Weights
+ * \param *labelingWeights : A pointer on the LabelingWeights to copy
+ *
+ * \return LabelingWeights*
+ */
+LabelingWeights* copyLabelingWeights(LabelingWeights* labelingWeights);
 
 /**
  * \fn void destructLabelingWeights(LabelingWeights **labelingWeights)
