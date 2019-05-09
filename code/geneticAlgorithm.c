@@ -240,6 +240,26 @@ LabelingWeights* initialiseLabelingWeights(void)
 }
 
 /**
+ * \fn LabelingWeights* copyLabelingWeights(LabelingWeights* labelingWeights)
+ * \brief function that returns the copy of the given labeling Weights
+ * \param *labelingWeights : A pointer on the LabelingWeights to copy
+ *
+ * \return LabelingWeights*
+ */
+LabelingWeights* copyLabelingWeights(LabelingWeights* labelingWeights)
+{
+    LabelingWeights* returnLabelingWeights = NULL;
+    if (labelingWeights != NULL)
+    {
+        returnLabelingWeights = initialiseLabelingWeights();
+        int i;
+        for(i = 0; i < 9; i++)
+            returnLabelingWeights->weights[i] = labelingWeights->weights[i];
+    }
+    return returnLabelingWeights;
+}
+
+/**
  * \fn void destructLabelingWeights(LabelingWeights **labelingWeights)
  * \brief function that free the labeling weight structure out of memory
  *
@@ -380,24 +400,29 @@ GeneticNetworks *initialiseGeneticNetworks(int size)
  */
 GeneticNetworks *initialiseGeneticNetworksFrom(int size, char* pathOfGeneticNetwork, float variation)
 {
-    GeneticNetworks* geneticNetworks = (GeneticNetworks*) malloc(sizeof(GeneticNetworks));
-    geneticNetworks->size = size;
-    geneticNetworks->list = (LabelingWeights**) malloc(sizeof(LabelingWeights*) * size);
-    int i;
-    for (i = 0; i < size; i++)
+    GeneticNetworks* geneticNetworks = NULL;
+    LabelingWeights* labelingWeights = loadGeneticNetwork(pathOfGeneticNetwork);
+    if (labelingWeights != NULL)
     {
-        geneticNetworks->list[i] = loadGeneticNetwork(pathOfGeneticNetwork);
-    }
-    geneticNetworks->score = (float*) malloc(sizeof(float) * size);
-    geneticNetworks->time = (float*) malloc(sizeof(float) * size);
-    for (i = 0; i < size; i++)
-    {
-        geneticNetworks->score[i] = 0;
-        geneticNetworks->time[i] = 0;
-        int j;
-        for(j = 0; j < 9; j++)
+        geneticNetworks = (GeneticNetworks*) malloc(sizeof(GeneticNetworks));
+        geneticNetworks->size = size;
+        geneticNetworks->list = (LabelingWeights**) malloc(sizeof(LabelingWeights*) * size);
+        int i;
+        for (i = 0; i < size; i++)
         {
-            geneticNetworks->list[i]->weights[j] += nmap(rand()%1000, 0, 1000, -variation, variation);
+            geneticNetworks->list[i] = copyLabelingWeights(labelingWeights);
+        }
+        geneticNetworks->score = (float*) malloc(sizeof(float) * size);
+        geneticNetworks->time = (float*) malloc(sizeof(float) * size);
+        for (i = 0; i < size; i++)
+        {
+            geneticNetworks->score[i] = 0;
+            geneticNetworks->time[i] = 0;
+            int j;
+            for(j = 0; j < 9; j++)
+            {
+                geneticNetworks->list[i]->weights[j] += nmap(rand()%1000, 0, 1000, -variation, variation);
+            }
         }
     }
     return geneticNetworks;

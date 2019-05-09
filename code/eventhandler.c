@@ -38,6 +38,13 @@ void* eventHandlerFunction(void* data)
 			//We set the waiting flag to false (not waiting for inputs anymore)
 			cdata->waitForInstruction = false;
 		}
+		if(cdata->event->type == SDL_TEXTINPUT &&
+		cdata->waitForInstruction &&
+		(*cdata->event->text.text == 'r' || 
+		*cdata->event->text.text == 'R'))
+		{
+			cdata->waitForInstruction = false;
+		}
 	}
 	return 0;
 }
@@ -55,6 +62,6 @@ dataType* initData(SDL_Event* event)
     data->event = event;
     data->endEvent = false;
     data->statut = EXIT_FAILURE;
-    data->waitForInstruction = true;
+    data->waitForInstruction = false;
     return data;
 }

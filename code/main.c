@@ -11,6 +11,11 @@
 
 #include "wrapper.h"
 
+#define FIELD_WIDTH 50
+#define FIELD_HEIGHT 50
+#define SAVING_PATH_NN "../NN/Reseau1.nn"
+#define SAVING_PATH_GN "../GN"
+
 //Main of the programme
 int main(int argc, char** argv)
 {
@@ -26,10 +31,6 @@ int main(int argc, char** argv)
 	{
 		//Initialize the random seed value
 		srand(12345);
-		
-		// Create a color for the entity that will move
-		SDL_Color entityColor = {80, 160, 160, 255};
-
 		
 		const int tileSize = 10;
 		int windowWidth = 640;
@@ -66,18 +67,15 @@ int main(int argc, char** argv)
 		//Declaration of the thread and the data for the events
 		pthread_t thread1;
 		pthread_create(&thread1, NULL, eventHandlerFunction, (void*) data);
-	
-		char savingPathNN[256] = "../NN/Reseau1.nn";
-		char savingPathGN[256] = "../GN";
 
 		NeuralNetwork* neuralNetwork = NULL;
 		LabelingWeights* labelingWeights = NULL;
 		
 		Field *theField = NULL;
-		int fieldHeight = 20;
-		int fieldWidth = 20;
+		int fieldHeight = FIELD_WIDTH;
+		int fieldWidth = FIELD_HEIGHT;
 		
-		char pathImageField[256] = "";
+		char* pathImageField = NULL;
 		
 		int menuChoice = atoi(argv[1]);
 
@@ -87,27 +85,27 @@ int main(int argc, char** argv)
 			//New neural network
 			case TRAIN_NN:
 			    if (argc == 3)
-	                strcpy(pathImageField, argv[2]);
+	                pathImageField = argv[2];
 				break;
 			//Load neural network
 			case LOAD_NN:
 			    if (argc == 3)
-	                strcpy(pathImageField, argv[2]);
+			    pathImageField = argv[2];
 				break;
 			//Load genetic network
 			case LOAD_GN:
 			    if (argc == 4)
-	                strcpy(pathImageField, argv[3]);
+	                pathImageField = argv[3];
 			    break;
 		}
 		
 	    theField = createCustomField(pathImageField);
-	    bool fieldIsLoad = true;
+	    bool fieldIsFromImage = true;
 	    if (theField == NULL)
 	    {
 	        theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 	        generateEnv(theField);
-	        fieldIsLoad = false;
+	        fieldIsFromImage = false;
 	    }
         fieldHeight = theField->height;
         fieldWidth = theField->width;
@@ -116,19 +114,19 @@ int main(int argc, char** argv)
 		{
 			//New neural network
 			case TRAIN_NN:
-				neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, savingPathNN);
+				neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, SAVING_PATH_NN);
 				break;
 			//Load neural network
 			case LOAD_NN:
-				neuralNetwork = loadNeuralNetwork(savingPathNN);
+				neuralNetwork = loadNeuralNetwork(SAVING_PATH_NN);
 				break;
 			//New genetic network
 			case TRAIN_GN:
 			    // 5 generation seems to be enought and 100 member is maybe a bit too much
 			    if (argc >= 3)
-			        labelingWeights = trainingGN1(data, 30, 30, savingPathGN, argv[2], 10, 100);
+			        labelingWeights = trainingGN1(data, 30, 30, SAVING_PATH_GN, argv[2], 10, 100);
 			    else
-			        labelingWeights = trainingGN1(data, 30, 30, savingPathGN, NULL, 10, 100);
+			        labelingWeights = trainingGN1(data, 30, 30, SAVING_PATH_GN, NULL, 10, 100);
 			    break;
 			//Load genetic network
 			case LOAD_GN:
@@ -148,7 +146,7 @@ int main(int argc, char** argv)
 		
 		//--- Main loop
 		
-		while(data->endEvent == false)
+		while(!data->endEvent)
 		{   
 			//Initiate the entity, the start and end of the route according to the field
 			Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
@@ -157,70 +155,32 @@ int main(int argc, char** argv)
 			entity->y = startNode->y;
 			destructNodes(&startNode);
 			node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
+			
+			updateFieldOfViewEntity(theField, entity);
+			updateMentalMapEntity(entity);
 		    
-			//While the entity hasn't arrived
+			//While the entity hasn't arrived at destination
 			while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
 			{
-				updateFieldOfViewEntity(theField, entity);
-				updateMentalMapEntity(entity);
-
 				node *path = NULL;
                 if (menuChoice == LOAD_NN)
 				    path = findNextPathNN(entity, endNode, data, neuralNetwork);
 				else if (menuChoice == LOAD_GN)
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
 				
-
-		        node* nodePosition = popNode(&path);
-		        node* lastNodeInPath = getLastNode(&path);
-		        //Move the entity along the path
-		        while(nodePosition != NULL)
-		        {
-			        entity->x = nodePosition->x;
-			        entity->y = nodePosition->y;
-
-			        updateFieldOfViewEntity(theField, entity);
-			        updateMentalMapEntity(entity);
-			        
-			        free(nodePosition);
-			        nodePosition = popNode(&path);
-			        
-			        //Clear the screen
-					SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-					SDL_RenderClear(renderer);
-					//Draw
-					drawField(renderer, entity->mentalMap, tileSize);
-					drawFieldOfViewEntity(renderer, entity, theField, tileSize);
-					showEntity(entity, renderer, entityColor, tileSize);
-					SDL_Color colorLastNodeInPath = {255, 0, 0, 255};
-					viewNodes(&lastNodeInPath, renderer, colorLastNodeInPath, tileSize);
-					//Refresh the window
-					SDL_RenderPresent(renderer);
-					SDL_Delay(30);
-		        }
-				
+		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30);
 			}
 			destructNodes(&endNode);
 			
 			// We load a new field if we use a random map
-			if(!fieldIsLoad)
+			if(!fieldIsFromImage)
 		    {
 		        destructField(&theField);
 		        theField = initialiseField(fieldWidth, fieldHeight, EMPTY);
 	            generateEnv(theField);
 		    }
 			
-			while(data->waitForInstruction)
-			{
-				SDL_Delay(50);
-				if(event.type == SDL_TEXTINPUT && 
-					(*event.text.text == 'r' || 
-					*event.text.text == 'R'))
-				{
-					data->waitForInstruction = false;
-				}
-			}
-			data->waitForInstruction = true;
+			waitForInstruction(data);
 		}
 
 		destructNeuralNetwork(&neuralNetwork);

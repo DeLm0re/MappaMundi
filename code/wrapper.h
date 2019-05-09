@@ -53,3 +53,33 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
  * 		LabelingWeights*
  */
 LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, char *savingPathGN, char* basePathGN, int nbGeneration, int nbMember);
+
+/**
+ * \fn void moveEntityAlongPath(Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, dataType* data, bool displayOn)
+ * \brief make an entity follow a path and update its mental map
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ *      entity : the entity that wil follow the path and wil update its mental map
+ *      pathToFollow : the path that the entity will follow
+ *      theField : the field where the entity is moving
+ *      renderer : the SDL renderer, use to visualize the entity on the map
+ *      tileSize : the size of one tile on the map
+ *      animationDelay : the amount of milliseconds the function will wait before each step of the entity
+ *
+ * \return
+ * 		LabelingWeights*
+ */
+void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay);
+
+/**
+ * \fn void waitForInstruction(dataType *data)
+ * \brief wait until the repeat key is pressed (R) or the quit key is pressed (Q)
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ *
+ * \return
+ * 		void
+ */
+void waitForInstruction(dataType *data);
