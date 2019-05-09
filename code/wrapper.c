@@ -115,7 +115,7 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 	float successRate = 0;
 	int nbLearning = 0;
 	// While the neural network is not correct 100% of the time
-	while ((successRate < 0.95 && !data->endEvent) && nbLearning <= 700)
+	while (successRate < 0.95 && !data->endEvent)
 	{
 		//Initialise the entity
 		Entity *entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, field->width, field->height);
@@ -149,6 +149,7 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 			{
 				// We count it as a new correct answer
 				correctAnswer++;
+				printf("success\n");
 			}
 			//We increment the number of learning
 			nbLearning++;
@@ -193,7 +194,7 @@ NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, 
 
 					//Refresh the window
 					SDL_RenderPresent(renderer);
-					SDL_Delay(100);
+					//SDL_Delay(30);
 				}
 			}while(nodePosition != NULL && !data->endEvent);
 			destructNodes(&expectedPath);
