@@ -18,6 +18,8 @@ public class EnvironmentHandler : MonoBehaviour
 
     void Start()
     {
+        this.map = new int[width,height];
+
         CreateMap();
 
         path.findPathFromStartEnd(path.nearestNode(map,0,0), path.nearestNode(map,width-1,height-1), map);
@@ -34,8 +36,6 @@ public class EnvironmentHandler : MonoBehaviour
 
     public void CreateMap()
     {
-        map = new int[width,height];
-
         //Make the borders of the map walls
         GenerateMapBorders();
 
@@ -57,14 +57,14 @@ public class EnvironmentHandler : MonoBehaviour
     {
         for(int heightIndex = 0; heightIndex < height; heightIndex++)
         {
-            map[0, heightIndex] = (int)Definition.pointEnum.WALL;
-            map[width-1, heightIndex] = (int)Definition.pointEnum.WALL;
+            this.map[0, heightIndex] = (int)Definition.pointEnum.WALL;
+            this.map[width-1, heightIndex] = (int)Definition.pointEnum.WALL;
         }
 
         for(int widthIndex = 0; widthIndex < width; widthIndex++)
         {
-            map[widthIndex, height-1] = (int)Definition.pointEnum.WALL;
-            map[widthIndex, 0] = (int)Definition.pointEnum.WALL;
+            this.map[widthIndex, height-1] = (int)Definition.pointEnum.WALL;
+            this.map[widthIndex, 0] = (int)Definition.pointEnum.WALL;
         }
     }
 
@@ -82,7 +82,7 @@ public class EnvironmentHandler : MonoBehaviour
         {
             for (int y = 1; y < height-1; y ++)
             {
-                map[x,y] = (pseudoRandom.Next(1,100) < 50)? 1 : 0;
+                this.map[x,y] = (pseudoRandom.Next(1,100) < 50)? 1 : 0;
             }
         }
     }
@@ -95,18 +95,18 @@ public class EnvironmentHandler : MonoBehaviour
         {
             for(int h = 1; h < height-1; h++)
             {
-                sumNeighbours = map[w-1, h-1] + map[w-1, h] + map[w, h-1] + map[w-1, h+1]
-                                + map[w+1, h-1] + map[w+1, h] + map[w, h+1] + map[w+1, h+1];
+                sumNeighbours = this.map[w-1, h-1] + this.map[w-1, h] + this.map[w, h-1] + this.map[w-1, h+1]
+                                + this.map[w+1, h-1] + this.map[w+1, h] + this.map[w, h+1] + this.map[w+1, h+1];
 
                 //Clean some obstacles
                 if(sumNeighbours < 2)
                 {
-                    map[w, h] = (int)Definition.pointEnum.EMPTY;
+                    this.map[w, h] = (int)Definition.pointEnum.EMPTY;
                 }
                 //Prevent stuck
                 else if(sumNeighbours >= 4)
                 {
-                    map[w, h] = (int)Definition.pointEnum.EMPTY;
+                    this.map[w, h] = (int)Definition.pointEnum.EMPTY;
                 }
             }
         }
@@ -120,11 +120,11 @@ public class EnvironmentHandler : MonoBehaviour
         {
             for(int h = 1; h < height-1; h++)
             {
-                sumNeighbours = map[w, h-1] + map[w-1, h] + map[w, h+1] + map[w+1, h];
+                sumNeighbours = this.map[w, h-1] + this.map[w-1, h] + this.map[w, h+1] + this.map[w+1, h];
 
                 if(sumNeighbours >= 3)
                 {
-                    map[w, h] = (int)Definition.pointEnum.WALL;
+                    this.map[w, h] = (int)Definition.pointEnum.WALL;
                 }
             }
         }

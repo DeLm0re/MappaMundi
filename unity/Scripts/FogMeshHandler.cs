@@ -16,7 +16,7 @@ public class FogMeshHandler : MonoBehaviour
 		{
 			for (int y = 0; y < map.GetLength(1); y ++)
 			{
-				if(map[x, y] == 2)
+				if(map[x, y] == (int)Definition.pointEnum.FOG)
 				{
 					CreateCube(x, y, cubeSize, map.GetLength(0), map.GetLength(1));
 				}

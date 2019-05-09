@@ -34,6 +34,7 @@ public class EventButton : MonoBehaviour
 
     private void GenerationMap()
     {
+        /*
         environment.getEnvironmentMeshHandler().DestructMesh();
         environment.CreateMap();
 
@@ -43,7 +44,7 @@ public class EventButton : MonoBehaviour
 
         path.cleanPath();
         path.findPathFromStartEnd(path.nearestNode(map,0,0), path.nearestNode(map,width-1,height-1), map);
-
-        entity.entityInitialization();
+        */
+        entity.newGeneration();
     }
 }

@@ -33,50 +33,128 @@ public class EntityHandler : MonoBehaviour
 
     void Start()
     {
-        entityInitialization();
+        initializationAttributs();
+        //Set : map, diameter, width, height, mentalMap/fieldOfView vide, path, start node, xEntity, yEntity
 
+        //Set the entity position in game scene
+        this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
+
+        //Update the fieldOfView for the start
         updateFieldOfViewEntity();
+
+        //Update the fieldOfView for the start
         updateMentalMapEntity();
 
-        //Draw the fog using mesh 
+        //Draw the fog using mesh and the mentalMap updated
         fogHandler.CreateFog(mentalMap);
     }
 
     void FixedUpdate()
     {
+        //Waiting to find a path to follow
         if(pathToFollow != null)
         {
+            //If the entity reach the end of the path
             if(pathToFollow.Count == 0)
             {
-                newPathToFollow();
+                //Generate a new map, path and attributs
+                newGeneration();
 
+                //Set the entity position in game scene
+                this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
+
+                //Update the fieldOfView for the start
                 updateFieldOfViewEntity();
+
+                //Update the fieldOfView for the start
                 updateMentalMapEntity();
 
-                //Draw the fog using mesh 
+                //Destroy the mesh of the last map
                 fogHandler.getFogMeshHandler().DestructMesh();
+
+                //Create the starting fog of the new map
                 fogHandler.CreateFog(mentalMap);
             }
             else
             {
-                followPathOneStep();
+                //Calcul the next position of the entity to follow the path
+                calculNextPosition();
 
+                //Move the entity position in game scene
+                this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
+
+                //Update the fieldOfView for the start
                 updateFieldOfViewEntity();
+
+                //Update the fieldOfView for the start
                 updateMentalMapEntity();
 
+                //Destroy the mesh of the last frame
                 fogHandler.getFogMeshHandler().DestructMesh();
+
+                //Draw the actual frame's fog
                 fogHandler.CreateFog(mentalMap);
             }
         }
     }
 
-    public void entityInitialization()
+    private void initializationAttributs()
     {
+        int i, j;
+
         this.map = environment.getMap();
         this.width = this.map.GetLength(0);
         this.height = this.map.GetLength(1);
 
         this.diameter = 2*this.visionRange + 1;
+
+        this.fieldOfView = new Point[this.diameter,this.diameter];
+        for(i = 0; i < this.diameter; i++)
+        {
+            for(j = 0; j < this.diameter; j++)
+            {
+                this.fieldOfView[i,j] = new Point();
+            }
+        }
+        initialiseFieldOfViewEntity();
+
+        this.mentalMap = new int[this.width,this.height];
+        initializeMentalMapEntity();
+
+        pathToFollow = path.getPathStack();
+
+        startNode = path.nearestNode(this.map, 0, 0);
+
+        this.xEntity = startNode.getX();
+        this.yEntity = startNode.getY();
+    }
+
+    private void calculNextPosition()
+    {
+        Node nodeToGo;
+
+        nodeToGo = (Node)pathToFollow.Pop();
+
+        this.xEntity = nodeToGo.getX();
+        this.yEntity = nodeToGo.getY();
+    }
+
+    public void newGeneration()
+    {
+        environment.getEnvironmentMeshHandler().DestructMesh();
+        environment.CreateMap();
+
+        path.cleanPath();
+        path.findPathFromStartEnd(path.nearestNode(this.map,0,0), path.nearestNode(this.map,this.width-1,this.height-1), this.map);
+
+        this.generateNewAttributs();
+    }
+
+    private void generateNewAttributs()
+    {
+        this.map = environment.getMap();
+        this.width = this.map.GetLength(0);
+        this.height = this.map.GetLength(1);
 
         initialiseFieldOfViewEntity();
         initializeMentalMapEntity();
@@ -87,40 +165,11 @@ public class EntityHandler : MonoBehaviour
 
         this.xEntity = startNode.getX();
         this.yEntity = startNode.getY();
-
-        this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
-    }
-
-    private void followPathOneStep()
-    {
-        Node nodeToGo;
-
-        nodeToGo = (Node)pathToFollow.Pop();
-
-        this.xEntity = nodeToGo.getX();
-        this.yEntity = nodeToGo.getY();
-
-        this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
-    }
-
-    private void newPathToFollow()
-    {
-        environment.getEnvironmentMeshHandler().DestructMesh();
-        Array.Clear(this.fieldOfView, 0, this.fieldOfView.Length);
-        Array.Clear(this.mentalMap, 0, this.mentalMap.Length);
-        environment.CreateMap();
-
-        path.cleanPath();
-        path.findPathFromStartEnd(path.nearestNode(this.map,0,0), path.nearestNode(this.map,this.width-1,this.height-1), this.map);
-
-        this.entityInitialization();
     }
 
     private void initializeMentalMapEntity()
     {
         int widthIndex, heightIndex;
-
-        this.mentalMap = new int[this.width,this.height];
 
         for(widthIndex = 1; widthIndex < (this.width - 1); widthIndex++)
         {
@@ -147,14 +196,11 @@ public class EntityHandler : MonoBehaviour
     {
         int iFieldOfView;
         int jFieldOfView;
-
-        this.fieldOfView = new Point[this.diameter,this.diameter];
         
         for(iFieldOfView = 0; iFieldOfView < this.diameter; iFieldOfView++)
         {
             for(jFieldOfView = 0; jFieldOfView < this.diameter; jFieldOfView++)
             {
-                this.fieldOfView[jFieldOfView,iFieldOfView] = new Point();
                 this.fieldOfView[jFieldOfView,iFieldOfView].setXPoint(jFieldOfView);
                 this.fieldOfView[jFieldOfView,iFieldOfView].setYPoint(iFieldOfView);
                 this.fieldOfView[jFieldOfView,iFieldOfView].setPointValue(Definition.pointEnum.FOG);
