@@ -43,7 +43,6 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
  * 
  * \param
  * 		data : structure which define the kind of event we have to raise for interruption
- * 		fieldName : the name of the field where to train the neural network
  * 		savingPathNN : path where to save the neural network
  * 		renderer : renderer used to draw with the SDL
  * 		tileSize : size of a tile for display
@@ -51,4 +50,20 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
  * \return
  * 		NeuralNetwork*
  */
-NeuralNetwork *trainingNN2(dataType *data, char* fieldName, char *savingPathNN, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor);
+NeuralNetwork *trainingNN2(dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor);
+
+/**
+ * \fn void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
+ * \brief trains a neural network on a single field
+ * 
+ * \param
+ * 		neuralNetwork : the neural network to train
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		field : the field where to train the neural network
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ *      entityColor : color of the entity to display
+ * \return
+ * 		void
+ */
+void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor);
