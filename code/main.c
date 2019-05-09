@@ -10,6 +10,7 @@
  */
 
 #include "wrapper.h"
+#include <time.h>
 
 #define FIELD_WIDTH 50
 #define FIELD_HEIGHT 50

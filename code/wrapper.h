@@ -10,6 +10,7 @@
  */
 
 #include <pthread.h>
+#include <SDL2/SDL.h>
 #include "prototype.h"
 #include "eventhandler.h"
 #include "rioFunction.h"
@@ -83,3 +84,32 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
  * 		void
  */
 void waitForInstruction(dataType *data);
+
+/**
+ * \fn NeuralNetwork* trainingNN2(dataType *data, Field *field, char *savingPathNN)
+ * \brief creates a neural network and trains it on a field, then saves it
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		savingPathNN : path where to save the neural network
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ * \return
+ * 		NeuralNetwork*
+ */
+NeuralNetwork *trainingNN2(dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize);
+
+/**
+ * \fn void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
+ * \brief trains a neural network on a single field
+ * 
+ * \param
+ * 		neuralNetwork : the neural network to train
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		field : the field where to train the neural network
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ * \return
+ * 		void
+ */
+void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize);

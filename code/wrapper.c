@@ -55,7 +55,7 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
 		//We convert the field of view to an input for the neural network
 		inputs = createInput(fieldInput, xPosition, yPosition, xFinalPosition, yFinalPosition);
 		//We create the expected output with the labeling function
-		referenceOutputs[0] = labeling2(fieldInput, xPosition, yPosition, xFinalPosition, yFinalPosition);
+		referenceOutputs[0] = labeling1(fieldInput, xPosition, yPosition, xFinalPosition, yFinalPosition);
 		
 		//We make the neural network learn and if he andswered correctly
 		if(superviseLearningNeuralNetwork(neuralNetwork, inputs->data, referenceOutputs, 0.001, 0.1))
@@ -226,7 +226,7 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
     node* nodePosition = popNode(&pathToFollow);
     node* lastNodeInPath = getLastNode(&pathToFollow);
     //Move the entity along the path
-    while(nodePosition != NULL && !data->endEvent)
+    while(entity != NULL && nodePosition != NULL && !data->endEvent)
     {
         entity->x = nodePosition->x;
         entity->y = nodePosition->y;
@@ -273,4 +273,92 @@ void waitForInstruction(dataType *data)
 	while(data->waitForInstruction && !data->endEvent){SDL_Delay(50);}
 }
 
+/**
+ * \fn NeuralNetwork* trainingNN2(dataType *data, char* fieldName, char *savingPathNN, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
+ * \brief creates a neural network and trains it on a field, then saves it
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		savingPathNN : path where to save the neural network
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ * \return
+ * 		NeuralNetwork*
+ */
+NeuralNetwork *trainingNN2(dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize)
+{
+	//We create the field
+	Field *field = initialiseField(20, 20, EMPTY);
+	generateEnv(field);
 
+	//We create a neural network
+	int nbTiles = field->height * field->width;
+	int neuronsPerLayers[4] = {nbTiles + 4, nbTiles*2, nbTiles*2, nbTiles};
+	NeuralNetwork *neuralNetwork = createNeuralNetwork(4, neuronsPerLayers, -0.5, 0.5);
+	
+	int nbMap = 0;
+
+	// While the neural network is not correct 100% of the time
+	while (nbMap <= 1000000 && !data->endEvent)
+	{
+		printf("Step n°%d\n", nbMap);
+		trainNN2onField(neuralNetwork, data, field, renderer, tileSize);
+		generateEnv(field);
+		nbMap++;
+	}
+
+	saveNeuralNetwork(neuralNetwork, savingPathNN);
+
+	return neuralNetwork;
+}
+
+/**
+ * \fn void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
+ * \brief trains a neural network on a single field
+ * 
+ * \param
+ * 		neuralNetwork : the neural network to train
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		field : the field where to train the neural network
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ * \return
+ * 		void
+ */
+void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize)
+{
+	//Initialise the entity
+	Entity *entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, field->width, field->height);
+	//Initialisation of the nodes
+	node* startNode = nearestNode(field, entity->x, entity->y);
+	//Updates the position of the entity for the nearest starting node
+	entity->x = startNode->x;
+	entity->y = startNode->y;
+	destructNodes(&startNode);
+	node* endNode = nearestNode(field, field->width, field->height);
+
+	//While the entity hasn't arrived
+	while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
+	{	
+		//Updates the field of view of our entity
+		updateFieldOfViewEntity(field, entity);
+		//Updates the mental map of our entity with its new field of view
+		updateMentalMapEntity(entity);
+
+		//float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
+		//float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+		//node *choice = findNextPathNN2(entity, data, output);
+		//Find the expected choice
+		node *expectedNode = labeling2(entity, endNode->x, endNode->y, field, data);
+		float *expectedOutput = convertLabeling2(field->width, field->height, expectedNode);
+		node *expectedPath = findNextPathNN2(entity, data, expectedOutput);
+
+		//We make the neural network learn
+		//superviseLearningNeuralNetwork(neuralNetwork, input, expectedOutput, 0.2, 0.1);
+
+		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 0);
+
+		destructNodes(&expectedNode);
+		free(&expectedOutput);
+	}
+}

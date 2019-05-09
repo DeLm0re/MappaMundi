@@ -357,6 +357,43 @@ InputNeuralNetwork* createInput(Field* fieldOfView, int x, int y, int xEnd, int 
 }
 
 /**
+ * \fn createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd)
+ * \brief function that create the inputs for the neural network based on a field,
+ *      the coordinate of the entity and the coordinate the entity wants to get to
+ *
+ * \param field : A pointer to the field we want to convert
+ * \param visionRange : the vision range of the entity
+ * \param entityX, entityY : the coordinate of the entity
+ * \param xEnd, yEnd : the coordinate the entity wants to get to
+ *      
+ * \return InputNeuralNetwork*
+ */
+float* createInputNN2(Field* field, int entityX, int entityY, int xEnd, int yEnd)
+{
+    int widthIndex, heightIndex;
+    int inputIndex = 0;
+    float *input = (float*)malloc(( 4 + field->height * field->width) * sizeof(float));
+    for(widthIndex = 0; widthIndex < field->width; widthIndex++)
+    {
+        for(heightIndex = 0; heightIndex < field->height; heightIndex++)
+        {
+            if(field->data[widthIndex][heightIndex] == EMPTY || field->data[widthIndex][heightIndex] == VISITED)
+                input[inputIndex] = 1;
+            else
+                input[inputIndex] = 0;
+            inputIndex++;
+        }
+    }
+
+    input[inputIndex] = nmap(entityX, 0, field->width - 1, 0, 1);
+    input[inputIndex + 1] = nmap(entityY, 0, field->height - 1, 0, 1);
+    input[inputIndex + 2] = nmap(xEnd, 0, field->width - 1, 0, 1);
+    input[inputIndex + 3] = nmap(yEnd, 0, field->height - 1, 0, 1);
+
+    return input;
+}
+
+/**
  * \fn void destructInput(InputNeuralNetwork** input)
  * \brief free a structure InputNeuralNetwork from the memory
  *
@@ -532,7 +569,130 @@ node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwor
 }
 
 /**
- * \fn node *findNextPathGN(Entity *entity, node *startNode, node *endNode, dataType *data, LabelingWeights* labelingWeights)
+ * \fn node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \param output : output of the neuralNetwork
+ *  
+ * \return node*
+ */
+node *findNextPathNN2(Entity *entity, dataType *data, float *output)
+{
+    //Find the max value in the outputs
+    float max = -INFINITY;
+    int index, indexMax = 0;
+    int fieldWidth = entity->mentalMap->width;
+    int fieldHeight = entity->mentalMap->height;
+    for(index = 0; index < fieldWidth * fieldHeight; index++)
+    {
+        if(output[index] > max)
+        {
+            max = output[index];
+            indexMax = index;
+        }
+    }
+
+    int outputX = indexMax / fieldHeight;
+    int outputY = indexMax % fieldHeight;
+
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    node *endnode = initNode(outputX, outputY, 0, 0);
+    
+    //We set a default wanted node
+    node *wantedPosition = cpyNode(endnode);
+
+    //Use to store the path found by the pathfinding
+    node* path = NULL;
+    //We try to find a path
+    while((path == startNode || path == NULL) && !data->endEvent)
+    {   
+        destructNodes(&path);
+        //We try to find a path
+        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+        //If we haven't find a path
+        if ((path == startNode || path == NULL))
+        {            
+            //We change our wanted node to the nearest position available
+            node *tmp = nearestNode(entity->mentalMap, wantedPosition->x, wantedPosition->y);
+            if(tmp->x == wantedPosition->x && tmp->y == wantedPosition->y)
+            {
+                destructNodes(&tmp);
+                break;
+            }
+            else
+            {
+                destructNodes(&wantedPosition);
+                wantedPosition = tmp;
+            }
+        }
+    }
+    return path;
+}
+
+/**
+ * \fn InputNeuralNetwork* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+ * \brief function that returns the expected choice for the neural network
+ *
+ * \param entity : entity that is moving
+ * \param xEnd, yEnd : coordinates of the destination
+ * \param field : the complete field for the supervised learning
+ * \param data : the structure we use to raise a flag for interruption
+ * 
+ * \return node*
+ */
+node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+{
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    node *endNode = initNode(xEnd, yEnd, 0, 0);
+    node *completePath = findPathFromStartEnd(startNode, endNode, field, &data->endEvent);
+    node *destination = popNode(&completePath);
+
+    bool endLoop = false;
+    while(!(destination->x == endNode->x && destination->y == endNode->y) && endLoop == false)
+    {
+        int xPath = completePath->x;
+        int yPath = completePath->y;
+        pointEnum tileValue = entity->mentalMap->data[xPath][yPath];
+
+        if (tileValue != EMPTY && tileValue != VISITED)
+            endLoop = true;
+        else
+        {
+            destructNodes(&destination);
+            destination = popNode(&completePath);
+        }
+    }
+    destructNodes(&completePath);
+    return destination;
+}
+
+/**
+ * \fn float* convertLabeling2(int fieldWidth, int fieldHeight, node *label)
+ * \brief function that converts a label2 into a valid output of neural network
+ *
+ * \param fieldWidth, fieldHeight : dimensions of the field
+ * \param label : node found by function labeling2
+ * 
+ * \return float*
+ */
+float *convertLabeling2(int fieldWidth, int fieldHeight, node *label)
+{
+    int index;
+    int outputSize = fieldWidth * fieldHeight;
+    float *output = (float*)malloc(outputSize*sizeof(float));
+    
+    for(index = 0; index < outputSize; index++)
+        output[index] = 0;
+
+    output[label->y + label->x * fieldHeight] = 1;
+
+    return output;
+}
+
+/**
+ *  \fn node *findNextPathGN(Entity *entity, node *startNode, node *endNode, dataType *data, LabelingWeights* labelingWeights)
  * \brief returns the next path chosen by a given neural network
  *
  * \param entity : entity to move
