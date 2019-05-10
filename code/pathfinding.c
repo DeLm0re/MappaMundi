@@ -262,22 +262,28 @@ void insertFrontNode(node** frontNode, node* newNode)
  */
 void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize)
 {
-	//If the size of the tile is large enought to draw a rectangle
-	if (tileSize > 2)
+	if(frontNode != NULL)
 	{
-		node* cursor = *frontNode;
-		//We set the drawing color
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-		//For each node in the chain list
-		while(cursor != NULL)
+		if(*frontNode != NULL)
 		{
-			//We draw a rectangle at the correct coordiante
-			SDL_RenderFillRect(renderer, &((SDL_Rect) {
-				cursor->x*tileSize + 1, 
-				cursor->y*tileSize + 1, 
-				tileSize-2, 
-				tileSize-2}));
-			cursor = cursor->linkedNode;
+			//If the size of the tile is large enought to draw a rectangle
+			if (tileSize > 2)
+			{
+				node* cursor = *frontNode;
+				//We set the drawing color
+				SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+				//For each node in the chain list
+				while(cursor != NULL)
+				{
+					//We draw a rectangle at the correct coordiante
+					SDL_RenderFillRect(renderer, &((SDL_Rect) {
+						cursor->x*tileSize + 1, 
+						cursor->y*tileSize + 1, 
+						tileSize-2, 
+						tileSize-2}));
+					cursor = cursor->linkedNode;
+				}
+			}
 		}
 	}
 }

@@ -12,8 +12,8 @@
 #include "wrapper.h"
 #include <time.h>
 
-#define FIELD_WIDTH 50
-#define FIELD_HEIGHT 50
+#define FIELD_WIDTH 20
+#define FIELD_HEIGHT 20
 #define SAVING_PATH_NN "../NN/Reseau1.nn"
 #define SAVING_PATH_GN "../GN"
 
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 		}
 		// Initialisation de la fenêtre
 		window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-								windowWidth, windowHeight, SDL_WINDOW_SHOWN);
+								windowWidth, windowHeight, SDL_WINDOW_HIDDEN);
 		if(window == NULL)
 		{
 			fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
@@ -111,14 +111,20 @@ int main(int argc, char** argv)
         fieldHeight = theField->height;
         fieldWidth = theField->width;
 		        
+		windowWidth = (fieldWidth*tileSize) + /*offset*/ 2*tileSize + (RADIUS_VIEWPOINT*2*tileSize) + 2*tileSize;
+		windowHeight = fieldHeight*tileSize;
+		SDL_SetWindowSize(window, windowWidth, windowHeight);
+		
 		switch (menuChoice)
 		{
 			//New neural network
 			case TRAIN_NN:
-				neuralNetwork = trainingNN1(RADIUS_VIEWPOINT, data, fieldHeight, fieldWidth, SAVING_PATH_NN);
+				SDL_ShowWindow(window);
+				neuralNetwork = trainingNN2(fieldWidth, fieldHeight, data, SAVING_PATH_NN, renderer, tileSize);
 				break;
 			//Load neural network
 			case LOAD_NN:
+				SDL_ShowWindow(window);
 				neuralNetwork = loadNeuralNetwork(SAVING_PATH_NN);
 				break;
 			//New genetic network
@@ -131,6 +137,7 @@ int main(int argc, char** argv)
 			    break;
 			//Load genetic network
 			case LOAD_GN:
+				SDL_ShowWindow(window);
 		        if (argc >= 3)
                     labelingWeights = loadGeneticNetwork(argv[2]);
                 else
@@ -140,10 +147,6 @@ int main(int argc, char** argv)
 				printf("Error : Invalid arguments\n");
 				break;
 		}
-		
-		windowWidth = (fieldWidth*tileSize) + /*offset*/ 2*tileSize + (RADIUS_VIEWPOINT*2*tileSize) + 2*tileSize;
-		windowHeight = fieldHeight*tileSize;
-		SDL_SetWindowSize(window, windowWidth, windowHeight);
 		
 		//--- Main loop
 		
