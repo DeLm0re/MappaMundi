@@ -13,7 +13,13 @@ public class EntityHandler : MonoBehaviour
 
     public int visionRange;
 
+    private float waitSecondToMove;
+
+    private int countFrame;
+
     private int diameter;
+
+    private bool pause;
 
     private Node startNode;
 
@@ -34,7 +40,7 @@ public class EntityHandler : MonoBehaviour
     void Start()
     {
         initializationAttributs();
-        //Set : map, diameter, width, height, mentalMap/fieldOfView vide, path, start node, xEntity, yEntity
+        //Set : map, diameter, width, height, mentalMap/fieldOfView vide, path, start node, xEntity, yEntity, waitSecondToMove, countFrame
 
         //Actualize the position of the entity
         actualizePositionEntity();
@@ -49,52 +55,62 @@ public class EntityHandler : MonoBehaviour
         fogHandler.CreateFog(mentalMap);
     }
 
+    //FixedUpdate is called every 0.02s
     void FixedUpdate()
     {
-        //Waiting to find a path to follow
-        if(pathToFollow != null)
+        this.countFrame++;
+
+        if(Time.deltaTime * this.countFrame >= this.waitSecondToMove)
         {
-            //If the entity reach the end of the path
-            if(pathToFollow.Count == 0)
+            if(pause == false)
             {
-                //Generate a new map, path and attributs
-                newGeneration();
+                //Waiting to find a path to follow
+                if(pathToFollow != null)
+                {
+                    //If the entity reach the end of the path
+                    if(pathToFollow.Count == 0)
+                    {
+                        //Generate a new map, path and attributs
+                        newGeneration();
 
-                //Actualize the position of the entity
-                actualizePositionEntity();
+                        //Actualize the position of the entity
+                        actualizePositionEntity();
 
-                //Update the fieldOfView for the start
-                updateFieldOfViewEntity();
+                        //Update the fieldOfView for the start
+                        updateFieldOfViewEntity();
 
-                //Update the fieldOfView for the start
-                updateMentalMapEntity();
+                        //Update the fieldOfView for the start
+                        updateMentalMapEntity();
 
-                //Destroy the mesh of the last map
-                fogHandler.getFogMeshHandler().DestructMesh();
+                        //Destroy the mesh of the last map
+                        fogHandler.getFogMeshHandler().DestructMesh();
 
-                //Create the starting fog of the new map
-                fogHandler.CreateFog(mentalMap);
+                        //Create the starting fog of the new map
+                        fogHandler.CreateFog(mentalMap);
+                    }
+                    else
+                    {
+                        //Calcul the next position of the entity to follow the path
+                        calculNextPosition();
+
+                        //Actualize the position of the entity
+                        actualizePositionEntity();
+
+                        //Update the fieldOfView for the start
+                        updateFieldOfViewEntity();
+
+                        //Update the fieldOfView for the start
+                        updateMentalMapEntity();
+
+                        //Destroy the mesh of the last frame
+                        fogHandler.getFogMeshHandler().DestructMesh();
+
+                        //Draw the actual frame's fog
+                        fogHandler.CreateFog(mentalMap);
+                    }
+                }
             }
-            else
-            {
-                //Calcul the next position of the entity to follow the path
-                calculNextPosition();
-
-                //Actualize the position of the entity
-                actualizePositionEntity();
-
-                //Update the fieldOfView for the start
-                updateFieldOfViewEntity();
-
-                //Update the fieldOfView for the start
-                updateMentalMapEntity();
-
-                //Destroy the mesh of the last frame
-                fogHandler.getFogMeshHandler().DestructMesh();
-
-                //Draw the actual frame's fog
-                fogHandler.CreateFog(mentalMap);
-            }
+            this.countFrame = 0;
         }
     }
 
@@ -107,6 +123,10 @@ public class EntityHandler : MonoBehaviour
     private void initializationAttributs()
     {
         int i, j;
+
+        this.pause = false;
+
+        this.countFrame = 0;
 
         this.map = environment.getMap();
         this.width = this.map.GetLength(0);
@@ -302,6 +322,26 @@ public class EntityHandler : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool getPause()
+    {
+        return this.pause;
+    }
+
+    public void setPause(bool value)
+    {
+        this.pause = value;
+    }
+
+    public float getWaitSecondToMove()
+    {
+        return this.waitSecondToMove;
+    }
+
+    public void setWaitSecondToMove(float value)
+    {
+        this.waitSecondToMove = value;
     }
 
 }

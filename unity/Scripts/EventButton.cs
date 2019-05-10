@@ -6,6 +6,11 @@ public class EventButton : MonoBehaviour
     //Make sure to attach these Buttons in the Inspector
     public Button quitButton;
     public Button genButton;
+    public Button pauseButton;
+    
+    public Slider sliderFps;
+
+    public Text fpsValue;
 
     public EnvironmentHandler environment;
 
@@ -15,9 +20,28 @@ public class EventButton : MonoBehaviour
 
     void Start()
     {
+        updateFps();
         //Calls the TaskOnClick/TaskWithParameters/ButtonClicked method when you click the Button
         quitButton.onClick.AddListener(ApplicationQuit);
         genButton.onClick.AddListener(GenerationMap);
+        pauseButton.onClick.AddListener(ChangePauseMode);
+        sliderFps.onValueChanged.AddListener(delegate {updateFps(); });
+    }
+    
+    private void updateFps()
+    {
+        entity.setWaitSecondToMove(1/sliderFps.value);
+        displayNewFps();
+    }
+
+    private void displayNewFps()
+    {
+        fpsValue.text = sliderFps.value.ToString();
+    }
+
+    private void ChangePauseMode()
+    {
+        entity.setPause(!entity.getPause());
     }
 
     private void ApplicationQuit()
