@@ -457,30 +457,29 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
 }
 
 /**
- * \fn void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
+ * \fn void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Entity* entity, LabelingWeights* labelingWeights)
  * \brief function that change the values in an interest field according to the labelisation function
  *
  * \param InterestField* interestField : the interest field that will be update
- * \param Field* mentalMap : the mental map on wich the updated values will be based on
  * \param int xEnd : x coordinate of the ending point
  * \param int yEnd : y coordinate of the ending point
- * \param int visionRange : the vision range of the entity
+ * \param Entity* entity : the entity on which we base the update of the interest field
  * \param LabelingWeights* labelingWeights : Ze labeling weights
 
  * \return void
  */
-void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
+void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Entity* entity, LabelingWeights* labelingWeights)
 {
-    if (interestField != NULL && mentalMap != NULL && labelingWeights != NULL)
+    if (interestField != NULL && entity != NULL && labelingWeights != NULL)
     {
         int width, height;
         for(width = 0; width < interestField->width; width++)
         {
             for(height = 0; height < interestField->height; height++)
             {
-                Field* fieldOfView = getFieldOfViewFromMap(mentalMap, width, height, visionRange);
+                Field* fieldOfView = getFieldOfViewFromMap(entity->mentalMap, width, height, entity->visionRange);
                 
-                interestField->data[width][height] = labeling3(fieldOfView, width, height, xEnd, yEnd, labelingWeights);
+                interestField->data[width][height] = labeling3(fieldOfView, width, height, xEnd, yEnd, entity, labelingWeights);
                 
                 destructField(&fieldOfView);
             }
@@ -632,7 +631,7 @@ node *findNextPathNN2(Entity *entity, dataType *data, float *output)
 }
 
 /**
- * \fn InputNeuralNetwork* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+ * \fn node* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
  * \brief function that returns the expected choice for the neural network
  *
  * \param entity : entity that is moving
@@ -666,6 +665,93 @@ node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data
     }
     destructNodes(&completePath);
     return destination;
+}
+
+/**
+ * \fn float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity* entity, LabelingWeights* labelingWeights)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the center of the field of view
+ * \param int yPosition : y coordinate of the center of the field of view
+ * \param int xFinalPosition : x coordinate of the end point
+ * \param int yFinalPosition : y coordinate of the end point
+ * \param Entity* entity : the entity which uses the function to navigate (only use his coordiantes)
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+ * \return float
+ */
+float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity* entity, LabelingWeights* labelingWeights)
+{
+    float emptyPoint = 0;
+    float wallPoint = 0;
+    float fogPoint = 0;
+    float visitedPoint = 0;
+    float dist = 0;
+    float avgDistEmpty = 0;
+    float avgDistWall = 0;
+    float avgDistFog = 0;
+    float avgDistVisited = 0;
+    float distFromEntity = 0;
+    float value = 0;
+    float centerPointx = (fieldOfView->width-1)/2;
+    float centerPointy = (fieldOfView->height-1)/2;
+
+
+    if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
+    {
+        return -INFINITY;
+    }
+    
+    for(int width = 0; width < fieldOfView->width; width++)
+    {
+        for(int height = 0; height < fieldOfView->height; height++)
+        {
+            switch (fieldOfView->data[width][height])
+            {
+                case EMPTY:
+                    avgDistEmpty += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                    emptyPoint++;
+                    break;
+                case WALL:
+                    avgDistWall += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                    wallPoint++;
+                    break;
+                case FOG:
+                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
+                    {
+                        avgDistFog += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                        fogPoint++;
+                    }
+                    break;
+                case VISITED:
+                    avgDistVisited += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                    visitedPoint++;
+                    break;
+            }
+        }
+    }
+
+    dist = sqrt(pow(xFinalPosition-xPosition,2) + pow(yFinalPosition-yPosition,2));
+    distFromEntity = sqrt(pow(entity->x-xPosition,2) + pow(entity->y-yPosition,2));
+
+    avgDistEmpty /= emptyPoint;
+    avgDistWall /= wallPoint;
+    avgDistFog /= fogPoint;
+    avgDistVisited /= visitedPoint;
+
+    value = dist*labelingWeights->weights[DIST]+
+            emptyPoint*labelingWeights->weights[NB_EMPTY]+
+            wallPoint*labelingWeights->weights[NB_WALL]+
+            fogPoint*labelingWeights->weights[NB_FOG]+
+            visitedPoint*labelingWeights->weights[NB_VISITED]+
+            avgDistEmpty*labelingWeights->weights[AVG_DIST_EMPTY]+
+            avgDistWall*labelingWeights->weights[AVG_DIST_WALL]+
+            avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
+            avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED]+
+            distFromEntity*labelingWeights->weights[DIST_FROM_ENTITY];
+
+    return value;
 }
 
 /**
@@ -709,7 +795,7 @@ node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeig
     InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
 
     //We update each values of the interest field with what our neural network think
-    updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, labelingWeights);
+    updateInterestField2(interestField, endNode->x, endNode->y, entity, labelingWeights);
     
     //We set a default wanted node
     node *wantedPosition = cpyNode(endNode);

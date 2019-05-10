@@ -174,7 +174,7 @@ LabelingWeights* initialiseLabelingWeights(void)
 {
     LabelingWeights* labelingWeights = (LabelingWeights*)malloc(sizeof(LabelingWeights));
     int i;
-    for(i = 0; i < 9; i++)
+    for(i = 0; i < 10; i++)
     {
         labelingWeights->weights[i] = ((float)(rand()%1000))/1000-0.5;
     }
@@ -195,7 +195,7 @@ LabelingWeights* copyLabelingWeights(LabelingWeights* labelingWeights)
     {
         returnLabelingWeights = initialiseLabelingWeights();
         int i;
-        for(i = 0; i < 9; i++)
+        for(i = 0; i < 10; i++)
             returnLabelingWeights->weights[i] = labelingWeights->weights[i];
     }
     return returnLabelingWeights;
@@ -218,89 +218,6 @@ void destructLabelingWeights(LabelingWeights **labelingWeights)
             *labelingWeights = NULL;
         }
     }
-}
-
-/**
- * \fn Field* labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, LabelingWeights* labelingWeights)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \param LabelingWeights* labelingWeights : Ze labeling weights
- * \return float
- */
-float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, LabelingWeights* labelingWeights)
-{
-    float emptyPoint = 0;
-    float wallPoint = 0;
-    float fogPoint = 0;
-    float visitedPoint = 0;
-    float dist = 0;
-    float avgDistEmpty = 0;
-    float avgDistWall = 0;
-    float avgDistFog = 0;
-    float avgDistVisited = 0;
-    float value = 0;
-    float centerPointx = (fieldOfView->width-1)/2;
-    float centerPointy = (fieldOfView->height-1)/2;
-
-
-    if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
-    {
-        return -INFINITY;
-    }
-    
-    for(int width = 0; width < fieldOfView->width; width++)
-    {
-        for(int height = 0; height < fieldOfView->height; height++)
-        {
-            switch (fieldOfView->data[width][height])
-            {
-                case EMPTY:
-                    avgDistEmpty += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
-                    emptyPoint++;
-                    break;
-                case WALL:
-                    avgDistWall += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
-                    wallPoint++;
-                    break;
-                case FOG:
-                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
-                    {
-                        avgDistFog += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
-                        fogPoint++;
-                    }
-                    break;
-                case VISITED:
-                    avgDistVisited += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
-                    visitedPoint++;
-                    break;
-            }
-        }
-    }
-
-    dist = sqrt(pow(xFinalPosition-xPosition,2) + pow(yFinalPosition-yPosition,2));
-
-    avgDistEmpty /= emptyPoint;
-    avgDistWall /= wallPoint;
-    avgDistFog /= fogPoint;
-    avgDistVisited /= visitedPoint;
-
-    value = dist*labelingWeights->weights[DIST]+
-            emptyPoint*labelingWeights->weights[NB_EMPTY]+
-            wallPoint*labelingWeights->weights[NB_WALL]+
-            fogPoint*labelingWeights->weights[NB_FOG]+
-            visitedPoint*labelingWeights->weights[NB_VISITED]+
-            avgDistEmpty*labelingWeights->weights[AVG_DIST_EMPTY]+
-            avgDistWall*labelingWeights->weights[AVG_DIST_WALL]+
-            avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
-            avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED];
-
-    return value;
 }
 
 /**
@@ -361,7 +278,7 @@ GeneticNetworks *initialiseGeneticNetworksFrom(int size, char* pathOfGeneticNetw
             geneticNetworks->score[i] = 0;
             geneticNetworks->time[i] = 0;
             int j;
-            for(j = 0; j < 9; j++)
+            for(j = 0; j < 10; j++)
             {
                 geneticNetworks->list[i]->weights[j] += nmap(rand()%1000, 0, 1000, -variation, variation);
             }
@@ -397,7 +314,7 @@ GeneticNetworks *createNewGeneration(GeneticNetworks* geneticNetworks, int numbe
             }
             
             int j;
-            for(j = 0; j < 9; j++)
+            for(j = 0; j < 10; j++)
             {
                 float randomMutation;
                 if (((float) (rand()%1000)) / 1000 < mutationChance)
@@ -495,7 +412,7 @@ bool saveGeneticNetwork(LabelingWeights* labelingWeights, char* path)
 	if((file = fopen(path, "wb+")))
 	{
 		// We write down the weights
-		fwrite(labelingWeights->weights, sizeof(float), 9, file);
+		fwrite(labelingWeights->weights, sizeof(float), 10, file);
 		
 		// We close the file
 		fclose(file);
@@ -525,7 +442,7 @@ LabelingWeights* loadGeneticNetwork(char* path)
 		int statut = 0;
 
         // We read the waights from the file
-        statut = fread(labelingWeights->weights, sizeof(float), 9, file);
+        statut = fread(labelingWeights->weights, sizeof(float), 10, file);
         if (statut == 0) 
         {
             return NULL;

@@ -31,7 +31,7 @@ typedef struct InterestField
 
 typedef struct 
 {
-    float weights[9];
+    float weights[10];
 } LabelingWeights;
 
 typedef struct
@@ -120,21 +120,6 @@ LabelingWeights* copyLabelingWeights(LabelingWeights* labelingWeights);
  * \return void
  */
 void destructLabelingWeights(LabelingWeights **labelingWeights);
-
-/**
- * \fn Field* labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, LabelingWeights* labelingWeights)
- * \brief function that returns the labeling of the points
- * will be used for labelisation
- *
- * \param Field* fieldOfView : a field of view
- * \param int xPosition : x coordinate of the entity
- * \param int yPosition : y coordinate of the entity
- * \param int xFinalPosition : x coordinate of the end point
- * \param int yFinalPosition : y coordinate of the end point
- * \param LabelingWeights* labelingWeights : Ze labeling weights
- * \return float
- */
-float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, LabelingWeights* labelingWeights);
 
 /**
  * \fn GeneticNetworks *initialiseGeneticNetworks(int size)
