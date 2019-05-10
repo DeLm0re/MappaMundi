@@ -12,4 +12,16 @@
 #ifndef H_STATS
     #define H_STATS
 
+#include <stdio.h>
+#include <stdbool.h>
+
+typedef enum StatIndex {NB_STEPS = 0, NB_FOG_REVEALED, EXECUTION_TIME, SIZEOFSTAT};
+
+typedef struct Statistics
+{
+    float data[SIZEOFSTAT];
+} Statistics;
+
+bool writeStatsIntoFile(Statistics *stats, char *path, bool fileIsNew);
+
 #endif
