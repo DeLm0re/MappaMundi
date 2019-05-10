@@ -12,8 +12,10 @@
 #include "wrapper.h"
 #include <time.h>
 
-#define FIELD_WIDTH 50
-#define FIELD_HEIGHT 50
+#define TILESIZE 10;
+
+#define FIELD_WIDTH 20
+#define FIELD_HEIGHT 20
 #define SAVING_PATH_NN "../NN/Reseau1.nn"
 #define SAVING_PATH_GN "../GN"
 
@@ -25,7 +27,7 @@ int main(int argc, char** argv)
 		printf("Please, enter an argument : \n");
 		printf(" 1 [pathMap] : \n\tCreate a new neural network and train it on a random map or on an existing map\n");
 		printf(" 2 [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
-		printf(" 3 [pathGeneticNetwork] : \n\tStart a new genetic network and train it or use an existing one as reference\n");
+		printf(" 3 [pathGeneticNetwork] [pathMap] : \n\tStart a new genetic network and train it\n\tIt could be based on an existing map and be based on an existing genetic algorithm\n\t put \"NONE\" if you don't want to use any base genetic algorithm\n");
 		printf(" 4 pathGeneticNetwork [pathMap] : \n\tLoad an existing genetic network and test it on a random map or on an existing map\n");
 	}
 	else
@@ -33,7 +35,7 @@ int main(int argc, char** argv)
 		//Initialize the random seed value
 		srand(12345);
 		
-		const int tileSize = 10;
+		const int tileSize = TILESIZE;
 		int windowWidth = 640;
 		int windowHeight = 480;
 		
@@ -83,18 +85,17 @@ int main(int argc, char** argv)
         // We extract the path pf the image if it exist
         switch (menuChoice)
 		{
+			//Load neural network
 			//New neural network
+			case LOAD_NN:
 			case TRAIN_NN:
 			    if (argc == 3)
 	                pathImageField = argv[2];
 				break;
-			//Load neural network
-			case LOAD_NN:
-			    if (argc == 3)
-			    pathImageField = argv[2];
-				break;
 			//Load genetic network
+			//New genetic network
 			case LOAD_GN:
+			case TRAIN_GN:
 			    if (argc == 4)
 	                pathImageField = argv[3];
 			    break;
@@ -125,9 +126,9 @@ int main(int argc, char** argv)
 			case TRAIN_GN:
 			    // 5 generation seems to be enought and 100 member is maybe a bit too much
 			    if (argc >= 3)
-			        labelingWeights = trainingGN1(data, 30, 30, SAVING_PATH_GN, argv[2], 10, 100);
+			        labelingWeights = trainingGN1(data, theField, SAVING_PATH_GN, argv[2], 10, 100);
 			    else
-			        labelingWeights = trainingGN1(data, 30, 30, SAVING_PATH_GN, NULL, 10, 100);
+			        labelingWeights = trainingGN1(data, theField, SAVING_PATH_GN, NULL, 10, 100);
 			    break;
 			//Load genetic network
 			case LOAD_GN:

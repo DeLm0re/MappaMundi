@@ -170,6 +170,33 @@ node* getLastNode(node** frontNode)
 }
 
 /**
+ * \fn int getNbNode(node** frontNode)
+ * \brief function which return the number of node in the path
+ *
+ * \param frontNode : the top node of a chain list of node
+ * \return int
+ */
+int getNbNode(node** frontNode)
+{
+    int nbNode = 0;
+    node* cursor = NULL;
+    //If the list isn't empty
+	if(frontNode != NULL)
+	{
+	    if(*frontNode != NULL)
+	    {
+	        cursor = *frontNode;
+	        while(cursor != NULL)
+	        {
+	            nbNode++;
+	            cursor = cursor->linkedNode;
+	        }
+	    }
+	}
+	return nbNode;
+}
+
+/**
  * \fn void rmvNode(node** frontNode, node* nodeToRemove)
  * \brief function which pop out a given node from a chain list of node
  *
