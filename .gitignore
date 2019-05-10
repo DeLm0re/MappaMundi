@@ -3,3 +3,6 @@ main
 .vscode
 *.log
 *.meta
+*.cs.meta
+*.mat.meta
+*.png.meta
