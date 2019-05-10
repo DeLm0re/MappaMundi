@@ -23,6 +23,7 @@
 #include "pathfinding.h"
 #include "entity.h"
 #include "display.h"
+#include "stats.h"
 
 
 /**
