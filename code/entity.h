@@ -193,19 +193,18 @@ void destructInput(InputNeuralNetwork** input);
 void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetwork, Field* mentalMap, int xEnd, int yEnd, int visionRange);
 
 /**
- * \fn void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights)
+ * \fn void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Entity* entity, LabelingWeights* labelingWeights)
  * \brief function that change the values in an interest field according to the labelisation function
  *
  * \param InterestField* interestField : the interest field that will be update
- * \param Field* mentalMap : the mental map on wich the updated values will be based on
  * \param int xEnd : x coordinate of the ending point
  * \param int yEnd : y coordinate of the ending point
- * \param int visionRange : the vision range of the entity
+ * \param Entity* entity : the entity on which we base the update of the interest field
  * \param LabelingWeights* labelingWeights : Ze labeling weights
 
  * \return void
  */
-void updateInterestField2(InterestField* interestField, Field* mentalMap, int xEnd, int yEnd, int visionRange, LabelingWeights* labelingWeights);
+void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Entity* entity, LabelingWeights* labelingWeights);
 
 /**
  * \fn void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
@@ -259,7 +258,7 @@ node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeig
 node *findNextPathNN2(Entity *entity, dataType *data, float *output);
 
 /**
- * \fn InputNeuralNetwork* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
+ * \fn node* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
  * \brief function that returns the expected choice for the neural network
  *
  * \param entity : entity that is moving
@@ -270,6 +269,22 @@ node *findNextPathNN2(Entity *entity, dataType *data, float *output);
  * \return node*
  */
 node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data);
+
+/**
+ * \fn float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity* entity, LabelingWeights* labelingWeights)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the center of the field of view
+ * \param int yPosition : y coordinate of the center of the field of view
+ * \param int xFinalPosition : x coordinate of the end point
+ * \param int yFinalPosition : y coordinate of the end point
+ * \param Entity* entity : the entity which uses the function to navigate (only use his coordiantes)
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+ * \return float
+ */
+float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity* entity, LabelingWeights* labelingWeights);
 
 /**
  * \fn float* convertLabeling2(int fieldWidth, int fieldHeight, node *label)

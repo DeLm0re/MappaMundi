@@ -142,7 +142,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
 		        updateFieldOfViewEntity(theField, entity);
 		        updateMentalMapEntity(entity);
 		        
-		        updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, geneticNetworks->list[networkIndex]);
+		        updateInterestField2(interestField, endNode->x, endNode->y, entity, geneticNetworks->list[networkIndex]);
 		
 		        //We set a default node to which the entity will try to move to
 		        node* wantedPosition = cpyNode(endNode);
@@ -181,7 +181,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
     
 	LabelingWeights* labelingWeights = geneticNetworks->list[0];
 
-    printf("\tDIST : %f\n", labelingWeights->weights[DIST]);
+    printf("\tdist : %f\n", labelingWeights->weights[DIST]);
     printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
     printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
     printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
@@ -190,6 +190,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
     printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
     printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
     printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
+    printf("\tdistFromEntity : %f\n", labelingWeights->weights[DIST_FROM_ENTITY]);
 	
 	if (!data->endEvent)
 	{
