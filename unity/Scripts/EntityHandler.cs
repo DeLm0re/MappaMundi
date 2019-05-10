@@ -36,8 +36,8 @@ public class EntityHandler : MonoBehaviour
         initializationAttributs();
         //Set : map, diameter, width, height, mentalMap/fieldOfView vide, path, start node, xEntity, yEntity
 
-        //Set the entity position in game scene
-        this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
+        //Actualize the position of the entity
+        actualizePositionEntity();
 
         //Update the fieldOfView for the start
         updateFieldOfViewEntity();
@@ -60,8 +60,8 @@ public class EntityHandler : MonoBehaviour
                 //Generate a new map, path and attributs
                 newGeneration();
 
-                //Set the entity position in game scene
-                this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
+                //Actualize the position of the entity
+                actualizePositionEntity();
 
                 //Update the fieldOfView for the start
                 updateFieldOfViewEntity();
@@ -80,8 +80,8 @@ public class EntityHandler : MonoBehaviour
                 //Calcul the next position of the entity to follow the path
                 calculNextPosition();
 
-                //Move the entity position in game scene
-                this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
+                //Actualize the position of the entity
+                actualizePositionEntity();
 
                 //Update the fieldOfView for the start
                 updateFieldOfViewEntity();
@@ -96,6 +96,12 @@ public class EntityHandler : MonoBehaviour
                 fogHandler.CreateFog(mentalMap);
             }
         }
+    }
+
+    private void actualizePositionEntity()
+    {
+        //Set the entity position in game scene
+        this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
     }
 
     private void initializationAttributs()
