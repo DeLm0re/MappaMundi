@@ -224,7 +224,6 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay)
 {
     node* nodePosition = popNode(&pathToFollow);
-    node* lastNodeInPath = getLastNode(&pathToFollow);
     //Move the entity along the path
     while(entity != NULL && nodePosition != NULL && !data->endEvent)
     {
@@ -248,6 +247,7 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
 		    SDL_Color entityColor = {80, 160, 160, 255};
 		    showEntity(entity, renderer, entityColor, tileSize);
 		    SDL_Color colorLastNodeInPath = {255, 0, 0, 255};
+			node* lastNodeInPath = getLastNode(&pathToFollow);
 		    viewNodes(&lastNodeInPath, renderer, colorLastNodeInPath, tileSize);
 		    //Refresh the window
 		    SDL_RenderPresent(renderer);
@@ -275,9 +275,10 @@ void waitForInstruction(dataType *data)
 
 /**
  * \fn NeuralNetwork* trainingNN2(dataType *data, char* fieldName, char *savingPathNN, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
- * \brief creates a neural network and trains it on a field, then saves it
+ * \brief creates a neural network and trains it on random fields, then saves it
  * 
  * \param
+ * 		fieldWidth, fieldHeight : dimensions of the random fields
  * 		data : structure which define the kind of event we have to raise for interruption
  * 		savingPathNN : path where to save the neural network
  * 		renderer : renderer used to draw with the SDL
@@ -285,10 +286,10 @@ void waitForInstruction(dataType *data)
  * \return
  * 		NeuralNetwork*
  */
-NeuralNetwork *trainingNN2(dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize)
+NeuralNetwork *trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize)
 {
 	//We create the field
-	Field *field = initialiseField(20, 20, EMPTY);
+	Field *field = initialiseField(fieldWidth, fieldHeight, EMPTY);
 	generateEnv(field);
 
 	//We create a neural network
@@ -345,20 +346,26 @@ void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field,
 		//Updates the mental map of our entity with its new field of view
 		updateMentalMapEntity(entity);
 
-		//float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
-		//float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
-		//node *choice = findNextPathNN2(entity, data, output);
+		float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
+		float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+		node *choice = findNextPathNN2(entity, data, output);
 		//Find the expected choice
 		node *expectedNode = labeling2(entity, endNode->x, endNode->y, field, data);
 		float *expectedOutput = convertLabeling2(field->width, field->height, expectedNode);
 		node *expectedPath = findNextPathNN2(entity, data, expectedOutput);
 
 		//We make the neural network learn
-		//superviseLearningNeuralNetwork(neuralNetwork, input, expectedOutput, 0.2, 0.1);
+		superviseLearningNeuralNetwork(neuralNetwork, input, expectedOutput, 0.2, 0.1);
 
-		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 0);
-
+		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 1);
+		
 		destructNodes(&expectedNode);
-		free(&expectedOutput);
+		destructNodes(&choice);
+		if(expectedOutput != NULL)	
+			free(expectedOutput);
+		if(output != NULL)	
+			free(output);
+		if(input != NULL)	
+			free(input);
 	}
 }

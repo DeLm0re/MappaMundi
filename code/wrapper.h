@@ -86,10 +86,11 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
 void waitForInstruction(dataType *data);
 
 /**
- * \fn NeuralNetwork* trainingNN2(dataType *data, Field *field, char *savingPathNN)
- * \brief creates a neural network and trains it on a field, then saves it
+ * \fn NeuralNetwork* trainingNN2(dataType *data, char* fieldName, char *savingPathNN, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
+ * \brief creates a neural network and trains it on random fields, then saves it
  * 
  * \param
+ * 		fieldWidth, fieldHeight : dimensions of the random fields
  * 		data : structure which define the kind of event we have to raise for interruption
  * 		savingPathNN : path where to save the neural network
  * 		renderer : renderer used to draw with the SDL
@@ -97,7 +98,7 @@ void waitForInstruction(dataType *data);
  * \return
  * 		NeuralNetwork*
  */
-NeuralNetwork *trainingNN2(dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize);
+NeuralNetwork *trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize);
 
 /**
  * \fn void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, SDL_Color entityColor)
