@@ -120,12 +120,10 @@ int main(int argc, char** argv)
 		{
 			//New neural network
 			case TRAIN_NN:
-				SDL_ShowWindow(window);
 				neuralNetwork = trainingNN2(fieldWidth, fieldHeight, data, SAVING_PATH_NN, renderer, tileSize);
 				break;
 			//Load neural network
 			case LOAD_NN:
-				SDL_ShowWindow(window);
 				neuralNetwork = loadNeuralNetwork(SAVING_PATH_NN);
 				break;
 			//New genetic network
@@ -138,7 +136,6 @@ int main(int argc, char** argv)
 			    break;
 			//Load genetic network
 			case LOAD_GN:
-				SDL_ShowWindow(window);
 		        if (argc >= 3)
                     labelingWeights = loadGeneticNetwork(argv[2]);
                 else
@@ -148,6 +145,8 @@ int main(int argc, char** argv)
 				printf("Error : Invalid arguments\n");
 				break;
 		}
+		
+		SDL_ShowWindow(window);
 		
 		//--- Main loop
 		
@@ -168,9 +167,9 @@ int main(int argc, char** argv)
 			while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
 			{
 				node *path = NULL;
-                if (menuChoice == LOAD_NN)
+                if (menuChoice == LOAD_NN || menuChoice == TRAIN_NN)
 				    path = findNextPathNN(entity, endNode, data, neuralNetwork);
-				else if (menuChoice == LOAD_GN)
+				else if (menuChoice == LOAD_GN || menuChoice == TRAIN_GN)
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
 				
 		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30);

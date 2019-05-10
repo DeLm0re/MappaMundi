@@ -123,6 +123,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
         }
         
 	    int timeStartGeneration = clock();
+	    int sumScoreGeneration = 0;
 	    int networkIndex;
 	    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
 	    {
@@ -165,6 +166,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
 		        geneticNetworks->score[networkIndex] += getNbNode(&path);
 		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0);
 	        }
+	        sumScoreGeneration += geneticNetworks->score[networkIndex];
 	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
 	        printf("Gen : %d, member : %d, time : %.3f sec, score : %.0f\n", generationIndex, networkIndex, geneticNetworks->time[networkIndex], geneticNetworks->score[networkIndex]);
 	        
@@ -172,7 +174,8 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
 	        destructNodes(&startNode);
 		    destructNodes(&endNode);
 	    }
-	    printf("\taverage time : %.3f sec\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC)/nbMember);
+	    printf("\ttotal time : %.3f sec\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC));
+	    printf("\taverage time : %.3f sec, average score %.3f\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC)/nbMember, sumScoreGeneration/((float)nbMember));
 	    sortGeneticNetworks(geneticNetworks);
 	    printf("\tbest : score : %.3f, time : %.3f\n", geneticNetworks->score[0], geneticNetworks->time[0]);
 	    
@@ -181,6 +184,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
     
 	LabelingWeights* labelingWeights = geneticNetworks->list[0];
 
+    printf("\n");
     printf("\tdist : %f\n", labelingWeights->weights[DIST]);
     printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
     printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
