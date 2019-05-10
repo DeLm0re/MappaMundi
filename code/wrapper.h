@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_WRAPPER
+    #define H_WRAPPER
+
 #include <pthread.h>
 #include <SDL2/SDL.h>
 #include "prototype.h"
@@ -114,3 +117,5 @@ NeuralNetwork *trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char
  * 		void
  */
 void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize);
+
+#endif
