@@ -38,13 +38,12 @@
 NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int fieldWidth, char *savingPathNN);
 
 /**
- * \fn NeuralNetwork* trainingGN1(int visionRange, dataType *data, int fieldHeight, int fieldWidth, char *savingPathGN)
+ * \fn NeuralNetwork* trainingGN1(int visionRange, dataType *data, Field* theField, char *savingPathGN)
  * \brief creates a neural network and trains it on randomly generated fields of view, then saves it
  * 
  * \param
  * 		data : structure which define the kind of event we have to raise for interruption
- * 		fieldHeight : height of the field
- * 		fieldWidth : width of the field
+ *      theField : the field on which the genetic network will be trained
  * 		savingPathGN : path where to save the genetic network
  *      basePathGN : path to a genetic network from which the first generation will be based on.
  *                  If NULL, then a default first generation will be created
@@ -53,7 +52,7 @@ NeuralNetwork *trainingNN1(int visionRange, dataType *data, int fieldHeight, int
  * \return
  * 		LabelingWeights*
  */
-LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, char *savingPathGN, char* basePathGN, int nbGeneration, int nbMember);
+LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN, char* basePathGN, int nbGeneration, int nbMember);
 
 /**
  * \fn void moveEntityAlongPath(Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, dataType* data, bool displayOn)

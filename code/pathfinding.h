@@ -90,6 +90,15 @@ node* popNode(node** frontNode);
 node* getLastNode(node** frontNode);
 
 /**
+ * \fn int getNbNode(node** frontNode)
+ * \brief function which return the number of node in the path
+ *
+ * \param frontNode : the top node of a chain list of node
+ * \return int
+ */
+int getNbNode(node** frontNode);
+
+/**
  * \fn void rmvNode(node** frontNode, node* nodeToRemove)
  * \brief function which pop out a given node from a chain list of node
  *
