@@ -71,11 +71,12 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
  *      renderer : the SDL renderer, use to visualize the entity on the map
  *      tileSize : the size of one tile on the map
  *      animationDelay : the amount of milliseconds the function will wait before each step of the entity
- *
+ *		stats : the structure used to store statistics
+ * 
  * \return
  * 		LabelingWeights*
  */
-void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay);
+void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay, Statistics *stats);
 
 /**
  * \fn void waitForInstruction(dataType *data)

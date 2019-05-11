@@ -165,7 +165,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 		        }
 		        free(wantedPosition);
 		        
-		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0);
+		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0, NULL);
 	        }
 	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
 	        printf("Gen : %d, member : %d, time : %.3f sec, score : %.0f\n", generationIndex, networkIndex, geneticNetworks->time[networkIndex], geneticNetworks->score[networkIndex]);
@@ -217,11 +217,12 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
  *      renderer : the SDL renderer, use to visualize the entity on the map
  *      tileSize : the size of one tile on the map
  *      animationDelay : the amount of milliseconds the function will wait before each step of the entity
- *
+ *		stats : the structure used to store statistics
+ * 
  * \return
  * 		LabelingWeights*
  */
-void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay)
+void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay, Statistics *stats)
 {
     node* nodePosition = popNode(&pathToFollow);
     //Move the entity along the path
@@ -229,6 +230,9 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
     {
         entity->x = nodePosition->x;
         entity->y = nodePosition->y;
+
+		if(stats != NULL)
+			stats->data[NB_STEPS] += 1;
 
         updateFieldOfViewEntity(theField, entity);
         updateMentalMapEntity(entity);
@@ -357,7 +361,7 @@ void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field,
 		//We make the neural network learn
 		superviseLearningNeuralNetwork(neuralNetwork, input, expectedOutput, 0.2, 0.1);
 
-		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 1);
+		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 1, NULL);
 		
 		destructNodes(&expectedNode);
 		destructNodes(&choice);
