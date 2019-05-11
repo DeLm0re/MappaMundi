@@ -10,12 +10,12 @@
  */
 
 #include "wrapper.h"
-#include <time.h>
 
 #define FIELD_WIDTH 20
 #define FIELD_HEIGHT 20
 #define SAVING_PATH_NN "../NN/Reseau1.nn"
 #define SAVING_PATH_GN "../GN"
+
 
 //Main of the programme
 int main(int argc, char** argv)
@@ -168,7 +168,13 @@ int main(int argc, char** argv)
 			{
 				node *path = NULL;
                 if (menuChoice == LOAD_NN)
-				    path = findNextPathNN(entity, endNode, data, neuralNetwork);
+				{
+					float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
+					float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+				    path = findNextPathNN2(entity, data, output);
+					free(input);
+					free(output);
+				}
 				else if (menuChoice == LOAD_GN)
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
 				
