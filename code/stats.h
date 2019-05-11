@@ -31,4 +31,6 @@ bool writeStatsIntoFile(Statistics *stats, char *path);
 void startClock(Statistics *stats);
 void endClock(Statistics *stats);
 
+void initStats(Statistics *stats, const char *mapName, const char *networkName);
+
 #endif

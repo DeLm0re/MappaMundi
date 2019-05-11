@@ -71,6 +71,8 @@ int main(int argc, char** argv)
 
 		NeuralNetwork* neuralNetwork = NULL;
 		LabelingWeights* labelingWeights = NULL;
+
+		Statistics stats;
 		
 		Field *theField = NULL;
 		int fieldHeight = FIELD_WIDTH;
@@ -150,6 +152,9 @@ int main(int argc, char** argv)
 		
 		while(!data->endEvent)
 		{   
+			//Initialize the statistics
+			initStats(&stats, pathImageField, argv[2]);
+
 			//Initiate the entity, the start and end of the route according to the field
 			Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 			node* startNode = nearestNode(theField, entity->x, entity->y);

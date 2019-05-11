@@ -85,3 +85,22 @@ void endClock(Statistics *stats)
 		stats->data[EXECUTION_TIME] = (float)(stats->endTime - stats->startTime) / CLOCKS_PER_SEC;
 	}
 }
+
+void initStats(Statistics *stats, const char *mapName, const char *networkName)
+{
+    if(stats != NULL)
+    {
+        if(mapName != NULL)
+            stats->mapId = mapName;
+        else
+            stats->mapId = "Random";
+        if(networkName != NULL)
+            stats->nnId = networkName;
+        else
+            stats->nnId = "Unknown name";
+
+        int i;
+        for(i = 0; i < SIZEOFSTAT; i++)
+            stats->data[i] = 0;
+    }
+}
