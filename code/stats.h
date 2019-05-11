@@ -20,6 +20,7 @@ typedef enum {NB_STEPS = 0, NB_FOG_REVEALED, EXECUTION_TIME, SIZEOFSTAT} StatInd
 
 typedef struct Statistics
 {
+    const char *mapId, *nnId;
     float data[SIZEOFSTAT];
     clock_t startTime, endTime;
 } Statistics;

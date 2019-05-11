@@ -42,11 +42,16 @@ bool writeStatsIntoFile(Statistics *stats, char *path)
             
             if(fileIsNew)
             {
-                fputs("Number of steps, Number of fog tiles revealed, Execution time", file);
+                fputs("Map, Neural network, Number of steps, Number of fog tiles revealed, Execution time", file);
             }
             
             fputs(lineJump, file);
             
+            fputs(stats->mapId, file);
+            fputs(separator, file);
+            fputs(stats->nnId, file);
+            fputs(separator, file);
+
             int i;
             for(i = 0; i < SIZEOFSTAT; i++)
             {
