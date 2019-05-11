@@ -11,11 +11,26 @@
 
 #include "stats.h"
 
-bool writeStatsIntoFile(Statistics *stats, char *path, bool fileIsNew) 
+bool fileExists(const char * fileName)
+{
+    FILE *file;
+    if( (file = fopen(fileName, "r")) )
+    {
+        fclose(file);
+        return true;
+    }
+    return false;
+}
+
+bool writeStatsIntoFile(Statistics *stats, char *path) 
 {
     FILE* file;
 	if(stats != NULL)
     {
+        bool fileIsNew = true;
+        if(fileExists(path))
+            fileIsNew = false;
+
         char *fopenParam = "a";
         if(fileIsNew)
             fopenParam = "w";

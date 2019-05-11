@@ -24,7 +24,8 @@ typedef struct Statistics
     clock_t startTime, endTime;
 } Statistics;
 
-bool writeStatsIntoFile(Statistics *stats, char *path, bool fileIsNew);
+bool fileExists(const char * fileName);
+bool writeStatsIntoFile(Statistics *stats, char *path);
 
 void startClock(Statistics *stats);
 void endClock(Statistics *stats);
