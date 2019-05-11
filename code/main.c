@@ -13,7 +13,7 @@
 
 #define FIELD_WIDTH 20
 #define FIELD_HEIGHT 20
-#define SAVING_PATH_NN "../NN/Reseau1.nn"
+#define SAVING_PATH_NN "../NN"
 #define SAVING_PATH_GN "../GN"
 
 
@@ -23,8 +23,8 @@ int main(int argc, char** argv)
 	if (argc < 2) 
 	{
 		printf("Please, enter an argument : \n");
-		printf(" 1 [pathMap] : \n\tCreate a new neural network and train it on a random map or on an existing map\n");
-		printf(" 2 [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
+		printf(" 1 : \n\tCreate a new neural network and train it on a random map\n");
+		printf(" 2 pathNeuralNetwork [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
 		printf(" 3 [pathGeneticNetwork] : \n\tStart a new genetic network and train it or use an existing one as reference\n");
 		printf(" 4 pathGeneticNetwork [pathMap] : \n\tLoad an existing genetic network and test it on a random map or on an existing map\n");
 	}
@@ -83,15 +83,10 @@ int main(int argc, char** argv)
         // We extract the path pf the image if it exist
         switch (menuChoice)
 		{
-			//New neural network
-			case TRAIN_NN:
-			    if (argc == 3)
-	                pathImageField = argv[2];
-				break;
 			//Load neural network
 			case LOAD_NN:
-			    if (argc == 3)
-			    pathImageField = argv[2];
+			    if (argc == 4)
+			    	pathImageField = argv[3];
 				break;
 			//Load genetic network
 			case LOAD_GN:
@@ -125,7 +120,10 @@ int main(int argc, char** argv)
 			//Load neural network
 			case LOAD_NN:
 				SDL_ShowWindow(window);
-				neuralNetwork = loadNeuralNetwork(SAVING_PATH_NN);
+				if (argc >= 3)
+                    neuralNetwork = loadNeuralNetwork(argv[2]);
+                else
+                    printf("Error : Invalid arguments\n");
 				break;
 			//New genetic network
 			case TRAIN_GN:
