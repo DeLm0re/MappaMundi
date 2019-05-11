@@ -14,14 +14,19 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
-typedef enum StatIndex {NB_STEPS = 0, NB_FOG_REVEALED, EXECUTION_TIME, SIZEOFSTAT};
+typedef enum {NB_STEPS = 0, NB_FOG_REVEALED, EXECUTION_TIME, SIZEOFSTAT} StatIndex;
 
 typedef struct Statistics
 {
     float data[SIZEOFSTAT];
+    clock_t startTime, endTime;
 } Statistics;
 
 bool writeStatsIntoFile(Statistics *stats, char *path, bool fileIsNew);
+
+void startClock(Statistics *stats);
+void endClock(Statistics *stats);
 
 #endif

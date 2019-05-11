@@ -27,8 +27,7 @@ bool writeStatsIntoFile(Statistics *stats, char *path, bool fileIsNew)
             
             if(fileIsNew)
             {
-                const char *header = "Number of steps, Number of fog tiles revealed, Execution time";
-                fputs(header, file);
+                fputs("Number of steps, Number of fog tiles revealed, Execution time", file);
             }
             
             fputs(lineJump, file);
@@ -48,4 +47,21 @@ bool writeStatsIntoFile(Statistics *stats, char *path, bool fileIsNew)
     }
 
     return false;
+}
+
+void startClock(Statistics *stats)
+{
+	if(stats != NULL)
+	{
+		stats->startTime = clock();
+	}
+}
+
+void endClock(Statistics *stats)
+{
+	if(stats != NULL)
+	{
+		stats->endTime = clock();
+		stats->data[EXECUTION_TIME] = (float)(stats->endTime - stats->startTime) / CLOCKS_PER_SEC;
+	}
 }
