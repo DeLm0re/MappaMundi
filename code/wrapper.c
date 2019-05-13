@@ -304,16 +304,21 @@ NeuralNetwork *trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char
 	int nbMap = 0;
 
 	// While the neural network is not correct 100% of the time
-	while (nbMap <= 1000000 && !data->endEvent)
+	while (nbMap < 1000 && !data->endEvent)
 	{
+		nbMap++;
 		printf("Step n°%d\n", nbMap);
 		trainNN2onField(neuralNetwork, data, field, renderer, tileSize);
 		generateEnv(field);
-		nbMap++;
 	}
 
-	saveNeuralNetwork(neuralNetwork, savingPathNN);
-
+    char strBuffer[256] = "";
+    sprintf(strBuffer, "%s/network%dm%dx%d.nn", savingPathNN, nbMap, fieldWidth, fieldHeight);
+	if(saveNeuralNetwork(neuralNetwork, strBuffer))
+		printf("End of learning. Neural network saved as %s\n", strBuffer);
+	else
+		printf("Unable to save file %s\n", strBuffer);
+	
 	return neuralNetwork;
 }
 
