@@ -27,6 +27,8 @@ typedef struct Statistics
 
 bool fileExists(const char * fileName);
 bool writeStatsIntoFile(Statistics *stats, char *path);
+void startDecisionClock(Statistics *stats);
+void endDecisionClock(Statistics *stats);
 
 void startClock(Statistics *stats);
 void endClock(Statistics *stats);

@@ -69,7 +69,7 @@ bool writeStatsIntoFile(Statistics *stats, char *path)
     return false;
 }
 
-void startClock(Statistics *stats)
+void startDecisionClock(Statistics *stats)
 {
 	if(stats != NULL)
 	{
@@ -77,7 +77,7 @@ void startClock(Statistics *stats)
 	}
 }
 
-void endClock(Statistics *stats)
+void endDecisionClock(Statistics *stats)
 {
 	if(stats != NULL)
 	{
