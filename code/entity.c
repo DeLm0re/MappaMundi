@@ -836,7 +836,7 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
                     wallPoint++;
                     break;
                 case FOG:
-                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
+                    if(isVisibleFrom(fieldOfView, (fieldOfView->width-1)/2, (fieldOfView->height-1)/2, width, height))
                     {
                         avgDistFog += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
                         fogPoint++;
@@ -920,7 +920,7 @@ float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity
                     wallPoint++;
                     break;
                 case FOG:
-                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
+                    if(isVisibleFrom(fieldOfView, (fieldOfView->width-1)/2, (fieldOfView->height-1)/2, width, height))
                     {
                         avgDistFog += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
                         fogPoint++;
