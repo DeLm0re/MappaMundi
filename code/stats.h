@@ -32,5 +32,6 @@ void startClock(Statistics *stats);
 void endClock(Statistics *stats);
 
 void initStats(Statistics *stats, const char *mapName, const char *networkName);
+char *getLastElementOfString(const char *path, const char *delimiters, int nbElements);
 
 #endif

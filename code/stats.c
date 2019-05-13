@@ -104,3 +104,23 @@ void initStats(Statistics *stats, const char *mapName, const char *networkName)
             stats->data[i] = 0;
     }
 }
+char *getLastElementOfString(const char *path, const char *delimiters, int nbElements)
+{
+    char copy[strlen(path)];
+    strcpy(copy, path);
+    char *part = strtok(copy, delimiters);
+    char *array[nbElements];
+    int partIndex = 0;
+
+    while (part != NULL)
+    {
+        array[partIndex++] = part;
+        part = strtok (NULL, delimiters);
+    }
+
+    int sizeOfResult = strlen(array[partIndex - 1]);
+    char *result = (char*)malloc(sizeOfResult*sizeof(char));
+    strcpy(result, array[partIndex - 1]);
+    
+    return result;    
+}
