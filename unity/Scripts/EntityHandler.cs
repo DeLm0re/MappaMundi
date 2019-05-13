@@ -344,4 +344,24 @@ public class EntityHandler : MonoBehaviour
         this.waitSecondToMove = value;
     }
 
+    public int[,] getMentalMap()
+    {
+        return this.mentalMap;
+    }
+
+    public int getPointFromMentalMap(int x, int y)
+    {
+        return this.mentalMap[x,y];
+    }
+
+    public int getXEntity()
+    {
+        return this.xEntity;
+    }
+
+    public int getYEntity()
+    {
+        return this.yEntity;
+    }
+
 }
