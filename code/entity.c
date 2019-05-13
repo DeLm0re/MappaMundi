@@ -176,7 +176,7 @@ void updateMentalMapEntity(Entity *entity)
                 pointEnum mentalMapPoint = entity->mentalMap->data[pointWidth][pointHeight];
 
                 //Check if the old value of the point was FOG before updating it
-                if(mentalMapPoint == FOG)
+                if(mentalMapPoint == FOG && pointValue != FOG)
                 {
                     entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
                 }
