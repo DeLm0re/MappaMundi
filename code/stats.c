@@ -22,11 +22,15 @@ bool fileExists(const char * fileName)
     return false;
 }
 
-bool writeStatsIntoFile(Statistics *stats, char *path) 
+bool writeStatsIntoFile(Statistics *stats, char *folderPath)
 {
     FILE* file;
 	if(stats != NULL)
     {
+        int pathLength = strlen(folderPath) + strlen(stats->mapId) + strlen(stats->nnId) + sizeof("/m-net.stat");
+	    char *path = (char*)malloc(pathLength * sizeof(char));
+	    sprintf(path, "%s/m%s-net%s.stat", folderPath, stats->mapId, stats->nnId);
+
         bool fileIsNew = true;
         if(fileExists(path))
             fileIsNew = false;
@@ -42,7 +46,7 @@ bool writeStatsIntoFile(Statistics *stats, char *path)
             
             if(fileIsNew)
             {
-                fputs("Map, Neural network, Number of steps, Number of fog tiles revealed, Execution time", file);
+                fputs("Map, Neural network, Number of steps, Number of fog tiles revealed, Number of decisions taken, Average time to take a decision", file);
             }
             
             fputs(lineJump, file);
@@ -82,20 +86,28 @@ void endDecisionClock(Statistics *stats)
 	if(stats != NULL)
 	{
 		stats->endTime = clock();
-		stats->data[EXECUTION_TIME] = (float)(stats->endTime - stats->startTime) / CLOCKS_PER_SEC;
+		stats->data[AVG_EXECUTION_TIME] += (float)(stats->endTime - stats->startTime) / CLOCKS_PER_SEC;
 	}
 }
 
-void initStats(Statistics *stats, const char *mapName, const char *networkName)
+void initStats(Statistics *stats, const char *mapPath, const char *networkPath)
 {
     if(stats != NULL)
     {
-        if(mapName != NULL)
+        if(mapPath != NULL)
+        {
+            char *mapName = (char*)malloc(strlen(mapPath) * sizeof(char)) ;
+            mapName = getLastElementOfString(mapPath, "/", 3);
             stats->mapId = mapName;
+        }
         else
             stats->mapId = "Random";
-        if(networkName != NULL)
+        if(networkPath != NULL)
+        {
+            char *networkName = (char*)malloc(strlen(networkPath) * sizeof(char));
+            networkName = getLastElementOfString(networkPath, "/", 3);
             stats->nnId = networkName;
+        }
         else
             stats->nnId = "Unknown name";
 
@@ -104,6 +116,16 @@ void initStats(Statistics *stats, const char *mapName, const char *networkName)
             stats->data[i] = 0;
     }
 }
+
+void endStatsComputations(Statistics *stats)
+{
+    if(stats != NULL)
+    {
+        if(stats->data[NB_DECISIONS] > 0)
+            stats->data[AVG_EXECUTION_TIME] = stats->data[AVG_EXECUTION_TIME] / stats->data[NB_DECISIONS];
+    }
+}
+
 char *getLastElementOfString(const char *path, const char *delimiters, int nbElements)
 {
     char copy[strlen(path)];

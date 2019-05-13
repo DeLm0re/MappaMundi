@@ -15,8 +15,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
+#include "rioFunction.h"
 
-typedef enum {NB_STEPS = 0, NB_FOG_REVEALED, EXECUTION_TIME, SIZEOFSTAT} StatIndex;
+typedef enum {NB_STEPS = 0, NB_FOG_REVEALED, NB_DECISIONS, AVG_EXECUTION_TIME, SIZEOFSTAT} StatIndex;
 
 typedef struct Statistics
 {
@@ -26,14 +28,14 @@ typedef struct Statistics
 } Statistics;
 
 bool fileExists(const char * fileName);
-bool writeStatsIntoFile(Statistics *stats, char *path);
+bool writeStatsIntoFile(Statistics *stats, char *folderPath);
+
 void startDecisionClock(Statistics *stats);
 void endDecisionClock(Statistics *stats);
 
-void startClock(Statistics *stats);
-void endClock(Statistics *stats);
+void initStats(Statistics *stats, const char *mapPath, const char *networkPath);
+void endStatsComputations(Statistics *stats);
 
-void initStats(Statistics *stats, const char *mapName, const char *networkName);
 char *getLastElementOfString(const char *path, const char *delimiters, int nbElements);
 
 #endif
