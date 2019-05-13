@@ -163,9 +163,9 @@ int main(int argc, char** argv)
 			entity->y = startNode->y;
 			destructNodes(&startNode);
 			node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
-			
+
 			updateFieldOfViewEntity(theField, entity);
-			updateMentalMapEntity(entity);
+			updateMentalMapEntity(entity, &stats);
 		    
 			//While the entity hasn't arrived at destination
 			while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)

@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <math.h>
+#include "stats.h"
 #include "eventhandler.h"
 #include "pathfinding.h"
 #include "neuralNetwork.h"
@@ -115,9 +116,10 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  * \brief function that update the mental map of an entity
  *
  * \param entity : the Entity to update
+ * \param stats : the structure we use to store statistics
  * \return void
  */
-void updateMentalMapEntity(Entity *entity);
+void updateMentalMapEntity(Entity *entity, Statistics *stats);
 
 /**
  * \fn void updateFieldOfViewEntity(Field *aField, Entity *entity)

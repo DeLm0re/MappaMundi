@@ -143,7 +143,7 @@ LabelingWeights *trainingGN1(dataType *data, int fieldHeight, int fieldWidth, ch
 	            !data->endEvent)
 	        {
 		        updateFieldOfViewEntity(theField, entity);
-		        updateMentalMapEntity(entity);
+		        updateMentalMapEntity(entity, NULL);
 		        
 		        updateInterestField2(interestField, entity->mentalMap, endNode->x, endNode->y, entity->visionRange, geneticNetworks->list[networkIndex]);
 		
@@ -235,7 +235,7 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
 			stats->data[NB_STEPS] += 1;
 
         updateFieldOfViewEntity(theField, entity);
-        updateMentalMapEntity(entity);
+        updateMentalMapEntity(entity, stats);
         
         free(nodePosition);
         nodePosition = popNode(&pathToFollow);
@@ -353,7 +353,7 @@ void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field,
 		//Updates the field of view of our entity
 		updateFieldOfViewEntity(field, entity);
 		//Updates the mental map of our entity with its new field of view
-		updateMentalMapEntity(entity);
+		updateMentalMapEntity(entity, NULL);
 
 		float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
 		float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
