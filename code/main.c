@@ -178,6 +178,7 @@ int main(int argc, char** argv)
 					float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
 				    path = findNextPathNN2(entity, data, output);
 					endDecisionClock(&stats);
+					stats.data[NB_DECISIONS]++;
 					free(input);
 					free(output);
 				}
@@ -186,6 +187,7 @@ int main(int argc, char** argv)
 					startDecisionClock(&stats);
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
 					endDecisionClock(&stats);
+					stats.data[NB_DECISIONS]++;
 				}
 				
 		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30, &stats);
