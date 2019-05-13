@@ -488,6 +488,35 @@ void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Enti
 }
 
 /**
+ * \fn void updateInterestField3(InterestField* interestField, Entity* entity, LabelingWeights* labelingWeights)
+ * \brief function that change the values in an interest field according to the labelisation function
+ *
+ * \param InterestField* interestField : the interest field that will be update
+ * \param Entity* entity : the entity on which we base the update of the interest field
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+
+ * \return void
+ */
+void updateInterestField3(InterestField* interestField, Entity* entity, LabelingWeights* labelingWeights)
+{
+    if (interestField != NULL && entity != NULL && labelingWeights != NULL)
+    {
+        int width, height;
+        for(width = 0; width < interestField->width; width++)
+        {
+            for(height = 0; height < interestField->height; height++)
+            {
+                Field* fieldOfView = getFieldOfViewFromMap(entity->mentalMap, width, height, entity->visionRange);
+                
+                interestField->data[width][height] = labeling4(fieldOfView, width, height, entity, labelingWeights);
+                
+                destructField(&fieldOfView);
+            }
+        }
+    }
+}
+
+/**
  * \fn void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
  * \brief function that change the coordinate of a node to the best coordinate on the interest field.
  * This is use to get the position where our entity will go next.
@@ -631,6 +660,95 @@ node *findNextPathNN2(Entity *entity, dataType *data, float *output)
 }
 
 /**
+ *  \fn node *findNextPathGN(Entity *entity, node *startNode, node *endNode, dataType *data, LabelingWeights* labelingWeights)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param endNode : position of destination
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \labelingWeights : genetic network used to take the decision
+ *  
+ * \return node*
+ */
+node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeights* labelingWeights)
+{
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    //We initialize an interest field
+    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
+
+    //We update each values of the interest field with what our neural network think
+    updateInterestField2(interestField, endNode->x, endNode->y, entity, labelingWeights);
+    
+    //We set a default wanted node
+    node *wantedPosition = cpyNode(endNode);
+    
+    //Use to store the path found by the pathfinding
+    node* path = NULL;
+    //We try to find a path
+    while((path == startNode || path == NULL) && !data->endEvent)
+    {
+        destructNodes(&path);
+        //We try to find a path
+        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+        //If we haven't find a path
+        if ((path == startNode || path == NULL))
+        {
+            //We change our wanted node to the best position found by the neural network
+            updateBestWantedPosition(wantedPosition, interestField);
+        }
+    }
+    destructInterestField(&interestField);
+    destructNodes(&wantedPosition);
+
+    return path;
+}
+
+/**
+ * \fn node *findNextPathGN2(Entity *entity, node *startNode, dataType *data, LabelingWeights* labelingWeights)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \labelingWeights : genetic network used to take the decision
+ *  
+ * \return node*
+ */
+node *findNextPathGN2(Entity *entity, dataType *data, LabelingWeights* labelingWeights)
+{
+    node *startNode = initNode(entity->x, entity->y, 0, 0);
+    //We initialize an interest field
+    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
+
+    //We update each values of the interest field with what our neural network think
+    updateInterestField3(interestField, entity, labelingWeights);
+    
+    //We set a default wanted node
+    node *wantedPosition = initNode(0, 0, 0, 0);
+    
+    //Use to store the path found by the pathfinding
+    node* path = NULL;
+    //We try to find a path
+    while((path == startNode || path == NULL) && !data->endEvent)
+    {
+        if ((path == startNode || path == NULL))
+        {
+            //We change our wanted node to the best position found by the neural network
+            updateBestWantedPosition(wantedPosition, interestField);
+        }
+        
+        destructNodes(&path);
+        //We try to find a path
+        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+        //If we haven't find a path
+       
+    }
+    destructInterestField(&interestField);
+    destructNodes(&wantedPosition);
+
+    return path;
+}
+
+/**
  * \fn node* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
  * \brief function that returns the expected choice for the neural network
  *
@@ -755,6 +873,88 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
 }
 
 /**
+ * \fn float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity, LabelingWeights* labelingWeights)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the center of the field of view
+ * \param int yPosition : y coordinate of the center of the field of view
+ * \param Entity* entity : the entity which uses the function to navigate (only use his coordiantes)
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+ * \return float
+ */
+float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity, LabelingWeights* labelingWeights)
+{
+    float emptyPoint = 0;
+    float wallPoint = 0;
+    float fogPoint = 0;
+    float visitedPoint = 0;
+    float avgDistEmpty = 0;
+    float avgDistWall = 0;
+    float avgDistFog = 0;
+    float avgDistVisited = 0;
+    float distFromEntity = 0;
+    float value = 0;
+    float centerPointx = (fieldOfView->width-1)/2;
+    float centerPointy = (fieldOfView->height-1)/2;
+
+
+    if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
+    {
+        return -INFINITY;
+    }
+    
+    for(int width = 0; width < fieldOfView->width; width++)
+    {
+        for(int height = 0; height < fieldOfView->height; height++)
+        {
+            switch (fieldOfView->data[width][height])
+            {
+                case EMPTY:
+                    avgDistEmpty += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                    emptyPoint++;
+                    break;
+                case WALL:
+                    avgDistWall += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                    wallPoint++;
+                    break;
+                case FOG:
+                    if(isVisibleFrom(fieldOfView, (fieldOfView->height-1)/2, (fieldOfView->width-1)/2, width, height))
+                    {
+                        avgDistFog += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                        fogPoint++;
+                    }
+                    break;
+                case VISITED:
+                    avgDistVisited += sqrt(pow(width-centerPointx,2) + pow(height-centerPointy,2));
+                    visitedPoint++;
+                    break;
+            }
+        }
+    }
+
+    distFromEntity = sqrt(pow(entity->x-xPosition,2) + pow(entity->y-yPosition,2));
+
+    avgDistEmpty /= emptyPoint;
+    avgDistWall /= wallPoint;
+    avgDistFog /= fogPoint;
+    avgDistVisited /= visitedPoint;
+
+    value = emptyPoint*labelingWeights->weights[NB_EMPTY]+
+            wallPoint*labelingWeights->weights[NB_WALL]+
+            fogPoint*labelingWeights->weights[NB_FOG]+
+            visitedPoint*labelingWeights->weights[NB_VISITED]+
+            avgDistEmpty*labelingWeights->weights[AVG_DIST_EMPTY]+
+            avgDistWall*labelingWeights->weights[AVG_DIST_WALL]+
+            avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
+            avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED]+
+            distFromEntity*labelingWeights->weights[DIST_FROM_ENTITY];
+
+    return value;
+}
+
+/**
  * \fn float* convertLabeling2(int fieldWidth, int fieldHeight, node *label)
  * \brief function that converts a label2 into a valid output of neural network
  *
@@ -775,48 +975,4 @@ float *convertLabeling2(int fieldWidth, int fieldHeight, node *label)
     output[label->y + label->x * fieldHeight] = 1;
 
     return output;
-}
-
-/**
- *  \fn node *findNextPathGN(Entity *entity, node *startNode, node *endNode, dataType *data, LabelingWeights* labelingWeights)
- * \brief returns the next path chosen by a given neural network
- *
- * \param entity : entity to move
- * \param endNode : position of destination
- * \param data : structure which define the kind of event we have to raise for interruption
- * \labelingWeights : genetic network used to take the decision
- *  
- * \return node*
- */
-node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeights* labelingWeights)
-{
-    node *startNode = initNode(entity->x, entity->y, 0, 0);
-    //We initialize an interest field
-    InterestField* interestField = initialiseInterestField(entity->mentalMap->width, entity->mentalMap->height);
-
-    //We update each values of the interest field with what our neural network think
-    updateInterestField2(interestField, endNode->x, endNode->y, entity, labelingWeights);
-    
-    //We set a default wanted node
-    node *wantedPosition = cpyNode(endNode);
-    
-    //Use to store the path found by the pathfinding
-    node* path = NULL;
-    //We try to find a path
-    while((path == startNode || path == NULL) && !data->endEvent)
-    {
-        destructNodes(&path);
-        //We try to find a path
-        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
-        //If we haven't find a path
-        if ((path == startNode || path == NULL))
-        {
-            //We change our wanted node to the best position found by the neural network
-            updateBestWantedPosition(wantedPosition, interestField);
-        }
-    }
-    destructInterestField(&interestField);
-    destructNodes(&wantedPosition);
-
-    return path;
 }

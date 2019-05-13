@@ -113,4 +113,13 @@ Field* generateRandomFieldOfView(int visionRange, bool isValid);
  */
 bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition);
 
+/**
+ * \fn int getNbFog(Field* field)
+ * \brief function that returns the number of fog tile in a field
+ *
+ * \param Field* field : the field where we will count the number of fog tile
+ * \return int
+ */
+int getNbFog(Field* field);
+
 #endif

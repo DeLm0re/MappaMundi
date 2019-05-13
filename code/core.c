@@ -325,4 +325,29 @@ bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, 
     return isVisible;
 }
 
+/**
+ * \fn int getNbFog(Field* field)
+ * \brief function that returns the number of fog tile in a field
+ *
+ * \param Field* field : the field where we will count the number of fog tile
+ * \return int
+ */
+int getNbFog(Field* field)
+{
+    int nbFog = 0;
+    if (field != NULL)
+    {
+        int width;
+        for (width = 0; width < field->width; width++)
+        {
+            int height;
+            for (height = 0; height < field->height; height++)
+            {
+                if (field->data[width][height] == FOG)
+                    nbFog++;
+            }
+        }
+    }
+    return nbFog;
+}
 
