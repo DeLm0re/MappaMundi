@@ -27,15 +27,93 @@ typedef struct Statistics
     clock_t startTime, endTime;
 } Statistics;
 
-bool fileExists(const char * fileName);
+/**
+ * \fn bool fileExists(const char * fileName)
+ * \brief verify if a file exists or not given its path. Returns true if it exists, false otherwise
+ * 
+ * \param
+ *      filePath : path to the file to verify
+ *
+ * \return
+ * 		bool
+ */
+bool fileExists(const char * filePath);
+
+/**
+ * \fn bool writeStatsIntoFile(Statistics *stats, char *folderPath)
+ * \brief writes given statistics in a file in the folder specified in parameter, then prompts a message. 
+ *        The file name is generated with the statistics informations. Returns true if successfully saves, false otherwise.         
+ * 
+ * \param
+ *      stats : statistics to save
+ *      folderPath : path where to save the statistics
+ *
+ * \return
+ * 		bool
+ */
 bool writeStatsIntoFile(Statistics *stats, char *folderPath);
 
+/**
+ * \fn void startDecisionClock(Statistics *stats)
+ * \brief start the clock used to measure execution time of a neural network
+ * 
+ * \param
+ *      stats : structure used to store statistics
+ *
+ * \return
+ * 		void
+ */
 void startDecisionClock(Statistics *stats);
+
+/**
+ * \fn void endDecisionClock(Statistics *stats)
+ * \brief end the clock used to measure execution time of a neural network and add it the the stat structure.
+ *        Must call endStatsComputations function at the end of the statistics gathering to compute the average execution time.
+ * 
+ * \param
+ *      stats : structure used to store statistics
+ * \return
+ * 		void
+ */
 void endDecisionClock(Statistics *stats);
 
+/**
+ * \fn void initStats(Statistics *stats, const char *mapPath, const char *networkPath)
+ * \brief initialize a strucutre statistics with default values and the name of the map and neural network used
+ * 
+ * \param
+ *      stats : structure to initialize
+ *      mapPath : path of the map used in this simulation
+ *      networkPath : path of the neural network used on this map
+ *
+ * \return
+ * 		void
+ */
 void initStats(Statistics *stats, const char *mapPath, const char *networkPath);
+
+/**
+ * \fn void endStatsComputations(Statistics *stats)
+ * \brief compute the final values of the statistics, like averages
+ * 
+ * \param
+ *      stats : statistics to finalize
+ *
+ * \return
+ * 		void
+ */
 void endStatsComputations(Statistics *stats);
 
-char *getLastElementOfString(const char *path, const char *delimiters, int nbElements);
+/**
+ * \fn char *getLastElementOfString(const char *path, const char *delimiters, int nbElements)
+ * \brief returns the last element of a string, given the delimitersbetween elements and the number of elements
+ * 
+ * \param
+ *      str : string to split
+ *      delimiters : delimiters between each element
+ *      nbElements : number of elements in str
+ * \return
+ * 		char*
+ */
+char *getLastElementOfString(const char *str, const char *delimiters, int nbElements);
 
 #endif
