@@ -27,9 +27,9 @@ bool writeStatsIntoFile(Statistics *stats, char *folderPath)
     FILE* file;
 	if(stats != NULL)
     {
-        int pathLength = strlen(folderPath) + strlen(stats->mapId) + strlen(stats->nnId) + sizeof("/m-net.stat");
+        int pathLength = strlen(folderPath) + strlen(stats->mapId) + strlen(stats->nnId) + sizeof("/-.stat");
 	    char *path = (char*)malloc(pathLength * sizeof(char));
-	    sprintf(path, "%s/m%s-net%s.stat", folderPath, stats->mapId, stats->nnId);
+	    sprintf(path, "%s/%s-%s.stat", folderPath, stats->mapId, stats->nnId);
 
         bool fileIsNew = true;
         if(fileExists(path))
