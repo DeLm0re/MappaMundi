@@ -141,7 +141,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
 	            !data->endEvent)
 	        {
 		        updateFieldOfViewEntity(theField, entity);
-		        updateMentalMapEntity(entity);
+		        updateMentalMapEntity(entity, NULL);
 		        
 		        updateInterestField2(interestField, endNode->x, endNode->y, entity, geneticNetworks->list[networkIndex]);
 		
@@ -164,7 +164,7 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
 		        free(wantedPosition);
 		        
 		        geneticNetworks->score[networkIndex] += getNbNode(&path);
-		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0);
+		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0, NULL);
 	        }
 	        sumScoreGeneration += geneticNetworks->score[networkIndex];
 	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
@@ -219,11 +219,12 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
  *      renderer : the SDL renderer, use to visualize the entity on the map
  *      tileSize : the size of one tile on the map
  *      animationDelay : the amount of milliseconds the function will wait before each step of the entity
- *
+ *		stats : the structure used to store statistics
+ * 
  * \return
  * 		LabelingWeights*
  */
-void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay)
+void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay, Statistics *stats)
 {
     node* nodePosition = popNode(&pathToFollow);
     //Move the entity along the path
@@ -232,8 +233,11 @@ void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Fie
         entity->x = nodePosition->x;
         entity->y = nodePosition->y;
 
+		if(stats != NULL)
+			stats->data[NB_STEPS] += 1;
+
         updateFieldOfViewEntity(theField, entity);
-        updateMentalMapEntity(entity);
+        updateMentalMapEntity(entity, stats);
         
         free(nodePosition);
         nodePosition = popNode(&pathToFollow);
@@ -302,16 +306,21 @@ NeuralNetwork *trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char
 	int nbMap = 0;
 
 	// While the neural network is not correct 100% of the time
-	while (nbMap <= 1000000 && !data->endEvent)
+	while (nbMap < 1000 && !data->endEvent)
 	{
+		nbMap++;
 		printf("Step n°%d\n", nbMap);
 		trainNN2onField(neuralNetwork, data, field, renderer, tileSize);
 		generateEnv(field);
-		nbMap++;
 	}
 
-	saveNeuralNetwork(neuralNetwork, savingPathNN);
-
+    char strBuffer[256] = "";
+    sprintf(strBuffer, "%s/network%dm%dx%d.nn", savingPathNN, nbMap, fieldWidth, fieldHeight);
+	if(saveNeuralNetwork(neuralNetwork, strBuffer))
+		printf("End of learning. Neural network saved as %s\n", strBuffer);
+	else
+		printf("Unable to save file %s\n", strBuffer);
+	
 	return neuralNetwork;
 }
 
@@ -346,7 +355,7 @@ void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field,
 		//Updates the field of view of our entity
 		updateFieldOfViewEntity(field, entity);
 		//Updates the mental map of our entity with its new field of view
-		updateMentalMapEntity(entity);
+		updateMentalMapEntity(entity, NULL);
 
 		float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
 		float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
@@ -359,7 +368,7 @@ void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field,
 		//We make the neural network learn
 		superviseLearningNeuralNetwork(neuralNetwork, input, expectedOutput, 0.2, 0.1);
 
-		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 1);
+		moveEntityAlongPath(data, entity, expectedPath, field, renderer, tileSize, 1, NULL);
 		
 		destructNodes(&expectedNode);
 		destructNodes(&choice);

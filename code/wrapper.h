@@ -9,6 +9,9 @@
  *
  */
 
+#ifndef H_WRAPPER
+    #define H_WRAPPER
+
 #include <pthread.h>
 #include <SDL2/SDL.h>
 #include "prototype.h"
@@ -20,6 +23,7 @@
 #include "pathfinding.h"
 #include "entity.h"
 #include "display.h"
+#include "stats.h"
 
 
 /**
@@ -66,11 +70,12 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
  *      renderer : the SDL renderer, use to visualize the entity on the map
  *      tileSize : the size of one tile on the map
  *      animationDelay : the amount of milliseconds the function will wait before each step of the entity
- *
+ *		stats : the structure used to store statistics
+ * 
  * \return
  * 		LabelingWeights*
  */
-void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay);
+void moveEntityAlongPath(dataType *data, Entity* entity, node* pathToFollow, Field* theField, SDL_Renderer* renderer, int tileSize, int animationDelay, Statistics *stats);
 
 /**
  * \fn void waitForInstruction(dataType *data)
@@ -113,3 +118,5 @@ NeuralNetwork *trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char
  * 		void
  */
 void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize);
+
+#endif

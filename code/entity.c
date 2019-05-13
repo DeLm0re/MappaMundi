@@ -157,9 +157,10 @@ void showEntity(Entity* entity, SDL_Renderer* renderer, SDL_Color color, int til
  * \brief function that update the mental map of an entity
  *
  * \param entity : the Entity to update
+ * \param stats : the structure we use to store statistics
  * \return void
  */
-void updateMentalMapEntity(Entity *entity)
+void updateMentalMapEntity(Entity *entity, Statistics *stats)
 {
     int widthIndex, heightIndex;
     for(widthIndex = 0; widthIndex < 2*entity->visionRange + 1; widthIndex++)
@@ -176,9 +177,15 @@ void updateMentalMapEntity(Entity *entity)
                 pointEnum mentalMapPoint = entity->mentalMap->data[pointWidth][pointHeight];
 
                 //Check if the old value of the point was FOG before updating it
-                if(mentalMapPoint == FOG)
+                if(mentalMapPoint == FOG && pointValue != FOG)
                 {
-                    entity->mentalMap->data[pointWidth][pointHeight] = pointValue; 
+                    entity->mentalMap->data[pointWidth][pointHeight] = pointValue;
+                    
+                    //We store the number of fog tiles revealed
+                    if(stats != NULL)
+                    {
+                        stats->data[NB_FOG_REVEALED]++;
+                    }
                 }
                 
                 entity->mentalMap->data[entity->x][entity->y] = VISITED;

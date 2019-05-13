@@ -10,14 +10,15 @@
  */
 
 #include "wrapper.h"
-#include <time.h>
 
 #define TILESIZE 10;
 
 #define FIELD_WIDTH 20
 #define FIELD_HEIGHT 20
-#define SAVING_PATH_NN "../NN/Reseau1.nn"
+#define SAVING_PATH_NN "../NN"
 #define SAVING_PATH_GN "../GN"
+#define SAVING_PATH_STATS "../stats"
+
 
 //Main of the programme
 int main(int argc, char** argv)
@@ -25,9 +26,9 @@ int main(int argc, char** argv)
 	if (argc < 2) 
 	{
 		printf("Please, enter an argument : \n");
-		printf(" 1 [pathMap] : \n\tCreate a new neural network and train it on a random map or on an existing map\n");
-		printf(" 2 [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
-		printf(" 3 [pathGeneticNetwork] [pathMap] : \n\tStart a new genetic network and train it\n\tIt could be based on an existing map and be based on an existing genetic algorithm\n\t put \"NONE\" if you don't want to use any base genetic algorithm\n");
+		printf(" 1 : \n\tCreate a new neural network and train it on a random map\n");
+		printf(" 2 pathNeuralNetwork [pathMap] : \n\tLoad an existing neural network and test it on a random map or on an existing map\n");
+		printf(" 3 [pathGeneticNetwork] : \n\tStart a new genetic network and train it or use an existing one as reference\n");
 		printf(" 4 pathGeneticNetwork [pathMap] : \n\tLoad an existing genetic network and test it on a random map or on an existing map\n");
 	}
 	else
@@ -73,6 +74,8 @@ int main(int argc, char** argv)
 
 		NeuralNetwork* neuralNetwork = NULL;
 		LabelingWeights* labelingWeights = NULL;
+
+		Statistics stats;
 		
 		Field *theField = NULL;
 		int fieldHeight = FIELD_WIDTH;
@@ -86,11 +89,10 @@ int main(int argc, char** argv)
         switch (menuChoice)
 		{
 			//Load neural network
-			//New neural network
 			case LOAD_NN:
 			case TRAIN_NN:
-			    if (argc == 3)
-	                pathImageField = argv[2];
+			    if (argc == 4)
+			    	pathImageField = argv[3];
 				break;
 			//Load genetic network
 			//New genetic network
@@ -120,11 +122,16 @@ int main(int argc, char** argv)
 		{
 			//New neural network
 			case TRAIN_NN:
+				SDL_ShowWindow(window);
 				neuralNetwork = trainingNN2(fieldWidth, fieldHeight, data, SAVING_PATH_NN, renderer, tileSize);
 				break;
 			//Load neural network
 			case LOAD_NN:
-				neuralNetwork = loadNeuralNetwork(SAVING_PATH_NN);
+				SDL_ShowWindow(window);
+				if (argc >= 3)
+                    neuralNetwork = loadNeuralNetwork(argv[2]);
+                else
+                    printf("Error : Invalid arguments\n");
 				break;
 			//New genetic network
 			case TRAIN_GN:
@@ -152,6 +159,9 @@ int main(int argc, char** argv)
 		
 		while(!data->endEvent)
 		{   
+			//Initialize the statistics
+			initStats(&stats, pathImageField, argv[2]);
+
 			//Initiate the entity, the start and end of the route according to the field
 			Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, fieldWidth, fieldHeight);
 			node* startNode = nearestNode(theField, entity->x, entity->y);
@@ -159,23 +169,41 @@ int main(int argc, char** argv)
 			entity->y = startNode->y;
 			destructNodes(&startNode);
 			node* endNode = nearestNode(theField, fieldWidth, fieldHeight);
-			
+
 			updateFieldOfViewEntity(theField, entity);
-			updateMentalMapEntity(entity);
+			updateMentalMapEntity(entity, &stats);
 		    
 			//While the entity hasn't arrived at destination
 			while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
 			{
 				node *path = NULL;
-                if (menuChoice == LOAD_NN || menuChoice == TRAIN_NN)
-				    path = findNextPathNN(entity, endNode, data, neuralNetwork);
-				else if (menuChoice == LOAD_GN || menuChoice == TRAIN_GN)
+                if (menuChoice == LOAD_NN)
+				{
+					startDecisionClock(&stats);
+					float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
+					float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+				    path = findNextPathNN2(entity, data, output);
+					endDecisionClock(&stats);
+					stats.data[NB_DECISIONS]++;
+					free(input);
+					free(output);
+				}
+				else if (menuChoice == LOAD_GN)
+				{
+					startDecisionClock(&stats);
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
+					endDecisionClock(&stats);
+					stats.data[NB_DECISIONS]++;
+				}
 				
-		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30);
+		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30, &stats);
 			}
 			destructNodes(&endNode);
 			
+			//We do the final statistics computations and saves it into a file
+			endStatsComputations(&stats);
+			writeStatsIntoFile(&stats, SAVING_PATH_STATS);
+
 			// We load a new field if we use a random map
 			if(!fieldIsFromImage)
 		    {
