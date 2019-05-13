@@ -53,24 +53,12 @@ Field *initialiseField(int width, int height, pointEnum defaultValue)
 
     int widthIndex, heightIndex;
 
-    for(widthIndex = 1; widthIndex < (width - 1); widthIndex++)
+    for(widthIndex = 0; widthIndex < width; widthIndex++)
     {
-        for(heightIndex = 1; heightIndex < (height - 1); heightIndex++)
+        for(heightIndex = 0; heightIndex < height; heightIndex++)
         {
             oneField->data[widthIndex][heightIndex] = defaultValue;
         }
-    }
-
-    for(heightIndex = 0; heightIndex < height; heightIndex++)
-    {
-        oneField->data[0][heightIndex] = WALL;
-        oneField->data[width-1][heightIndex] = WALL;
-    }
-
-    for(widthIndex = 0; widthIndex < width; widthIndex++)
-    {
-        oneField->data[widthIndex][height-1] = WALL;
-        oneField->data[widthIndex][0] = WALL;
     }
 
     return oneField;
@@ -135,6 +123,18 @@ void generateEnv(Field *oneField)
     int monRand;
     int sum_neigh;
 
+    for(h = 0; h < oneField->height; h++)
+    {
+        oneField->data[0][h] = WALL;
+        oneField->data[oneField->width-1][h] = WALL;
+    }
+
+    for(w = 0; w < oneField->width; w++)
+    {
+        oneField->data[w][oneField->height-1] = WALL;
+        oneField->data[w][0] = WALL;
+    }    
+    
     //First loop, random generation (obstacle or not, Bernoulli)
     for(w = 1; w < (oneField->width-1); w++)
     {
@@ -325,4 +325,29 @@ bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, 
     return isVisible;
 }
 
+/**
+ * \fn int getNbFog(Field* field)
+ * \brief function that returns the number of fog tile in a field
+ *
+ * \param Field* field : the field where we will count the number of fog tile
+ * \return int
+ */
+int getNbFog(Field* field)
+{
+    int nbFog = 0;
+    if (field != NULL)
+    {
+        int width;
+        for (width = 0; width < field->width; width++)
+        {
+            int height;
+            for (height = 0; height < field->height; height++)
+            {
+                if (field->data[width][height] == FOG)
+                    nbFog++;
+            }
+        }
+    }
+    return nbFog;
+}
 

@@ -209,6 +209,18 @@ void updateInterestField(InterestField* interestField, NeuralNetwork* neuralNetw
 void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Entity* entity, LabelingWeights* labelingWeights);
 
 /**
+ * \fn void updateInterestField3(InterestField* interestField, Entity* entity, LabelingWeights* labelingWeights)
+ * \brief function that change the values in an interest field according to the labelisation function
+ *
+ * \param InterestField* interestField : the interest field that will be update
+ * \param Entity* entity : the entity on which we base the update of the interest field
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+
+ * \return void
+ */
+void updateInterestField3(InterestField* interestField, Entity* entity, LabelingWeights* labelingWeights);
+
+/**
  * \fn void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
  * \brief function that change the coordinate of a node to the best coordinate on the interest field.
  * This is use to get the position where our entity will go next.
@@ -235,6 +247,18 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
 node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwork *neuralNetwork);
 
 /**
+ * \fn node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork)
+ * \brief returns the next path chosen by a given neural network
+ *
+ * \param entity : entity to move
+ * \param data : structure which define the kind of event we have to raise for interruption
+ * \param output : output of the neuralNetwork
+ *  
+ * \return node*
+ */
+node *findNextPathNN2(Entity *entity, dataType *data, float *output);
+
+/**
  * \fn node *findNextPathGN(Entity *entity, node *startNode, node *endNode, dataType *data, LabelingWeights* labelingWeights)
  * \brief returns the next path chosen by a given neural network
  *
@@ -248,16 +272,16 @@ node *findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwor
 node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeights* labelingWeights);
 
 /**
- * \fn node *findNextPathNN2(Entity *entity, dataType *data, NeuralNetwork *neuralNetwork)
+ * \fn node *findNextPathGN2(Entity *entity, node *startNode, dataType *data, LabelingWeights* labelingWeights)
  * \brief returns the next path chosen by a given neural network
  *
  * \param entity : entity to move
  * \param data : structure which define the kind of event we have to raise for interruption
- * \param output : output of the neuralNetwork
+ * \labelingWeights : genetic network used to take the decision
  *  
  * \return node*
  */
-node *findNextPathNN2(Entity *entity, dataType *data, float *output);
+node *findNextPathGN2(Entity *entity, dataType *data, LabelingWeights* labelingWeights);
 
 /**
  * \fn node* labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)
@@ -287,6 +311,20 @@ node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data
  * \return float
  */
 float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity* entity, LabelingWeights* labelingWeights);
+
+/**
+ * \fn float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity, LabelingWeights* labelingWeights)
+ * \brief function that returns the labeling of the points
+ * will be used for labelisation
+ *
+ * \param Field* fieldOfView : a field of view
+ * \param int xPosition : x coordinate of the center of the field of view
+ * \param int yPosition : y coordinate of the center of the field of view
+ * \param Entity* entity : the entity which uses the function to navigate (only use his coordiantes)
+ * \param LabelingWeights* labelingWeights : Ze labeling weights
+ * \return float
+ */
+float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity, LabelingWeights* labelingWeights);
 
 /**
  * \fn float* convertLabeling2(int fieldWidth, int fieldHeight, node *label)

@@ -78,7 +78,7 @@ void startDecisionClock(Statistics *stats);
 void endDecisionClock(Statistics *stats);
 
 /**
- * \fn void initStats(Statistics *stats, const char *mapPath, const char *networkPath)
+ * \fn void initStats(Statistics *stats, char *mapPath, char *networkPath)
  * \brief initialize a strucutre statistics with default values and the name of the map and neural network used
  * 
  * \param
@@ -89,7 +89,19 @@ void endDecisionClock(Statistics *stats);
  * \return
  * 		void
  */
-void initStats(Statistics *stats, const char *mapPath, const char *networkPath);
+void initStats(Statistics *stats, char *mapPath, char *networkPath);
+
+/**
+ * \fn void resetStats(Statistics *stats)
+ * \brief reset a strucutre statistics with default values
+ * 
+ * \param
+ *      stats : structure to reset
+ *
+ * \return
+ * 		void
+ */
+void resetStats(Statistics *stats);
 
 /**
  * \fn void endStatsComputations(Statistics *stats)
@@ -104,16 +116,15 @@ void initStats(Statistics *stats, const char *mapPath, const char *networkPath);
 void endStatsComputations(Statistics *stats);
 
 /**
- * \fn char *getLastElementOfString(const char *path, const char *delimiters, int nbElements)
+ * \fn char *getLastElementOfString(char *path, const char delimiters)
  * \brief returns the last element of a string, given the delimitersbetween elements and the number of elements
  * 
  * \param
  *      str : string to split
  *      delimiters : delimiters between each element
- *      nbElements : number of elements in str
  * \return
  * 		char*
  */
-char *getLastElementOfString(const char *str, const char *delimiters, int nbElements);
+char *getLastElementOfString(char *str, const char delimiters);
 
 #endif

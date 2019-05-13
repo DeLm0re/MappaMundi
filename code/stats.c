@@ -131,11 +131,12 @@ void endDecisionClock(Statistics *stats)
 	{
 		stats->endTime = clock();
 		stats->data[AVG_EXECUTION_TIME] += (float)(stats->endTime - stats->startTime) / CLOCKS_PER_SEC;
+		stats->data[NB_DECISIONS]++;
 	}
 }
 
 /**
- * \fn void initStats(Statistics *stats, const char *mapPath, const char *networkPath)
+ * \fn void initStats(Statistics *stats, char *mapPath, char *networkPath)
  * \brief initialize a strucutre statistics with default values and the name of the map and neural network used
  * 
  * \param
@@ -146,27 +147,43 @@ void endDecisionClock(Statistics *stats)
  * \return
  * 		void
  */
-void initStats(Statistics *stats, const char *mapPath, const char *networkPath)
+void initStats(Statistics *stats, char *mapPath, char *networkPath)
 {
     if(stats != NULL)
     {
         if(mapPath != NULL)
         {
-            char *mapName = (char*)malloc(strlen(mapPath) * sizeof(char)) ;
-            mapName = getLastElementOfString(mapPath, "/", 3);
+            char* mapName = getLastElementOfString(mapPath, '/');
             stats->mapId = mapName;
         }
         else
             stats->mapId = "Random";
         if(networkPath != NULL)
         {
-            char *networkName = (char*)malloc(strlen(networkPath) * sizeof(char));
-            networkName = getLastElementOfString(networkPath, "/", 3);
+            char* networkName = getLastElementOfString(networkPath, '/');
             stats->nnId = networkName;
         }
         else
             stats->nnId = "Unknown name";
 
+        resetStats(stats);
+    }
+}
+
+/**
+ * \fn void resetStats(Statistics *stats)
+ * \brief reset a strucutre statistics with default values
+ * 
+ * \param
+ *      stats : structure to reset
+ *
+ * \return
+ * 		void
+ */
+void resetStats(Statistics *stats)
+{
+    if(stats != NULL)
+    {
         int i;
         for(i = 0; i < SIZEOFSTAT; i++)
             stats->data[i] = 0;
@@ -193,33 +210,25 @@ void endStatsComputations(Statistics *stats)
 }
 
 /**
- * \fn char *getLastElementOfString(const char *path, const char *delimiters, int nbElements)
+ * \fn char *getLastElementOfString(char *path, const char delimiters)
  * \brief returns the last element of a string, given the delimitersbetween elements and the number of elements
  * 
  * \param
  *      str : string to split
  *      delimiters : delimiters between each element
- *      nbElements : number of elements in str
  * \return
  * 		char*
  */
-char *getLastElementOfString(const char *str, const char *delimiters, int nbElements)
+char *getLastElementOfString(char *str, const char delimiters)
 {
-    char copy[strlen(str)];
-    strcpy(copy, str);
-    char *part = strtok(copy, delimiters);
-    char *array[nbElements];
-    int partIndex = 0;
-
-    while (part != NULL)
+    int slashIndex = 0;
+    int index = 0;
+    while(str[index] != '\0')
     {
-        array[partIndex++] = part;
-        part = strtok (NULL, delimiters);
-    }
-
-    int sizeOfResult = strlen(array[partIndex - 1]);
-    char *result = (char*)malloc(sizeOfResult*sizeof(char));
-    strcpy(result, array[partIndex - 1]);
+        if (str[index] == delimiters)
+            slashIndex = index;
+        index++;
+    }  
     
-    return result;    
+    return str + slashIndex + 1;    
 }

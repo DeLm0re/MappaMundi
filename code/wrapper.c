@@ -200,7 +200,133 @@ LabelingWeights *trainingGN1(dataType *data, Field* theField, char *savingPathGN
 	{
 	    int nbGN = getNumberOfFilesInDirectory(savingPathGN);
 	    char strBuffer[256] = "";
-	    sprintf(strBuffer, "%s/genome%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
+	    sprintf(strBuffer, "%s/genomePoint%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
+	    saveGeneticNetwork(labelingWeights, strBuffer);
+	}
+	
+	return labelingWeights;
+}
+
+/**
+ * \fn NeuralNetwork* trainingGN2(int visionRange, dataType *data, Field* theField, char *savingPathGN)
+ * \brief creates a neural network and trains it on randomly generated fields of view, then saves it
+ * 
+ * \param
+ * 		data : structure which define the kind of event we have to raise for interruption
+ *      theField : the field on which the genetic network will be trained
+ * 		savingPathGN : path where to save the genetic network
+ *      basePathGN : path to a genetic network from which the first generation will be based on.
+ *                  If NULL, then a default first generation will be created
+ *      nbGeneration : the number of generation the training wil go throught
+ *      nbMember : the number of member tested by generation
+ *      percentReveal : the percentage of map revealed at which we concider that the entity finished his job
+ * \return
+ * 		LabelingWeights*
+ */
+LabelingWeights *trainingGN2(dataType *data, Field* theField, char *savingPathGN, char* basePathGN, int nbGeneration, int nbMember, float percentReveal)
+{
+    //Initialisation and generation of a field
+	InterestField* interestField = initialiseInterestField(theField->width, theField->height);
+	
+	//Creation of the first generation
+	GeneticNetworks* geneticNetworks = initialiseGeneticNetworksFrom(nbMember, basePathGN, 0.05);
+	if (geneticNetworks == NULL)
+	    geneticNetworks = initialiseGeneticNetworks(nbMember);
+	
+	int generationIndex;
+	for (generationIndex = 0; generationIndex < nbGeneration; generationIndex++)
+	{   
+	    if (generationIndex > 0)
+	    {
+	        //We create a new generation based on half the best individuals of the previous one
+            GeneticNetworks* temp = createNewGeneration(geneticNetworks, nbMember/2, 0.05);
+            destructGeneticNetworks(&geneticNetworks);
+            geneticNetworks = temp;
+        }
+        
+	    int timeStartGeneration = clock();
+	    int sumScoreGeneration = 0;
+	    int networkIndex;
+	    for (networkIndex = 0; networkIndex < geneticNetworks->size; networkIndex++)
+	    {
+	        //Initiate the entity, the start and end of the route according to the field
+	        Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, theField->width, theField->height);
+	        node* startNode = nearestNode(theField, entity->x, entity->y);
+	        entity->x = startNode->x;
+	        entity->y = startNode->y;
+	        node* endNode = nearestNode(theField, theField->width, theField->height);
+	        clock_t timeStartMember = clock();
+	        
+	        int remainingFog = getNbFog(entity->mentalMap);
+	        const int totalSize = theField->width*theField->height;
+	        //While the entity hasn't arrived
+	        while (
+	            remainingFog > (1-percentReveal)*totalSize && 
+	            geneticNetworks->score[networkIndex] < totalSize &&
+	            !data->endEvent)
+	        {
+		        updateFieldOfViewEntity(theField, entity);
+		        updateMentalMapEntity(entity, NULL);
+		        
+		        updateInterestField3(interestField, entity, geneticNetworks->list[networkIndex]);
+		
+		        //We set a default node to which the entity will try to move to
+		        node* wantedPosition = cpyNode(endNode);
+		        node* path = NULL;
+		        //We update the start node of the pathfinding
+		        startNode->x = entity->x;
+		        startNode->y = entity->y;
+		        //We search for a path based on the interest field
+		        while((path == startNode || path == NULL) && !data->endEvent)
+		        {
+			        destructNodes(&path);
+			        path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+			        if ((path == startNode || path == NULL))
+			        {
+				        updateBestWantedPosition(wantedPosition, interestField);
+			        }
+		        }
+		        free(wantedPosition);
+		        
+		        remainingFog = getNbFog(entity->mentalMap);
+		        geneticNetworks->score[networkIndex] += getNbNode(&path);
+		        moveEntityAlongPath(data, entity, path, theField, NULL, 0, 0, NULL);
+	        }
+	        sumScoreGeneration += geneticNetworks->score[networkIndex];
+	        geneticNetworks->time[networkIndex] = (clock()-timeStartMember)/((float)CLOCKS_PER_SEC);
+	        printf("Gen : %d, member : %d, time : %.3f sec, score : %.0f\n", generationIndex, networkIndex, geneticNetworks->time[networkIndex], geneticNetworks->score[networkIndex]);
+	        
+            destructEntity(&entity);
+	        destructNodes(&startNode);
+		    destructNodes(&endNode);
+	    }
+	    printf("\ttotal time : %.3f sec\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC));
+	    printf("\taverage time : %.3f sec, average score %.3f\n", (clock()-timeStartGeneration)/((float)CLOCKS_PER_SEC)/nbMember, sumScoreGeneration/((float)nbMember));
+	    sortGeneticNetworks(geneticNetworks);
+	    printf("\tbest : score : %.3f, time : %.3f\n", geneticNetworks->score[0], geneticNetworks->time[0]);
+	    
+	}
+    destructInterestField(&interestField);
+    
+	LabelingWeights* labelingWeights = geneticNetworks->list[0];
+
+    printf("\n");
+    printf("\tdist : %f\n", labelingWeights->weights[DIST]);
+    printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
+    printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
+    printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
+    printf("\tnbVisited : %f\n", labelingWeights->weights[NB_VISITED]);
+    printf("\tavgEmpty : %f\n", labelingWeights->weights[AVG_DIST_EMPTY]);
+    printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
+    printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
+    printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
+    printf("\tdistFromEntity : %f\n", labelingWeights->weights[DIST_FROM_ENTITY]);
+	
+	if (!data->endEvent)
+	{
+	    int nbGN = getNumberOfFilesInDirectory(savingPathGN);
+	    char strBuffer[256] = "";
+	    sprintf(strBuffer, "%s/genomeExplore%ds%.3ft%.3fg%dm%d.gn", savingPathGN, nbGN, geneticNetworks->score[0], geneticNetworks->time[0], nbGeneration, nbMember);
 	    saveGeneticNetwork(labelingWeights, strBuffer);
 	}
 	
@@ -379,4 +505,191 @@ void trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field* field,
 		if(input != NULL)	
 			free(input);
 	}
+}
+
+/**
+ * \fn void searchForEndPointNN(NeuralNetwork *neuralNetwork, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, Statistics* stats)
+ * \brief show the entity, starting in the top left corner, trying to go to the bottom right corner on the given field by using a neural network
+ * 
+ * \param
+ * 		neuralNetwork : the neural network to use to take decisions
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		field : the field where the entity will move
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ *      fieldIsFromImage : to know if the field as been loaded from an image. If it is set to true, the map will not be update each loop
+ *      stats : the structure used to store the stats
+ * \return
+ * 		void
+ */
+void searchForEndPointNN(NeuralNetwork *neuralNetwork, dataType *data, Field** field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, Statistics* stats)
+{
+    while(!data->endEvent)
+	{   
+		//Initiate the entity, the start and end of the route according to the field
+		Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, (*field)->width, (*field)->height);
+		node* startNode = nearestNode((*field), entity->x, entity->y);
+		entity->x = startNode->x;
+		entity->y = startNode->y;
+		destructNodes(&startNode);
+		node* endNode = nearestNode(*field, (*field)->width, (*field)->height);
+		
+		updateFieldOfViewEntity(*field, entity);
+		updateMentalMapEntity(entity, stats);
+	    
+		//While the entity hasn't arrived at destination
+		while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
+		{
+			startDecisionClock(stats);
+			float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
+			float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
+		    node* path = findNextPathNN2(entity, data, output);
+			endDecisionClock(stats);
+	        moveEntityAlongPath(data, entity, path, *field, renderer, tileSize, 30, stats);
+	        
+			free(input);
+			free(output);
+		}
+		//Update all the stats
+		endStatsComputations(stats);
+		writeStatsIntoFile(stats, SAVING_PATH_STATS);
+		
+		destructNodes(&endNode);
+		
+		// We load a new field if we use a random map
+		if(!fieldIsFromImage)
+	    {
+	        int fieldWidth = (*field)->width;
+	        int fieldHeight = (*field)->height;
+	        destructField(field);
+	        *field = initialiseField(fieldWidth, fieldHeight, EMPTY);
+            generateEnv(*field);
+	    }
+		destructEntity(&entity);
+		waitForInstruction(data);
+	}
+	destructField(field);
+}
+
+/**
+ * \fn void searchForEndPointNN(LabelingWeights *labelingWeights, dataType *data, Field* field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, Statistics* stats)
+ * \brief show the entity, starting in the top left corner, trying to go to the bottom right corner on the given field by using a genetic algorithm
+ * 
+ * \param
+ * 		labelingWeights : the genetic algorithm to use to take decisions
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		field : the field where the entity will move
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ *      fieldIsFromImage : to know if the field as been loaded from an image. If it is set to true, the map will not be update each loop
+ *      stats : the structure used to store the stats
+ * \return
+ * 		void
+ */
+void searchForEndPointGN(LabelingWeights *labelingWeights, dataType *data, Field** field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, Statistics* stats)
+{
+    while(!data->endEvent)
+	{   
+		//Initiate the entity, the start and end of the route according to the field
+		Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, (*field)->width, (*field)->height);
+		node* startNode = nearestNode(*field, entity->x, entity->y);
+		entity->x = startNode->x;
+		entity->y = startNode->y;
+		destructNodes(&startNode);
+		node* endNode = nearestNode(*field, (*field)->width, (*field)->height);
+		
+		updateFieldOfViewEntity(*field, entity);
+		updateMentalMapEntity(entity, stats);
+	    
+		//While the entity hasn't arrived at destination
+		while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
+		{
+		    startDecisionClock(stats);
+			node* path = findNextPathGN(entity, endNode, data, labelingWeights);
+			endDecisionClock(stats);
+	        moveEntityAlongPath(data, entity, path, *field, renderer, tileSize, 30, stats);
+		}
+		//Update all the stats
+		endStatsComputations(stats);
+		writeStatsIntoFile(stats, SAVING_PATH_STATS);
+		
+		destructNodes(&endNode);
+		
+		// We load a new field if we use a random map
+		if(!fieldIsFromImage)
+	    {
+	        int fieldWidth = (*field)->width;
+	        int fieldHeight = (*field)->height;
+	        destructField(field);
+	        *field = initialiseField(fieldWidth, fieldHeight, EMPTY);
+            generateEnv(*field);
+	    }
+		destructEntity(&entity);
+		waitForInstruction(data);
+	}
+	destructField(field);
+}
+
+/**
+ * \fn void exploreGN(LabelingWeights *labelingWeights, dataType *data, Field** field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, int maxDecisions, float percentReveal, Statistics* stats)
+ * \brief show the entity, starting in the top left corner, trying to explore as much of the given field as possible by using a genetic algorithm
+ * 
+ * \param
+ * 		labelingWeights : the genetic algorithm to use to take decisions
+ * 		data : structure which define the kind of event we have to raise for interruption
+ * 		field : the field where the entity will move
+ * 		renderer : renderer used to draw with the SDL
+ * 		tileSize : size of a tile for display
+ *      fieldIsFromImage : to know if the field as been loaded from an image. If it is set to true, the map will not be update each loop
+ *      maxDecisions : the maximum number of moves that the entity is allow to do before ending a loop
+ *      percentReveal : the percentage of map revealed at which we concider that the entity finished his job
+ *      stats : the structure used to store the stats
+ * \return
+ * 		void
+ */
+void exploreGN(LabelingWeights *labelingWeights, dataType *data, Field** field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, int maxDecisions, float percentReveal, Statistics* stats)
+{
+    while(!data->endEvent)
+	{   
+	    //We reset the stats
+	    resetStats(stats);
+		//Initiate the entity, the start and end of the route according to the field
+		Entity* entity = initialiseEntity(0, 0, RADIUS_VIEWPOINT, (*field)->width, (*field)->height);
+		node* startNode = nearestNode(*field, entity->x, entity->y);
+		entity->x = startNode->x;
+		entity->y = startNode->y;
+		destructNodes(&startNode);
+		
+		updateFieldOfViewEntity(*field, entity);
+		updateMentalMapEntity(entity, stats);
+	    
+	    const int totalFog = (*field)->width*(*field)->height;
+		//While the entity hasn't arrived at destination
+		while (stats->data[NB_DECISIONS] < maxDecisions && stats->data[NB_FOG_REVEALED] < percentReveal*totalFog && !data->endEvent)
+		{
+		    startDecisionClock(stats);
+			node* path = findNextPathGN2(entity, data, labelingWeights);
+			endDecisionClock(stats);
+	        moveEntityAlongPath(data, entity, path, *field, renderer, tileSize, 30, stats);
+		}
+		printf("\n\tnumber of decisions : %.0f\n", stats->data[NB_DECISIONS]);
+		printf("\tnumber of moves : %.0f\n", stats->data[NB_STEPS]);
+		printf("\ttime spent : %f seconds\n", stats->data[AVG_EXECUTION_TIME]);
+		//Update all the stats
+		endStatsComputations(stats);
+		writeStatsIntoFile(stats, SAVING_PATH_STATS);
+		
+		// We load a new field if we use a random map
+		if(!fieldIsFromImage)
+	    {
+	        int fieldWidth = (*field)->width;
+	        int fieldHeight = (*field)->height;
+	        destructField(field);
+	        *field = initialiseField(fieldWidth, fieldHeight, EMPTY);
+            generateEnv(*field);
+	    }
+		destructEntity(&entity);
+		waitForInstruction(data);
+	}
+	destructField(field);
 }

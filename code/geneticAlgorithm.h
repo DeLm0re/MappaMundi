@@ -31,7 +31,7 @@ typedef struct InterestField
 
 typedef struct 
 {
-    float weights[10];
+    double weights[10];
 } LabelingWeights;
 
 typedef struct
