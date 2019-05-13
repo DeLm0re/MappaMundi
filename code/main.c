@@ -15,6 +15,7 @@
 #define FIELD_HEIGHT 20
 #define SAVING_PATH_NN "../NN"
 #define SAVING_PATH_GN "../GN"
+#define SAVING_PATH_STATS "../stats"
 
 
 //Main of the programme
@@ -172,19 +173,29 @@ int main(int argc, char** argv)
 				node *path = NULL;
                 if (menuChoice == LOAD_NN)
 				{
+					startDecisionClock(&stats);
 					float *input = createInputNN2(entity->mentalMap, entity->x, entity->y, endNode->x, endNode->y);			
 					float *output = getOutputOfNeuralNetwork(neuralNetwork, input);
 				    path = findNextPathNN2(entity, data, output);
+					endDecisionClock(&stats);
 					free(input);
 					free(output);
 				}
 				else if (menuChoice == LOAD_GN)
+				{
+					startDecisionClock(&stats);
 				    path = findNextPathGN(entity, endNode, data, labelingWeights);
+					endDecisionClock(&stats);
+				}
 				
-		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30);
+		        moveEntityAlongPath(data, entity, path, theField, renderer, tileSize, 30, &stats);
 			}
 			destructNodes(&endNode);
 			
+			//We do the final statistics computations and saves it into a file
+			endStatsComputations(&stats);
+			writeStatsIntoFile(&stats, SAVING_PATH_STATS);
+
 			// We load a new field if we use a random map
 			if(!fieldIsFromImage)
 		    {
