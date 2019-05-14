@@ -1,0 +1,5 @@
+Map, Neural network, Number of steps, Number of fog tiles revealed, Number of decisions taken, Average time to take a decision
+Random,genomePoint-random40x40.gn,34.000000,216.000000,5.000000,0.009939,
+Random,genomePoint-random40x40.gn,13.000000,90.000000,2.000000,0.012263,
+Random,genomePoint-random40x40.gn,34.000000,216.000000,5.000000,0.010833,
+Random,genomePoint-random40x40.gn,91.000000,524.000000,14.000000,0.011572,
