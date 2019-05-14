@@ -546,7 +546,6 @@ void updateBestWantedPosition(node* wantedPosition, InterestField* interestField
         {
             for(height = 0; height < interestField->height; height++)
             {
-                
                 if (interestField->data[width][height] > bestPoint)
                 {
                     bestPoint = interestField->data[width][height];
@@ -697,6 +696,7 @@ node *findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeig
         destructNodes(&path);
         //We try to find a path
         path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+        //printf("%p %p\n", (void*) path, (void*) startNode);
         //If we haven't find a path
         if ((path == startNode || path == NULL))
         {
@@ -808,19 +808,19 @@ node *labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data
  */
 float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity* entity, LabelingWeights* labelingWeights)
 {
-    float emptyPoint = 0;
-    float wallPoint = 0;
-    float fogPoint = 0;
-    float visitedPoint = 0;
-    float dist = 0;
-    float avgDistEmpty = 0;
-    float avgDistWall = 0;
-    float avgDistFog = 0;
-    float avgDistVisited = 0;
-    float distFromEntity = 0;
-    float value = 0;
-    float centerPointx = (fieldOfView->width-1)/2;
-    float centerPointy = (fieldOfView->height-1)/2;
+    double emptyPoint = 0;
+    double wallPoint = 0;
+    double fogPoint = 0;
+    double visitedPoint = 0;
+    double dist = 0;
+    double avgDistEmpty = 0;
+    double avgDistWall = 0;
+    double avgDistFog = 0;
+    double avgDistVisited = 0;
+    double distFromEntity = 0;
+    double value = 0;
+    double centerPointx = (fieldOfView->width-1)/2;
+    double centerPointy = (fieldOfView->height-1)/2;
 
 
     if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
@@ -859,11 +859,14 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
 
     dist = sqrt(pow(xFinalPosition-xPosition,2) + pow(yFinalPosition-yPosition,2));
     distFromEntity = sqrt(pow(entity->x-xPosition,2) + pow(entity->y-yPosition,2));
-
-    avgDistEmpty /= emptyPoint;
-    avgDistWall /= wallPoint;
-    avgDistFog /= fogPoint;
-    avgDistVisited /= visitedPoint;
+    if (emptyPoint != 0)
+        avgDistEmpty /= emptyPoint;
+    if (wallPoint != 0)
+        avgDistWall /= wallPoint;
+    if (fogPoint != 0)
+        avgDistFog /= fogPoint;
+    if (visitedPoint != 0)
+        avgDistVisited /= visitedPoint;
 
     value = dist*labelingWeights->weights[DIST]+
             emptyPoint*labelingWeights->weights[NB_EMPTY]+
@@ -875,8 +878,8 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
             avgDistFog*labelingWeights->weights[AVG_DIST_FOG]+
             avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED]+
             distFromEntity*labelingWeights->weights[DIST_FROM_ENTITY];
-
-    return value;
+    
+    return (float) value;
 }
 
 /**
@@ -893,18 +896,18 @@ float labeling3(Field* fieldOfView, int xPosition, int yPosition, int xFinalPosi
  */
 float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity, LabelingWeights* labelingWeights)
 {
-    float emptyPoint = 0;
-    float wallPoint = 0;
-    float fogPoint = 0;
-    float visitedPoint = 0;
-    float avgDistEmpty = 0;
-    float avgDistWall = 0;
-    float avgDistFog = 0;
-    float avgDistVisited = 0;
-    float distFromEntity = 0;
-    float value = 0;
-    float centerPointx = (fieldOfView->width-1)/2;
-    float centerPointy = (fieldOfView->height-1)/2;
+    double emptyPoint = 0;
+    double wallPoint = 0;
+    double fogPoint = 0;
+    double visitedPoint = 0;
+    double avgDistEmpty = 0;
+    double avgDistWall = 0;
+    double avgDistFog = 0;
+    double avgDistVisited = 0;
+    double distFromEntity = 0;
+    double value = 0;
+    double centerPointx = (fieldOfView->width-1)/2;
+    double centerPointy = (fieldOfView->height-1)/2;
 
 
     if (fieldOfView->data[(int)centerPointx][(int)centerPointy] != EMPTY) 
@@ -942,11 +945,14 @@ float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity
     }
 
     distFromEntity = sqrt(pow(entity->x-xPosition,2) + pow(entity->y-yPosition,2));
-
-    avgDistEmpty /= emptyPoint;
-    avgDistWall /= wallPoint;
-    avgDistFog /= fogPoint;
-    avgDistVisited /= visitedPoint;
+    if (emptyPoint != 0)
+        avgDistEmpty /= emptyPoint;
+    if (wallPoint != 0)
+        avgDistWall /= wallPoint;
+    if (fogPoint != 0)
+        avgDistFog /= fogPoint;
+    if (visitedPoint != 0)
+        avgDistVisited /= visitedPoint;
 
     value = emptyPoint*labelingWeights->weights[NB_EMPTY]+
             wallPoint*labelingWeights->weights[NB_WALL]+
@@ -958,7 +964,7 @@ float labeling4(Field* fieldOfView, int xPosition, int yPosition, Entity* entity
             avgDistVisited*labelingWeights->weights[AVG_DIST_VISITED]+
             distFromEntity*labelingWeights->weights[DIST_FROM_ENTITY];
 
-    return value;
+    return (float) value;
 }
 
 /**

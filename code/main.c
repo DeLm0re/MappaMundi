@@ -13,15 +13,15 @@
 
 #define TILESIZE 10;
 
-#define FIELD_WIDTH 20
-#define FIELD_HEIGHT 20
+#define FIELD_WIDTH 40
+#define FIELD_HEIGHT 40
 #define SAVING_PATH_NN "../NN"
 #define SAVING_PATH_GN "../GN/pointToGo"
 #define SAVING_PATH_GN_EXPLORE "../GN/explore"
 
 //Main of the programme
 int main(int argc, char** argv)
-{
+{   
 	if (argc < 2) 
 	{
 		printf("Please, enter an argument : \n");
