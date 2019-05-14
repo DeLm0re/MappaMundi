@@ -588,6 +588,17 @@ void searchForEndPointNN(NeuralNetwork *neuralNetwork, dataType *data, Field** f
  */
 void searchForEndPointGN(LabelingWeights *labelingWeights, dataType *data, Field** field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, Statistics* stats)
 {
+    printf("Network loaded : \n");
+    printf("\tdist : %f\n", labelingWeights->weights[DIST]);
+    printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
+    printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
+    printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
+    printf("\tnbVisited : %f\n", labelingWeights->weights[NB_VISITED]);
+    printf("\tavgEmpty : %f\n", labelingWeights->weights[AVG_DIST_EMPTY]);
+    printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
+    printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
+    printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
+    printf("\tdistFromEntity : %f\n", labelingWeights->weights[DIST_FROM_ENTITY]);
     while(!data->endEvent)
 	{   
 		//Initiate the entity, the start and end of the route according to the field
@@ -600,18 +611,6 @@ void searchForEndPointGN(LabelingWeights *labelingWeights, dataType *data, Field
 		
 		updateFieldOfViewEntity(*field, entity);
 		updateMentalMapEntity(entity, stats);
-	    
-	    printf("Network loaded : \n");
-        printf("\tdist : %f\n", labelingWeights->weights[DIST]);
-        printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
-        printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
-        printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
-        printf("\tnbVisited : %f\n", labelingWeights->weights[NB_VISITED]);
-        printf("\tavgEmpty : %f\n", labelingWeights->weights[AVG_DIST_EMPTY]);
-        printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
-        printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
-        printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
-        printf("\tdistFromEntity : %f\n", labelingWeights->weights[DIST_FROM_ENTITY]);
 	    
 		//While the entity hasn't arrived at destination
 		while ((entity->x != endNode->x || entity->y != endNode->y) && !data->endEvent)
@@ -661,6 +660,17 @@ void searchForEndPointGN(LabelingWeights *labelingWeights, dataType *data, Field
  */
 void exploreGN(LabelingWeights *labelingWeights, dataType *data, Field** field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, int maxDecisions, float percentReveal, Statistics* stats)
 {
+    printf("Network loaded : \n");
+    printf("\tdist : %f\n", labelingWeights->weights[DIST]);
+    printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
+    printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
+    printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
+    printf("\tnbVisited : %f\n", labelingWeights->weights[NB_VISITED]);
+    printf("\tavgEmpty : %f\n", labelingWeights->weights[AVG_DIST_EMPTY]);
+    printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
+    printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
+    printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
+    printf("\tdistFromEntity : %f\n", labelingWeights->weights[DIST_FROM_ENTITY]);
     while(!data->endEvent)
 	{   
 	    //We reset the stats
@@ -674,18 +684,6 @@ void exploreGN(LabelingWeights *labelingWeights, dataType *data, Field** field, 
 		
 		updateFieldOfViewEntity(*field, entity);
 		updateMentalMapEntity(entity, stats);
-		
-		printf("Network loaded : \n");
-        printf("\tdist : %f\n", labelingWeights->weights[DIST]);
-        printf("\tnbEmpty : %f\n", labelingWeights->weights[NB_EMPTY]);
-        printf("\tnbWall : %f\n", labelingWeights->weights[NB_WALL]);
-        printf("\tnbFog : %f\n", labelingWeights->weights[NB_FOG]);
-        printf("\tnbVisited : %f\n", labelingWeights->weights[NB_VISITED]);
-        printf("\tavgEmpty : %f\n", labelingWeights->weights[AVG_DIST_EMPTY]);
-        printf("\tavgWall : %f\n", labelingWeights->weights[AVG_DIST_WALL]);
-        printf("\tavgFog : %f\n", labelingWeights->weights[AVG_DIST_FOG]);
-        printf("\tavgVisited : %f\n", labelingWeights->weights[AVG_DIST_VISITED]);
-        printf("\tdistFromEntity : %f\n", labelingWeights->weights[DIST_FROM_ENTITY]);
 	    
 	    const int totalFog = (*field)->width*(*field)->height;
 		//While the entity hasn't arrived at destination
