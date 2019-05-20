@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Crosstales.FB;
+
 public class Definition : MonoBehaviour
 {
     public enum pointEnum {UNDEFINED = -1, EMPTY = 0, WALL = 1, FOG = 2, VISITED = 3};
@@ -14,4 +16,10 @@ public class Definition : MonoBehaviour
 	public const double M_PI = 3.14159265358979323846;
 
     public const double INFINITY = double.PositiveInfinity;
+
+    public static string OpenSingleFile()
+    {
+        string path = FileBrowser.OpenSingleFile("gn");
+        return path;
+    }
 }

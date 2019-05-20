@@ -11,6 +11,8 @@ public class EntityHandler : MonoBehaviour
 
     public Pathfinding path;
 
+    public GeneticAlgorithm genetic;
+
     public int visionRange;
 
     private float waitSecondToMove;
@@ -23,7 +25,7 @@ public class EntityHandler : MonoBehaviour
 
     private Node startNode;
 
-    private Stack pathToFollow;
+    private Node endNode;
 
     private int xEntity;
     private int yEntity;
@@ -40,7 +42,7 @@ public class EntityHandler : MonoBehaviour
     void Start()
     {
         initializationAttributs();
-        //Set : map, diameter, width, height, mentalMap/fieldOfView vide, path, start node, xEntity, yEntity, waitSecondToMove, countFrame
+        //Set : map, diameter, width, height, mentalMap/fieldOfView vide, pathToFollow, start node, xEntity, yEntity, waitSecondToMove, countFrame
 
         //Actualize the position of the entity
         actualizePositionEntity();
@@ -64,57 +66,54 @@ public class EntityHandler : MonoBehaviour
         {
             if(pause == false)
             {
-                //Waiting to find a path to follow
-                if(pathToFollow != null)
+                //If the entity reach the end of the path
+                if(this.xEntity == endNode.getX() && this.yEntity == endNode.getY())
+                //if(path.getPathStack().Count == 0)
                 {
-                    //If the entity reach the end of the path
-                    if(pathToFollow.Count == 0)
-                    {
-                        //Generate a new map, path and attributs
-                        newGeneration();
+                    //Generate a new map, path and attributs
+                    newGeneration();
 
-                        //Actualize the position of the entity
-                        actualizePositionEntity();
+                    //Actualize the position of the entity
+                    actualizePositionEntity();
 
-                        //Update the fieldOfView for the start
-                        updateFieldOfViewEntity();
+                    //Update the fieldOfView for the start
+                    updateFieldOfViewEntity();
 
-                        //Update the fieldOfView for the start
-                        updateMentalMapEntity();
+                    //Update the fieldOfView for the start
+                    updateMentalMapEntity();
 
-                        //Destroy the mesh of the last map
-                        fogHandler.getFogMeshHandler().DestructMesh();
+                    //Create the starting fog of the new map
+                    fogHandler.CreateFog(mentalMap);
+                }
+                else
+                {
+                    if(path.getPathStack().Count == 0)
+                        genetic.findNextPathGN(this.endNode);
+                        //path.findPathFromStartEnd(this.startNode, this.endNode, this.map);
 
-                        //Create the starting fog of the new map
-                        fogHandler.CreateFog(mentalMap);
-                    }
-                    else
-                    {
-                        //Calcul the next position of the entity to follow the path
-                        calculNextPosition();
+                    //Calcul the next position of the entity to follow the path
+                    calculNextPosition();
 
-                        //Actualize the position of the entity
-                        actualizePositionEntity();
+                    //Actualize the position of the entity
+                    actualizePositionEntity();
 
-                        //Update the fieldOfView for the start
-                        updateFieldOfViewEntity();
+                    //Update the fieldOfView for the start
+                    updateFieldOfViewEntity();
 
-                        //Update the fieldOfView for the start
-                        updateMentalMapEntity();
-
-                        //Destroy the mesh of the last frame
-                        fogHandler.getFogMeshHandler().DestructMesh();
-
-                        //Draw the actual frame's fog
-                        fogHandler.CreateFog(mentalMap);
-                    }
+                    //Update the fieldOfView for the start
+                    updateMentalMapEntity();
+                    
+                    //Destroy the mesh of the last frame
+                    fogHandler.getFogMeshHandler().DestructMesh();
+                    //Draw the actual frame's fog
+                    fogHandler.CreateFog(mentalMap);
                 }
             }
             this.countFrame = 0;
         }
     }
 
-    private void actualizePositionEntity()
+    public void actualizePositionEntity()
     {
         //Set the entity position in game scene
         this.transform.localPosition = new Vector3(this.xEntity + 0.5f, 0.5f, this.yEntity + 0.5f);
@@ -147,9 +146,8 @@ public class EntityHandler : MonoBehaviour
         this.mentalMap = new int[this.width,this.height];
         initializeMentalMapEntity();
 
-        pathToFollow = path.getPathStack();
-
         startNode = path.nearestNode(this.map, 0, 0);
+        endNode = path.nearestNode(this.map,this.width-1,this.height-1);
 
         this.xEntity = startNode.getX();
         this.yEntity = startNode.getY();
@@ -157,21 +155,24 @@ public class EntityHandler : MonoBehaviour
 
     private void calculNextPosition()
     {
-        Node nodeToGo;
-
-        nodeToGo = (Node)pathToFollow.Pop();
-
-        this.xEntity = nodeToGo.getX();
-        this.yEntity = nodeToGo.getY();
+        if(path.getPathStack().Count != 0)
+        {
+            Node nodeToGo = (Node)path.getPathStack().Pop();
+            this.xEntity = nodeToGo.getX();
+            this.yEntity = nodeToGo.getY();
+        }
     }
 
     public void newGeneration()
     {
+        //Destroy the mesh of the last map
         environment.getEnvironmentMeshHandler().DestructMesh();
+        //Destroy the mesh of the last fog
+        fogHandler.getFogMeshHandler().DestructMesh();
         environment.CreateMap();
 
         path.cleanPath();
-        path.findPathFromStartEnd(path.nearestNode(this.map,0,0), path.nearestNode(this.map,this.width-1,this.height-1), this.map);
+        //path.findPathFromStartEnd(path.nearestNode(this.map,0,0), path.nearestNode(this.map,this.width-1,this.height-1), this.map);
 
         this.generateNewAttributs();
     }
@@ -185,9 +186,8 @@ public class EntityHandler : MonoBehaviour
         initialiseFieldOfViewEntity();
         initializeMentalMapEntity();
 
-        pathToFollow = path.getPathStack();
-
         startNode = path.nearestNode(this.map, 0, 0);
+        endNode = path.nearestNode(this.map,this.width-1,this.height-1);
 
         this.xEntity = startNode.getX();
         this.yEntity = startNode.getY();
@@ -234,7 +234,7 @@ public class EntityHandler : MonoBehaviour
         }
     }
 
-    private void updateMentalMapEntity()
+    public void updateMentalMapEntity()
     {
         int widthIndex, heightIndex;
 
@@ -262,7 +262,7 @@ public class EntityHandler : MonoBehaviour
         }
     }
 
-    private void updateFieldOfViewEntity()
+    public void updateFieldOfViewEntity()
     {
         int i;
         int j;

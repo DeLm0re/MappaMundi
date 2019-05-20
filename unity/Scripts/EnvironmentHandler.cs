@@ -22,7 +22,7 @@ public class EnvironmentHandler : MonoBehaviour
 
         CreateMap();
 
-        path.findPathFromStartEnd(path.nearestNode(map,0,0), path.nearestNode(map,width-1,height-1), map);
+        //path.findPathFromStartEnd(path.nearestNode(map,0,0), path.nearestNode(map,width-1,height-1), map);
         //pathFinder.printPath();
     }
 
