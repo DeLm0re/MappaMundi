@@ -51,7 +51,7 @@ bool writeStatsIntoFile(Statistics *stats, char *folderPath)
     {
         int pathLength = strlen(folderPath) + strlen(stats->mapId) + strlen(stats->nnId) + sizeof("/-.stat");
 	    char *path = (char*)malloc(pathLength * sizeof(char));
-	    sprintf(path, "%s/%s-%s.stat", folderPath, stats->mapId, stats->nnId);
+	    sprintf(path, "%s/%s.stat", folderPath, stats->mapId);
 
         bool fileIsNew = true;
         if(fileExists(path))
