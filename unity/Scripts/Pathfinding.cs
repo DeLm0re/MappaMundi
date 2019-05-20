@@ -10,7 +10,7 @@ public class Pathfinding : MonoBehaviour
 
     private Stack pathStack;
 
-    public Pathfinding()
+    void Start()
     {
         this.openList = new List<Node>();
         this.closeList = new List<Node>();
@@ -76,8 +76,14 @@ public class Pathfinding : MonoBehaviour
 
     public void removeByObject(List<Node> aList, Node aNode)
     {
-        int nodePosition = aList.IndexOf(aNode);
-        aList.RemoveAt(nodePosition);
+        if(aList != null)
+        {
+            if(aList.Count != 0)
+            {
+                int nodePosition = aList.IndexOf(aNode);
+                aList.RemoveAt(nodePosition);
+            }
+        }
     }
 
     private double distNodes(Node node1, Node node2)
@@ -121,14 +127,19 @@ public class Pathfinding : MonoBehaviour
 
     private Node getLowestNode()
     {
-        Node theNode = this.openList[0];
+        Node theNode = null;
 
-        //Return the value of the node with the min heuristic
-        foreach(Node element in this.openList)
+        if(this.openList.Count != 0)
         {
-            if(element.getHeuristic() < theNode.getHeuristic())
+            theNode = this.openList[0];
+
+            //Return the value of the node with the min heuristic
+            foreach(Node element in this.openList)
             {
-                theNode = element;
+                if(element.getHeuristic() < theNode.getHeuristic())
+                {
+                    theNode = element;
+                }
             }
         }
         return theNode;
@@ -238,37 +249,37 @@ public class Pathfinding : MonoBehaviour
     private void AStar(Node startNode, Node endNode, int[,] map)
     {
         //If their is no nodes left in the openSet
-        if(this.openList.Count == 0)
+        if(this.openList.Count > 0)
         {
-            //We return just the starting node, which means their is no path
-            this.pathStack.Push(startNode);
-        }
-
-        //We get the lowest heuristic node in the open set
-        Node lowestNode = getLowestNode();
-        //We remove it from the open set
-        removeByObject(this.openList, lowestNode);
-        //We insert it in the closed set
-        this.closeList.Add(lowestNode);
-        //If it's in the end node coordinate
-        if (lowestNode.getX() == endNode.getX() && lowestNode.getY() == endNode.getY())
-        {
-            //Update reconstructed path
-            getPath(endNode);
-        }
-        else
-        {
-            //Otherwise, we add the neighbors into the open set
-            addNeighbors(lowestNode, endNode, map);
+            //We get the lowest heuristic node in the open set
+            Node lowestNode = getLowestNode();
+            //We remove it from the open set
+            removeByObject(this.openList, lowestNode);
+            //We insert it in the closed set
+            this.closeList.Add(lowestNode);
+            //If it's in the end node coordinate
+            if (lowestNode.getX() == endNode.getX() && lowestNode.getY() == endNode.getY())
+            {
+                //Update reconstructed path
+                getPath(endNode);
+            }
+            else
+            {
+                //Otherwise, we add the neighbors into the open set
+                addNeighbors(lowestNode, endNode, map);
+            }
         }
     }
 
     public void findPathFromStartEnd(Node startNode, Node endNode, int[,] map)
-    {       
+    {      
+        this.openList.Clear();
+        this.closeList.Clear();
+        
         //We give to the openSet a starting point
-        this.openList.Add(startNode);
+        this.openList.Add(new Node(startNode.getX(), startNode.getY(), 0, 0));
 
-        while(this.pathStack.Count == 0)
+        while(this.pathStack.Count == 0 && this.openList.Count > 0)
         {
             //We do one step of A* algorithme
             AStar(startNode, endNode, map);
@@ -277,14 +288,25 @@ public class Pathfinding : MonoBehaviour
 
     public void printPath()
     {
-        Array myNodeArray = Array.CreateInstance(typeof(Node), this.pathStack.Count);
-        this.pathStack.CopyTo(myNodeArray, 0);
-
-        foreach(Node element in myNodeArray)
+        if(this.pathStack == null)
         {
-            Debug.Log("X: " + element.getX());
-            Debug.Log("Y: " + element.getY());
-            Debug.Log("======================");
+            Debug.Log("Path is null");
+        }
+        else if(this.pathStack.Count == 0)
+        {
+            Debug.Log("Path is empty");
+        }
+        else
+        {
+            Array myNodeArray = Array.CreateInstance(typeof(Node), this.pathStack.Count);
+            this.pathStack.CopyTo(myNodeArray, 0);
+
+            foreach(Node element in myNodeArray)
+            {
+                Debug.Log("X: " + element.getX());
+                Debug.Log("Y: " + element.getY());
+                Debug.Log("======================");
+            }
         }
     }
 

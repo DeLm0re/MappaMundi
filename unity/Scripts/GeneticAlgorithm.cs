@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class GeneticAlgorithm : MonoBehaviour
 {
@@ -23,7 +26,8 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         initializeGeneticAlgorithmAttributs();
         loadLabelingWeights();
-        printLabelingWeights();
+        //Print the labeling weights
+        //printLabelingWeights();
     }
 
     private void initializeGeneticAlgorithmAttributs()
@@ -46,7 +50,7 @@ public class GeneticAlgorithm : MonoBehaviour
         {
             for(heightIndex = 0; heightIndex < this.heightInterestField; heightIndex++)
             {
-                this.interestField[widthIndex,heightIndex] = 0;
+                this.interestField[widthIndex,heightIndex] = -Definition.INFINITY;
             }
         }
     }
@@ -78,18 +82,25 @@ public class GeneticAlgorithm : MonoBehaviour
 
     private void loadLabelingWeights()
     {
-        string path = EditorUtility.OpenFilePanel("Select Genetic Network", "", "gn");
+        //Get the path of the Game data folder
+        //string directPath = Application.dataPath;
+        //string filePath = directPath + @"/Resources/genome.gn";
 
-        if (path.Length != 0)
+        string filePath = Definition.OpenSingleFile();
+
+        if(System.IO.File.Exists(filePath))
         {
             int i;
-            var fileContent = File.ReadAllBytes(path);
+            var fileContent = File.ReadAllBytes(filePath);
 
             for(i = 0; i < 10; i++)
             {
                 this.labelingWeights[i] = BitConverter.ToDouble(fileContent,i*8);
-
             }
+        }
+        else
+        {
+            Debug.Log("Pas de fichier");
         }
     }
 
@@ -102,81 +113,77 @@ public class GeneticAlgorithm : MonoBehaviour
             print(this.labelingWeights[i]);
         }
     }
-/*
-    private Stack findNextPathGN(Node endNode)
+
+    public void findNextPathGN(Node endNode)
     {
         Node startNode = new Node(entity.getXEntity(), entity.getYEntity(), 0, 0);
 
         //We update each values of the interest field with what our neural network think
-        updateInterestField2(interestField, endNode->x, endNode->y, entity, labelingWeights);
+        updateInterestField2(endNode.getX(), endNode.getY());
         
         //We set a default wanted node
-        Node wantedPosition = endNode;
-        
-        //Use to store the path found by the pathfinding
-        Stack path = new Stack();
+        Node wantedPosition = new Node(endNode.getX(), endNode.getY(), 0, 0);
+        //updateBestWantedPosition(wantedPosition);
+        //on print wanted position
+        //path.findPathFromStartEnd(startNode, wantedPosition, entity.getMentalMap());
+        //print(path.getPathStack().Count);
+
         //We try to find a path
-        while(path.Count == 0)
+        while(path.getPathStack().Count == 0)
         {
             //We try to find a path
-            path = findPathFromStartEnd(startNode, wantedPosition, entity->mentalMap, &(data->endEvent));
+            //findPathFromStartEnd(Node startNode, Node endNode, int[,] map)
+            path.findPathFromStartEnd(startNode, wantedPosition, entity.getMentalMap());
             //If we haven't find a path
-            if ((path == startNode || path == NULL))
+            if(path.getPathStack().Count == 0)
             {
                 //We change our wanted node to the best position found by the neural network
-                updateBestWantedPosition(wantedPosition, interestField);
-            }
-        }
-        destructInterestField(&interestField);
-        destructNodes(&wantedPosition);
-
-        return path;
-    }
-
-    void updateInterestField2(InterestField* interestField, int xEnd, int yEnd, Entity* entity, LabelingWeights* labelingWeights)
-    {
-        if (interestField != NULL && entity != NULL && labelingWeights != NULL)
-        {
-            int width, height;
-            for(width = 0; width < interestField->width; width++)
-            {
-                for(height = 0; height < interestField->height; height++)
-                {
-                    Field* fieldOfView = getFieldOfViewFromMap(entity->mentalMap, width, height, entity->visionRange);
-                    
-                    interestField->data[width][height] = labeling3(fieldOfView, width, height, xEnd, yEnd, entity, labelingWeights);
-                    
-                    destructField(&fieldOfView);
-                }
+                updateBestWantedPosition(wantedPosition);
             }
         }
     }
 
-    void updateBestWantedPosition(node* wantedPosition, InterestField* interestField)
+    private void updateInterestField2(int xEnd, int yEnd)
     {
-        if (wantedPosition != NULL && interestField != NULL)
+        int width, height;
+
+        for(width = 0; width < this.interestField.GetLength(0); width++)
         {
-            float bestPoint = -INFINITY;
-            wantedPosition->x = 0;
-            wantedPosition->y = 0;
-            int width, height;
-            for(width = 0; width < interestField->width; width++)
+            for(height = 0; height < this.interestField.GetLength(1); height++)
             {
-                for(height = 0; height < interestField->height; height++)
+                int[,] fieldOfView = getFieldOfViewFromMap(width, height);
+                    
+                this.interestField[width,height] = labeling3(fieldOfView, width, height, xEnd, yEnd);
+            }
+        }
+    }
+
+    private void updateBestWantedPosition(Node wantedPosition)
+    {
+        if (wantedPosition != null)
+        {
+            double bestPoint = -Definition.INFINITY;
+            wantedPosition.setX(0);
+            wantedPosition.setY(0);
+            int width, height;
+            for(width = 0; width < this.interestField.GetLength(0); width++)
+            {
+                for(height = 0; height < this.interestField.GetLength(1); height++)
                 {
                     
-                    if (interestField->data[width][height] > bestPoint)
+                    if (this.interestField[width,height] > bestPoint)
                     {
-                        bestPoint = interestField->data[width][height];
-                        wantedPosition->x = width;
-                        wantedPosition->y = height;
+                        bestPoint = this.interestField[width,height];
+                        wantedPosition.setX(width);
+                        wantedPosition.setY(height);
                     }
                 }
             }
-            interestField->data[wantedPosition->x][wantedPosition->y] = -INFINITY;
+            this.interestField[wantedPosition.getX(),wantedPosition.getY()] = -Definition.INFINITY;
+            //print(wantedPosition.getX() + " " + wantedPosition.getY() + " " + bestPoint);
         }
     }
-*/
+
     private double labeling3(int[,] aField, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)
     {
         double emptyPoint = 0;
@@ -255,16 +262,14 @@ public class GeneticAlgorithm : MonoBehaviour
 
         double dist = Math.Sqrt(Math.Pow(xPosition-xOrigin, 2) + Math.Pow(yPosition-yOrigin, 2));
 
-        double[] vect = new double[2];
-        vect[0] = Math.Cos(angle);
-        vect[1] = Math.Sin(angle);
+        Vector2 vect = new Vector2((float)Math.Cos(angle),(float)Math.Sin(angle));
 
         bool isVisible = true;
 
         for(int i = 0; i < dist; i++)
         {
-            double x = xOrigin + i * vect[0];
-            double y = yOrigin + i * vect[1];
+            double x = xOrigin + i * vect.x;
+            double y = yOrigin + i * vect.y;
 
             if ( ((int) x) != xPosition && ((int) y) != yPosition)
             {
@@ -280,6 +285,10 @@ public class GeneticAlgorithm : MonoBehaviour
     public int[,] getFieldOfViewFromMap(int x, int y)
     {
         int[,] aField = new int[entity.visionRange*2 + 1, entity.visionRange*2 + 1];
+
+        int mentalMapWidth = entity.getMentalMap().GetLength(0);
+        int mentalMapHeight = entity.getMentalMap().GetLength(1);
+
         // If the mental map exist and if the vision range is greater than 0
         if(entity.getMentalMap() != null && entity.visionRange > 0)
         {
@@ -299,7 +308,7 @@ public class GeneticAlgorithm : MonoBehaviour
                     if(distanceSquare < radiusSquare)
                     {
                         // If it doesn't go out of bounds
-                        if (0 < width && width < entity.getMentalMap().GetLength(0) && 0 < height && height < entity.getMentalMap().GetLength(1))
+                        if (0 < width && width < mentalMapWidth && 0 < height && height < mentalMapHeight)
                         {
                             // We add it to the mental map
                             aField[width - x + entity.visionRange,height - y + entity.visionRange] = entity.getPointFromMentalMap(width,height);
@@ -309,5 +318,10 @@ public class GeneticAlgorithm : MonoBehaviour
             }
         }
         return aField;
+    }
+
+    public void setLabelingWeights(int index, double value)
+    {
+        this.labelingWeights[index] = value;
     }
 }

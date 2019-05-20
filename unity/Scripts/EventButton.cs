@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+
+using Crosstales.FB;
 
 public class EventButton : MonoBehaviour
 {
@@ -7,6 +11,7 @@ public class EventButton : MonoBehaviour
     public Button quitButton;
     public Button genButton;
     public Button pauseButton;
+    public Button genomeButton;
     
     public Slider sliderFps;
 
@@ -18,6 +23,8 @@ public class EventButton : MonoBehaviour
 
     public EntityHandler entity;
 
+    public GeneticAlgorithm genetic;
+
     void Start()
     {
         updateFps();
@@ -25,6 +32,7 @@ public class EventButton : MonoBehaviour
         quitButton.onClick.AddListener(ApplicationQuit);
         genButton.onClick.AddListener(GenerationMap);
         pauseButton.onClick.AddListener(ChangePauseMode);
+        genomeButton.onClick.AddListener(SwapGenome);
         sliderFps.onValueChanged.AddListener(delegate {updateFps(); });
     }
     
@@ -58,17 +66,41 @@ public class EventButton : MonoBehaviour
 
     private void GenerationMap()
     {
-        /*
-        environment.getEnvironmentMeshHandler().DestructMesh();
-        environment.CreateMap();
-
-        int[,] map = environment.getMap();
-        int width = map.GetLength(0);
-        int height = map.GetLength(1);
-
-        path.cleanPath();
-        path.findPathFromStartEnd(path.nearestNode(map,0,0), path.nearestNode(map,width-1,height-1), map);
-        */
         entity.newGeneration();
+
+        //Actualize the position of the entity
+        entity.actualizePositionEntity();
+
+        //Update the fieldOfView for the start
+        entity.updateFieldOfViewEntity();
+
+        //Update the fieldOfView for the start
+        entity.updateMentalMapEntity();
+
+        //Create the starting fog of the new map
+        entity.fogHandler.CreateFog(entity.getMentalMap());
     }
+
+    private void SwapGenome()
+    {
+        string filePath = Definition.OpenSingleFile();
+
+        if(System.IO.File.Exists(filePath))
+        {
+            int i;
+            var fileContent = File.ReadAllBytes(filePath);
+
+            for(i = 0; i < 10; i++)
+            {
+                genetic.setLabelingWeights(i, BitConverter.ToDouble(fileContent,i*8));
+            }
+        }
+        else
+        {
+            Debug.Log("Pas de fichier");
+        }
+
+        this.GenerationMap();
+    }
+
 }
