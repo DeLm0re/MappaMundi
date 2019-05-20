@@ -1,0 +1,8 @@
+Map, Neural network, Number of steps, Number of fog tiles revealed, Number of decisions taken, Average time to take a decision
+Random,genomePoint-cuvette.gn,117.000000,614.000000,20.000000,0.012499,
+Random,genomePoint-enfer_de_cuvette.gn,92.000000,537.000000,15.000000,0.012753,
+Random,genomePoint-labyrinthe.gn,113.000000,474.000000,24.000000,0.010625,
+Random,genomePoint-multi_voies.gn,91.000000,524.000000,14.000000,0.012675,
+Random,genomePoint-random40x40.gn,91.000000,524.000000,14.000000,0.012214,
+Random,genomePoint-shapes.gn,91.000000,524.000000,14.000000,0.011416,
+Random,genomePoint-tunnels.gn,93.000000,531.000000,14.000000,0.010740,
