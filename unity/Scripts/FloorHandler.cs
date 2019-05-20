@@ -14,8 +14,6 @@ public class FloorHandler : MonoBehaviour
     private void floorInitialization()
     {
         int[,] map = environment.getMap();
-
-        map = environment.getMap();
         
         float width = map.GetLength(0);
         float height = map.GetLength(1);

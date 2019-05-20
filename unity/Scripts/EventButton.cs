@@ -9,9 +9,10 @@ public class EventButton : MonoBehaviour
 {
     //Make sure to attach these Buttons in the Inspector
     public Button quitButton;
-    public Button genButton;
     public Button pauseButton;
     public Button genomeButton;
+    public Button aleatoireButton;
+    public Button customButton;
     
     public Slider sliderFps;
 
@@ -30,10 +31,25 @@ public class EventButton : MonoBehaviour
         updateFps();
         //Calls the TaskOnClick/TaskWithParameters/ButtonClicked method when you click the Button
         quitButton.onClick.AddListener(ApplicationQuit);
-        genButton.onClick.AddListener(GenerationMap);
         pauseButton.onClick.AddListener(ChangePauseMode);
         genomeButton.onClick.AddListener(SwapGenome);
         sliderFps.onValueChanged.AddListener(delegate {updateFps(); });
+        aleatoireButton.onClick.AddListener(AleatoireMap);
+        customButton.onClick.AddListener(CustomMap);
+    }
+
+    private void AleatoireMap()
+    {
+        environment.setFilePath("none");
+        entity.setFlagMap("random");
+        this.GenerationMap();
+    }
+
+    private void CustomMap()
+    {
+        environment.setFilePath("none");
+        entity.setFlagMap("custom");
+        this.GenerationMap();
     }
     
     private void updateFps()
@@ -77,6 +93,8 @@ public class EventButton : MonoBehaviour
         //Update the fieldOfView for the start
         entity.updateMentalMapEntity();
 
+        //Destroy the mesh of the last frame
+        entity.fogHandler.getFogMeshHandler().DestructMesh();
         //Create the starting fog of the new map
         entity.fogHandler.CreateFog(entity.getMentalMap());
     }

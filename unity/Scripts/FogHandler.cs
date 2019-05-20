@@ -6,11 +6,6 @@ public class FogHandler : MonoBehaviour
 {
     private FogMeshHandler fogMeshHandler;
 
-    void Start()
-    {
-
-    }
-
     public void CreateFog(int[,] mentalMap)
     {
         //Draw the map using mesh
