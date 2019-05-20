@@ -39,6 +39,8 @@ public class EntityHandler : MonoBehaviour
 
     private Point[,] fieldOfView;
 
+    private string flagMap;
+
     void Start()
     {
         initializationAttributs();
@@ -82,6 +84,8 @@ public class EntityHandler : MonoBehaviour
                     //Update the fieldOfView for the start
                     updateMentalMapEntity();
 
+                    //Destroy the mesh of the last frame
+                    fogHandler.getFogMeshHandler().DestructMesh();
                     //Create the starting fog of the new map
                     fogHandler.CreateFog(mentalMap);
                 }
@@ -146,11 +150,13 @@ public class EntityHandler : MonoBehaviour
         this.mentalMap = new int[this.width,this.height];
         initializeMentalMapEntity();
 
-        startNode = path.nearestNode(this.map, 0, 0);
-        endNode = path.nearestNode(this.map,this.width-1,this.height-1);
+        startNode = path.nearestNode(this.map, 0, this.height);
+        endNode = path.nearestNode(this.map,this.width-1, 0);
 
         this.xEntity = startNode.getX();
         this.yEntity = startNode.getY();
+
+        this.flagMap = "random";
     }
 
     private void calculNextPosition()
@@ -169,7 +175,15 @@ public class EntityHandler : MonoBehaviour
         environment.getEnvironmentMeshHandler().DestructMesh();
         //Destroy the mesh of the last fog
         fogHandler.getFogMeshHandler().DestructMesh();
-        environment.CreateMap();
+        
+        if(this.flagMap == "custom")
+        {
+            environment.CreateCustomMap();
+        }
+        if(this.flagMap == "random")
+        {
+            environment.CreateMap();
+        }
 
         path.cleanPath();
         //path.findPathFromStartEnd(path.nearestNode(this.map,0,0), path.nearestNode(this.map,this.width-1,this.height-1), this.map);
@@ -186,8 +200,8 @@ public class EntityHandler : MonoBehaviour
         initialiseFieldOfViewEntity();
         initializeMentalMapEntity();
 
-        startNode = path.nearestNode(this.map, 0, 0);
-        endNode = path.nearestNode(this.map,this.width-1,this.height-1);
+        startNode = path.nearestNode(this.map, 0, this.height);
+        endNode = path.nearestNode(this.map,this.width-1, 0);
 
         this.xEntity = startNode.getX();
         this.yEntity = startNode.getY();
@@ -362,6 +376,16 @@ public class EntityHandler : MonoBehaviour
     public int getYEntity()
     {
         return this.yEntity;
+    }
+
+    public void setFlagMap(string value)
+    {
+        this.flagMap = value;
+    }
+
+    public string getFlagMap()
+    {
+        return this.flagMap;
     }
 
 }

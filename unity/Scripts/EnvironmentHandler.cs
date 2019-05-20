@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.IO;
+
+using Crosstales.FB;
+using B83.Image.BMP;
 
 public class EnvironmentHandler : MonoBehaviour 
 {
@@ -16,24 +20,15 @@ public class EnvironmentHandler : MonoBehaviour
 
     private int[,] map;
 
+    private string filePath;
+
     void Start()
     {
-        this.map = new int[width,height];
+        this.map = new int[width, height];
+        this.filePath = "none";
 
         CreateMap();
-
-        //path.findPathFromStartEnd(path.nearestNode(map,0,0), path.nearestNode(map,width-1,height-1), map);
-        //pathFinder.printPath();
     }
-
-    /*
-    void Update() {
-        if (Input.GetKey(KeyCode.R)) {
-            meshGen.DestructMesh();
-            CreateMap();
-        }
-    }*/
-
     public void CreateMap()
     {
         //Make the borders of the map walls
@@ -82,7 +77,7 @@ public class EnvironmentHandler : MonoBehaviour
         {
             for (int y = 1; y < height-1; y ++)
             {
-                this.map[x,y] = (pseudoRandom.Next(1,100) < 50)? 1 : 0;
+                this.map[x,y] = (pseudoRandom.Next(1,100) < 50)? (int)Definition.pointEnum.WALL : (int)Definition.pointEnum.EMPTY;
             }
         }
     }
@@ -138,5 +133,54 @@ public class EnvironmentHandler : MonoBehaviour
     public int[,] getMap()
     {
         return this.map;
+    }
+
+    public void CreateCustomMap()
+    {
+        int i, j;
+        
+        if(this.filePath == "none")
+        {
+            this.filePath = FileBrowser.OpenSingleFile("bmp");
+        }
+        Texture2D texture = null;
+        byte[] fileData = File.ReadAllBytes(this.filePath);
+
+        BMPLoader bmpLoader = new BMPLoader();
+
+        //Load the BMP data
+        BMPImage bmpImg = bmpLoader.LoadBMP(fileData);
+
+        //Convert the Color32 array into a Texture2D
+        texture = bmpImg.ToTexture2D();
+
+        for(i = 0; i < texture.width; i++)
+        {
+            for(j = 0; j < texture.height; j++)
+            {
+                if(texture.GetPixel(i, j).r == 0)
+                {
+                    this.map[i, j] = (int)Definition.pointEnum.WALL;
+                }
+                else
+                {
+                    this.map[i, j] = (int)Definition.pointEnum.EMPTY;
+                }
+            }
+        }
+        
+        //Draw the map using mesh
+        envMeshHandler = GetComponent<EnvironmentMeshHandler>();
+        envMeshHandler.GenerateMeshWall(map, 1);
+    }
+
+    public void setFilePath(string value)
+    {
+        this.filePath = value;
+    }
+
+    public string getFilePath()
+    {
+        return this.filePath;
     }
 }
