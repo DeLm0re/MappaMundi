@@ -1,0 +1,565 @@
+\hypertarget{pathfinding_8h}{}\section{code/pathfinding.h File Reference}
+\label{pathfinding_8h}\index{code/pathfinding.\+h@{code/pathfinding.\+h}}
+
+
+Prototypes of the A$\ast$ pathfinding algorithm.  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$S\+D\+L2/\+S\+D\+L.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}prototype.\+h\char`\"{}}\\*
+Include dependency graph for pathfinding.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structnode}{node}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structnode}{node} {\bfseries node}\hypertarget{pathfinding_8h_af4aeda155dbe167f1c1cf38cb65bf324}{}\label{pathfinding_8h_af4aeda155dbe167f1c1cf38cb65bf324}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a07355f31580b67321e44d928d3f1160e}{init\+Node} (int x, int y, int cost, int heuristic)
+\begin{DoxyCompactList}\small\item\em Function that initialize a node. A node is a structure used in the A$\ast$ algorithme A node can be used to create a chain list of node. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a6bf7ac9193bc48dfb67282bca9a8de63}{nearest\+Node} (\hyperlink{structField}{Field} $\ast$one\+Field, int x, int y)
+\begin{DoxyCompactList}\small\item\em Function that returns the nearest and safest node around the node which is used as a starting point for the pathfinding. \end{DoxyCompactList}\item 
+void \hyperlink{pathfinding_8h_a947abfff07e9533f4c63946fcd054f0c}{destruct\+Nodes} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node)
+\begin{DoxyCompactList}\small\item\em Function used to free all the nodes in a chain list of nodes. \end{DoxyCompactList}\item 
+void \hyperlink{pathfinding_8h_a9a2be5ed6430331aa3c5f20d7bcf5674}{set\+Heuristic} (\hyperlink{structnode}{node} $\ast$node\+To\+Set, \hyperlink{structnode}{node} $\ast$end\+Node)
+\begin{DoxyCompactList}\small\item\em Function which is used to set the heuristic of a node. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a32c85f02f3dee4dfd6ef0f87b4d371ba}{pop\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node)
+\begin{DoxyCompactList}\small\item\em Function which pop the top node out of a chain list of node and returns it. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a248273da6d6bb5f6cbf68f35bc2e9fa2}{get\+Last\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node)
+\begin{DoxyCompactList}\small\item\em Function which return the bottom node of a chain list of nodes. \end{DoxyCompactList}\item 
+int \hyperlink{pathfinding_8h_ac3548114875d52613b2a7782b9b1f609}{get\+Nb\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node)
+\begin{DoxyCompactList}\small\item\em Function which returns the number of nodes in the path. \end{DoxyCompactList}\item 
+void \hyperlink{pathfinding_8h_ac808a207be726ca24a31f511c2564da5}{rmv\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node, \hyperlink{structnode}{node} $\ast$node\+To\+Remove)
+\begin{DoxyCompactList}\small\item\em Function which pops out a given node from a chain list of nodes. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a6ddab774669e3cbdcae9effea07b5c2c}{cpy\+Node} (\hyperlink{structnode}{node} $\ast$node\+To\+Cpy)
+\begin{DoxyCompactList}\small\item\em Function which initializes and returns a copy of the given node. \end{DoxyCompactList}\item 
+void \hyperlink{pathfinding_8h_ace54b8b7ea41338283ad22a0d4604dcd}{insert\+Front\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node, \hyperlink{structnode}{node} $\ast$new\+Node)
+\begin{DoxyCompactList}\small\item\em Function which adds a node at the top of a chain list of nodes. \end{DoxyCompactList}\item 
+void \hyperlink{pathfinding_8h_af5eda1dc96671ececdc1145dbb440dbc}{view\+Nodes} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node, S\+D\+L\+\_\+\+Renderer $\ast$renderer, S\+D\+L\+\_\+\+Color color, int tile\+Size)
+\begin{DoxyCompactList}\small\item\em Function used to draw a chain list of nodes on the screen using S\+DL. \end{DoxyCompactList}\item 
+int \hyperlink{pathfinding_8h_a97b8fd47256a86748865f05f07540695}{node\+Cmp} (\hyperlink{structnode}{node} $\ast$n1, \hyperlink{structnode}{node} $\ast$n2)
+\begin{DoxyCompactList}\small\item\em Function used to compare the heuristic of two nodes. \end{DoxyCompactList}\item 
+int \hyperlink{pathfinding_8h_a9b7b1e77c7629039815d17b54325d130}{dist\+Nodes} (\hyperlink{structnode}{node} $\ast$n1, \hyperlink{structnode}{node} $\ast$n2)
+\begin{DoxyCompactList}\small\item\em Function which returns the square of the distance between the two given nodes. \end{DoxyCompactList}\item 
+bool \hyperlink{pathfinding_8h_ad901f16b1f03ab8bcea6a6126e44c1d4}{is\+In\+Set} (\hyperlink{structnode}{node} $\ast$$\ast$front\+Node, int x, int y)
+\begin{DoxyCompactList}\small\item\em Function which checks if there is a node at the given coordinates in the given chain list of nodes. \end{DoxyCompactList}\item 
+bool \hyperlink{pathfinding_8h_ab5d0d788c16a95dde97f4bef37b8bcff}{is\+Next\+To} (\hyperlink{structnode}{node} $\ast$node\+To\+Check, int x, int y)
+\begin{DoxyCompactList}\small\item\em Function which check if the given node is next to the given coordinate. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a2045083410a642da7aa9b65678d23018}{get\+Lowest\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$open\+Set)
+\begin{DoxyCompactList}\small\item\em Function which returns the node with the best heuristic (the lowest) \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a7407b9a55abd3a89e50269e159b8c04f}{get\+Path} (\hyperlink{structnode}{node} $\ast$$\ast$closed\+Set, \hyperlink{structnode}{node} $\ast$end\+Node)
+\begin{DoxyCompactList}\small\item\em Function which creates a chain list of nodes which represent the optimized path. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_ac0f58309ead68ba16b6999243d90e73a}{get\+Node} (\hyperlink{structnode}{node} $\ast$$\ast$path, int index)
+\begin{DoxyCompactList}\small\item\em Function to access a node in a given path. \end{DoxyCompactList}\item 
+void \hyperlink{pathfinding_8h_ac8d1ff1dcb9fbba0fd15a681be024611}{add\+Neighbors} (\hyperlink{structnode}{node} $\ast$$\ast$open\+Set, \hyperlink{structnode}{node} $\ast$$\ast$closed\+Set, \hyperlink{structnode}{node} $\ast$current\+Node, \hyperlink{structnode}{node} $\ast$end\+Node, \hyperlink{structField}{Field} $\ast$the\+Field)
+\begin{DoxyCompactList}\small\item\em Function which adds and creates the neighboors of a given node in the open\+Set of the A$\ast$ algorithme It adds neighbors only if they are not in the closed\+Set or the open\+Set. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_ae36b2e23f5e7e33feb804da1863dd748}{A\+Star} (\hyperlink{structnode}{node} $\ast$$\ast$open\+Set, \hyperlink{structnode}{node} $\ast$$\ast$closed\+Set, \hyperlink{structnode}{node} $\ast$start\+Node, \hyperlink{structnode}{node} $\ast$end\+Node, \hyperlink{structField}{Field} $\ast$the\+Field)
+\begin{DoxyCompactList}\small\item\em Function which do one step of the A$\ast$ algorithme. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{pathfinding_8h_a4ae404d422c22b58ca74344ce62dc96b}{find\+Path\+From\+Start\+End} (\hyperlink{structnode}{node} $\ast$start\+Node, \hyperlink{structnode}{node} $\ast$end\+Node, \hyperlink{structField}{Field} $\ast$the\+Field, bool $\ast$end\+Event)
+\begin{DoxyCompactList}\small\item\em Function that finds the path between two points (start, end) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Prototypes of the A$\ast$ pathfinding algorithm. 
+
+\begin{DoxyAuthor}{Author}
+Louis Schuck 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+11/10/2018
+\end{DoxyDate}
+Module that contain all prototypes of function in \hyperlink{pathfinding_8c}{pathfinding.\+c} 
+
+\subsection{Function Documentation}
+\index{pathfinding.\+h@{pathfinding.\+h}!add\+Neighbors@{add\+Neighbors}}
+\index{add\+Neighbors@{add\+Neighbors}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{add\+Neighbors(node $\ast$$\ast$open\+Set, node $\ast$$\ast$closed\+Set, node $\ast$current\+Node, node $\ast$end\+Node, Field $\ast$the\+Field)}{addNeighbors(node **openSet, node **closedSet, node *currentNode, node *endNode, Field *theField)}}]{\setlength{\rightskip}{0pt plus 5cm}void add\+Neighbors (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{open\+Set, }
+\item[{{\bf node} $\ast$$\ast$}]{closed\+Set, }
+\item[{{\bf node} $\ast$}]{current\+Node, }
+\item[{{\bf node} $\ast$}]{end\+Node, }
+\item[{{\bf Field} $\ast$}]{the\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ac8d1ff1dcb9fbba0fd15a681be024611}{}\label{pathfinding_8h_ac8d1ff1dcb9fbba0fd15a681be024611}
+
+
+Function which adds and creates the neighboors of a given node in the open\+Set of the A$\ast$ algorithme It adds neighbors only if they are not in the closed\+Set or the open\+Set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Set} & \+: the chain list of nodes which represent the open\+Set of the A$\ast$ algorithme \\
+\hline
+{\em closed\+Set} & \+: the chain list of nodes which represent the close\+Set of the A$\ast$ algorithme \\
+\hline
+{\em current\+Node} & \+: the reference node used to create the neighbors \\
+\hline
+{\em end\+Node} & \+: the end node of the A$\ast$ algorithme \\
+\hline
+{\em the\+Field$\ast$} & \+: poiter to the field used to see if it is a valid neighbor or not\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!A\+Star@{A\+Star}}
+\index{A\+Star@{A\+Star}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{A\+Star(node $\ast$$\ast$open\+Set, node $\ast$$\ast$closed\+Set, node $\ast$start\+Node, node $\ast$end\+Node, Field $\ast$the\+Field)}{AStar(node **openSet, node **closedSet, node *startNode, node *endNode, Field *theField)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ A\+Star (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{open\+Set, }
+\item[{{\bf node} $\ast$$\ast$}]{closed\+Set, }
+\item[{{\bf node} $\ast$}]{start\+Node, }
+\item[{{\bf node} $\ast$}]{end\+Node, }
+\item[{{\bf Field} $\ast$}]{the\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ae36b2e23f5e7e33feb804da1863dd748}{}\label{pathfinding_8h_ae36b2e23f5e7e33feb804da1863dd748}
+
+
+Function which do one step of the A$\ast$ algorithme. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Set} & \+: the chain list of nodes which represent the open\+Set of the A$\ast$ algorithme \\
+\hline
+{\em closed\+Set} & \+: the chain list of nodes which represent the close\+Set of the A$\ast$ algorithme \\
+\hline
+{\em start\+Node} & \+: the starting node of the A$\ast$ algorithme \\
+\hline
+{\em end\+Node} & \+: the end node of the A$\ast$ algorithme \\
+\hline
+{\em the\+Field$\ast$} & \+: pointer the field used to see where the path can go\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: Once the path has been found, returns the complete path. Other\+Wise return N\+U\+LL. If no path possible, returns start\+Node 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!cpy\+Node@{cpy\+Node}}
+\index{cpy\+Node@{cpy\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{cpy\+Node(node $\ast$node\+To\+Cpy)}{cpyNode(node *nodeToCpy)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ cpy\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{node\+To\+Cpy}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a6ddab774669e3cbdcae9effea07b5c2c}{}\label{pathfinding_8h_a6ddab774669e3cbdcae9effea07b5c2c}
+
+
+Function which initializes and returns a copy of the given node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node\+To\+Cpy} & \+: the node wich will be copied\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The copy of the node 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!destruct\+Nodes@{destruct\+Nodes}}
+\index{destruct\+Nodes@{destruct\+Nodes}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Nodes(node $\ast$$\ast$front\+Node)}{destructNodes(node **frontNode)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Nodes (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a947abfff07e9533f4c63946fcd054f0c}{}\label{pathfinding_8h_a947abfff07e9533f4c63946fcd054f0c}
+
+
+Function used to free all the nodes in a chain list of nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!dist\+Nodes@{dist\+Nodes}}
+\index{dist\+Nodes@{dist\+Nodes}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{dist\+Nodes(node $\ast$n1, node $\ast$n2)}{distNodes(node *n1, node *n2)}}]{\setlength{\rightskip}{0pt plus 5cm}int dist\+Nodes (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{n1, }
+\item[{{\bf node} $\ast$}]{n2}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a9b7b1e77c7629039815d17b54325d130}{}\label{pathfinding_8h_a9b7b1e77c7629039815d17b54325d130}
+
+
+Function which returns the square of the distance between the two given nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n1,n2} & \+: the two nodes between which we want to know the distance\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: Square of the distance between the two nodes 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!find\+Path\+From\+Start\+End@{find\+Path\+From\+Start\+End}}
+\index{find\+Path\+From\+Start\+End@{find\+Path\+From\+Start\+End}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{find\+Path\+From\+Start\+End(node $\ast$start\+Node, node $\ast$end\+Node, Field $\ast$the\+Field, bool $\ast$end\+Event)}{findPathFromStartEnd(node *startNode, node *endNode, Field *theField, bool *endEvent)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ find\+Path\+From\+Start\+End (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{start\+Node, }
+\item[{{\bf node} $\ast$}]{end\+Node, }
+\item[{{\bf Field} $\ast$}]{the\+Field, }
+\item[{bool $\ast$}]{end\+Event}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a4ae404d422c22b58ca74344ce62dc96b}{}\label{pathfinding_8h_a4ae404d422c22b58ca74344ce62dc96b}
+
+
+Function that finds the path between two points (start, end) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+Node} & \+: the starting node of the A$\ast$ algorithme \\
+\hline
+{\em end\+Node} & \+: the end node of the A$\ast$ algorithme \\
+\hline
+{\em the\+Field$\ast$} & \+: pointer to the field used to see where the path can go \\
+\hline
+{\em end\+Event} & \+: pointer to boolean that will trigger the end of the function. Put N\+U\+LL if there is none\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The complete path. Other\+Wise return N\+U\+LL. If no path possible, returns start\+Node 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!get\+Last\+Node@{get\+Last\+Node}}
+\index{get\+Last\+Node@{get\+Last\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{get\+Last\+Node(node $\ast$$\ast$front\+Node)}{getLastNode(node **frontNode)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ get\+Last\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a248273da6d6bb5f6cbf68f35bc2e9fa2}{}\label{pathfinding_8h_a248273da6d6bb5f6cbf68f35bc2e9fa2}
+
+
+Function which return the bottom node of a chain list of nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The last node of the list 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!get\+Lowest\+Node@{get\+Lowest\+Node}}
+\index{get\+Lowest\+Node@{get\+Lowest\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{get\+Lowest\+Node(node $\ast$$\ast$open\+Set)}{getLowestNode(node **openSet)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ get\+Lowest\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{open\+Set}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a2045083410a642da7aa9b65678d23018}{}\label{pathfinding_8h_a2045083410a642da7aa9b65678d23018}
+
+
+Function which returns the node with the best heuristic (the lowest) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Set} & \+: the chain list of nodes which represent the open\+Set of the A$\ast$ algorithme\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The node with the lowest heuristic 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!get\+Nb\+Node@{get\+Nb\+Node}}
+\index{get\+Nb\+Node@{get\+Nb\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{get\+Nb\+Node(node $\ast$$\ast$front\+Node)}{getNbNode(node **frontNode)}}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Nb\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ac3548114875d52613b2a7782b9b1f609}{}\label{pathfinding_8h_ac3548114875d52613b2a7782b9b1f609}
+
+
+Function which returns the number of nodes in the path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: Number of nodes in the path 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!get\+Node@{get\+Node}}
+\index{get\+Node@{get\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{get\+Node(node $\ast$$\ast$path, int index)}{getNode(node **path, int index)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ get\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{path, }
+\item[{int}]{index}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ac0f58309ead68ba16b6999243d90e73a}{}\label{pathfinding_8h_ac0f58309ead68ba16b6999243d90e73a}
+
+
+Function to access a node in a given path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \+: the path where to search the node \\
+\hline
+{\em int} & \+: the index where to search the node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The node found in the path 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!get\+Path@{get\+Path}}
+\index{get\+Path@{get\+Path}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{get\+Path(node $\ast$$\ast$closed\+Set, node $\ast$end\+Node)}{getPath(node **closedSet, node *endNode)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ get\+Path (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{closed\+Set, }
+\item[{{\bf node} $\ast$}]{end\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a7407b9a55abd3a89e50269e159b8c04f}{}\label{pathfinding_8h_a7407b9a55abd3a89e50269e159b8c04f}
+
+
+Function which creates a chain list of nodes which represent the optimized path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em closed\+Set} & \+: the chain list of nodes which represent the close\+Set of the A$\ast$ algorithme \\
+\hline
+{\em end\+Node} & \+: the end node of the A$\ast$ algorithme\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The optimized path 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!init\+Node@{init\+Node}}
+\index{init\+Node@{init\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{init\+Node(int x, int y, int cost, int heuristic)}{initNode(int x, int y, int cost, int heuristic)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ init\+Node (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{cost, }
+\item[{int}]{heuristic}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a07355f31580b67321e44d928d3f1160e}{}\label{pathfinding_8h_a07355f31580b67321e44d928d3f1160e}
+
+
+Function that initialize a node. A node is a structure used in the A$\ast$ algorithme A node can be used to create a chain list of node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x,y} & \+: the coordinate of the node \\
+\hline
+{\em cost} & \+: the number of step since the starting node \\
+\hline
+{\em heuristic} & \+: the cost + the distance between the ending node and the node initialized the function set\+Heuristic can calculate and set the heuristic of a node so you can just put 0\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The initilized node 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!insert\+Front\+Node@{insert\+Front\+Node}}
+\index{insert\+Front\+Node@{insert\+Front\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{insert\+Front\+Node(node $\ast$$\ast$front\+Node, node $\ast$new\+Node)}{insertFrontNode(node **frontNode, node *newNode)}}]{\setlength{\rightskip}{0pt plus 5cm}void insert\+Front\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node, }
+\item[{{\bf node} $\ast$}]{new\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ace54b8b7ea41338283ad22a0d4604dcd}{}\label{pathfinding_8h_ace54b8b7ea41338283ad22a0d4604dcd}
+
+
+Function which adds a node at the top of a chain list of nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node \\
+\hline
+{\em new\+Node} & \+: the node that you want to add\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!is\+In\+Set@{is\+In\+Set}}
+\index{is\+In\+Set@{is\+In\+Set}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{is\+In\+Set(node $\ast$$\ast$front\+Node, int x, int y)}{isInSet(node **frontNode, int x, int y)}}]{\setlength{\rightskip}{0pt plus 5cm}bool is\+In\+Set (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node, }
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ad901f16b1f03ab8bcea6a6126e44c1d4}{}\label{pathfinding_8h_ad901f16b1f03ab8bcea6a6126e44c1d4}
+
+
+Function which checks if there is a node at the given coordinates in the given chain list of nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node \\
+\hline
+{\em x,y} & \+: the coordinate to check\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: True if there is a node, false otherwise 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!is\+Next\+To@{is\+Next\+To}}
+\index{is\+Next\+To@{is\+Next\+To}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{is\+Next\+To(node $\ast$node\+To\+Check, int x, int y)}{isNextTo(node *nodeToCheck, int x, int y)}}]{\setlength{\rightskip}{0pt plus 5cm}bool is\+Next\+To (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{node\+To\+Check, }
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ab5d0d788c16a95dde97f4bef37b8bcff}{}\label{pathfinding_8h_ab5d0d788c16a95dde97f4bef37b8bcff}
+
+
+Function which check if the given node is next to the given coordinate. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node\+To\+Check} & \+: the node which will be checked \\
+\hline
+{\em x,y} & \+: the reference coordinate\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: True if the node is next to the coordinates, false otherwise 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!nearest\+Node@{nearest\+Node}}
+\index{nearest\+Node@{nearest\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{nearest\+Node(\+Field $\ast$one\+Field, int x, int y)}{nearestNode(Field *oneField, int x, int y)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ nearest\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{one\+Field, }
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a6bf7ac9193bc48dfb67282bca9a8de63}{}\label{pathfinding_8h_a6bf7ac9193bc48dfb67282bca9a8de63}
+
+
+Function that returns the nearest and safest node around the node which is used as a starting point for the pathfinding. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x,y} & \+: the coordinates of the node used as a starting point for the pathfinding \\
+\hline
+{\em one\+Field$\ast$} & \+: poiter to the field in which we search a safe node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: Nearest node found 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!node\+Cmp@{node\+Cmp}}
+\index{node\+Cmp@{node\+Cmp}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{node\+Cmp(node $\ast$n1, node $\ast$n2)}{nodeCmp(node *n1, node *n2)}}]{\setlength{\rightskip}{0pt plus 5cm}int node\+Cmp (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{n1, }
+\item[{{\bf node} $\ast$}]{n2}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a97b8fd47256a86748865f05f07540695}{}\label{pathfinding_8h_a97b8fd47256a86748865f05f07540695}
+
+
+Function used to compare the heuristic of two nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n1,n2} & \+: the two nodes which will be compared\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: 1 if the fisrt one has better heuristic than the second one, 0 if thei are equals, -\/1 otherwise 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!pop\+Node@{pop\+Node}}
+\index{pop\+Node@{pop\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{pop\+Node(node $\ast$$\ast$front\+Node)}{popNode(node **frontNode)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ pop\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a32c85f02f3dee4dfd6ef0f87b4d371ba}{}\label{pathfinding_8h_a32c85f02f3dee4dfd6ef0f87b4d371ba}
+
+
+Function which pop the top node out of a chain list of node and returns it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The popped node 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!rmv\+Node@{rmv\+Node}}
+\index{rmv\+Node@{rmv\+Node}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{rmv\+Node(node $\ast$$\ast$front\+Node, node $\ast$node\+To\+Remove)}{rmvNode(node **frontNode, node *nodeToRemove)}}]{\setlength{\rightskip}{0pt plus 5cm}void rmv\+Node (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node, }
+\item[{{\bf node} $\ast$}]{node\+To\+Remove}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_ac808a207be726ca24a31f511c2564da5}{}\label{pathfinding_8h_ac808a207be726ca24a31f511c2564da5}
+
+
+Function which pops out a given node from a chain list of nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node \\
+\hline
+{\em node\+To\+Remove} & \+: the node from the list that you want to pop out\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!set\+Heuristic@{set\+Heuristic}}
+\index{set\+Heuristic@{set\+Heuristic}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{set\+Heuristic(node $\ast$node\+To\+Set, node $\ast$end\+Node)}{setHeuristic(node *nodeToSet, node *endNode)}}]{\setlength{\rightskip}{0pt plus 5cm}void set\+Heuristic (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{node\+To\+Set, }
+\item[{{\bf node} $\ast$}]{end\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_a9a2be5ed6430331aa3c5f20d7bcf5674}{}\label{pathfinding_8h_a9a2be5ed6430331aa3c5f20d7bcf5674}
+
+
+Function which is used to set the heuristic of a node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node\+To\+Set} & \+: the node you want the heuristic to be set correctly \\
+\hline
+{\em end\+Node} & \+: the end node of the A$\ast$ algorithme\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{pathfinding.\+h@{pathfinding.\+h}!view\+Nodes@{view\+Nodes}}
+\index{view\+Nodes@{view\+Nodes}!pathfinding.\+h@{pathfinding.\+h}}
+\subsubsection[{\texorpdfstring{view\+Nodes(node $\ast$$\ast$front\+Node, S\+D\+L\+\_\+\+Renderer $\ast$renderer, S\+D\+L\+\_\+\+Color color, int tile\+Size)}{viewNodes(node **frontNode, SDL_Renderer *renderer, SDL_Color color, int tileSize)}}]{\setlength{\rightskip}{0pt plus 5cm}void view\+Nodes (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$$\ast$}]{front\+Node, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{S\+D\+L\+\_\+\+Color}]{color, }
+\item[{int}]{tile\+Size}
+\end{DoxyParamCaption}
+)}\hypertarget{pathfinding_8h_af5eda1dc96671ececdc1145dbb440dbc}{}\label{pathfinding_8h_af5eda1dc96671ececdc1145dbb440dbc}
+
+
+Function used to draw a chain list of nodes on the screen using S\+DL. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Node} & \+: the top node of a chain list of node \\
+\hline
+{\em renderer} & \+: the renderer used with the window. The renderer must have been set using S\+DL functions \\
+\hline
+{\em color} & \+: the color which will be used to display the nodes \\
+\hline
+{\em tile\+Size} & \+: the size of one tile in the window\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}

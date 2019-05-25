@@ -1,0 +1,707 @@
+\hypertarget{entity_8h}{}\section{code/entity.h File Reference}
+\label{entity_8h}\index{code/entity.\+h@{code/entity.\+h}}
+
+
+Prototype of functions in \hyperlink{entity_8c}{entity.\+c}.  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$S\+D\+L2/\+S\+D\+L.\+h$>$}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}stats.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}eventhandler.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pathfinding.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}neural\+Network.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}genetic\+Algorithm.\+h\char`\"{}}\\*
+Include dependency graph for entity.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structPoint}{Point}
+\item 
+struct \hyperlink{structEntity}{Entity}
+\item 
+struct \hyperlink{structInputNeuralNetwork}{Input\+Neural\+Network}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries R\+A\+D\+I\+U\+S\+\_\+\+V\+I\+E\+W\+P\+O\+I\+NT}~(5)\hypertarget{entity_8h_a278be6b94dd17ad1541008db6e696437}{}\label{entity_8h_a278be6b94dd17ad1541008db6e696437}
+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structPoint}{Point} {\bfseries Point}\hypertarget{entity_8h_aa8a5ef5310a09b79eb672ceed477296b}{}\label{entity_8h_aa8a5ef5310a09b79eb672ceed477296b}
+
+\item 
+typedef struct \hyperlink{structEntity}{Entity} {\bfseries Entity}\hypertarget{entity_8h_a4d26e74d390c42c52b5707958e1a11cd}{}\label{entity_8h_a4d26e74d390c42c52b5707958e1a11cd}
+
+\item 
+typedef struct \hyperlink{structInputNeuralNetwork}{Input\+Neural\+Network} {\bfseries Input\+Neural\+Network}\hypertarget{entity_8h_a9b2136cce76804a7a0b8cc8a2b639ed3}{}\label{entity_8h_a9b2136cce76804a7a0b8cc8a2b639ed3}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structEntity}{Entity} $\ast$ \hyperlink{entity_8h_a0808190d8157acdbbd105bb00f8009f8}{initialise\+Entity} (int x, int y, int vision\+Range, int field\+Width, int field\+Height)
+\begin{DoxyCompactList}\small\item\em Function that initialize an \hyperlink{structEntity}{Entity}. An \hyperlink{structEntity}{Entity} is used by the neural network to navigate in a \hyperlink{structField}{Field}. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_ad365f40f19565307aaeeb4d741211e91}{initialize\+Mental\+Map\+Entity} (\hyperlink{structEntity}{Entity} $\ast$entity, int width, int height)
+\begin{DoxyCompactList}\small\item\em Function that initialize the mental map of a given entity. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_a31be7cf5b7e8a5f2beee242b8f1d5b2b}{initialise\+Field\+Of\+View\+Entity} (\hyperlink{structEntity}{Entity} $\ast$entity)
+\begin{DoxyCompactList}\small\item\em Function that initializes the field of view of an entity. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_a12f508ab0c773f2c826911f5fcd9ec34}{destruct\+Entity} (\hyperlink{structEntity}{Entity} $\ast$$\ast$entity)
+\begin{DoxyCompactList}\small\item\em Function used to free an \hyperlink{structEntity}{Entity}. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_a7819c48c497b7977d4ebefc3d0dcce17}{destruct\+Field\+Of\+View\+Entity} (\hyperlink{structEntity}{Entity} $\ast$entity)
+\begin{DoxyCompactList}\small\item\em Function used to free a field of view of an \hyperlink{structEntity}{Entity}. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_a86a4192e59777f598b2bb2620e3a8d96}{show\+Entity} (\hyperlink{structEntity}{Entity} $\ast$entity, S\+D\+L\+\_\+\+Renderer $\ast$renderer, S\+D\+L\+\_\+\+Color color, int tile\+Size)
+\begin{DoxyCompactList}\small\item\em Function used to display an \hyperlink{structEntity}{Entity}. \end{DoxyCompactList}\item 
+void {\bfseries update\+Mental\+Map\+Entity} (\hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structStatistics}{Statistics} $\ast$stats)\hypertarget{entity_8h_a528ae5efa3f14d6b6e9eec7468809a5d}{}\label{entity_8h_a528ae5efa3f14d6b6e9eec7468809a5d}
+
+\item 
+void \hyperlink{entity_8h_a20a77bde97a825a799c7aea8b205b1c4}{update\+Field\+Of\+View\+Entity} (\hyperlink{structField}{Field} $\ast$a\+Field, \hyperlink{structEntity}{Entity} $\ast$entity)
+\begin{DoxyCompactList}\small\item\em Function that updates the field of view of an entity. \end{DoxyCompactList}\item 
+\hyperlink{structField}{Field} $\ast$ \hyperlink{entity_8h_acd1b3a631ba8eda2832c135521e64c53}{get\+Field\+Of\+View\+From\+Map} (\hyperlink{structField}{Field} $\ast$map, int x, int y, int vision\+Range)
+\begin{DoxyCompactList}\small\item\em Function that returns the field of view from a map on a given coordinate. \end{DoxyCompactList}\item 
+\hyperlink{structInputNeuralNetwork}{Input\+Neural\+Network} $\ast$ \hyperlink{entity_8h_a6001b2904dc9c995ecd7b9d001df0e42}{create\+Input} (\hyperlink{structField}{Field} $\ast$field\+Of\+View, int x, int y, int x\+End, int y\+End)
+\begin{DoxyCompactList}\small\item\em Function that creates the inputs for the neural network based on the mental map, the vision range, the coordinate of the point we want to test and the coordinate the entity wants to get to. \end{DoxyCompactList}\item 
+float $\ast$ \hyperlink{entity_8h_a9b869cd549e906a4217d333b4fc7b2f7}{create\+Input\+N\+N2} (\hyperlink{structField}{Field} $\ast$field, int entityX, int entityY, int x\+End, int y\+End)
+\begin{DoxyCompactList}\small\item\em Second version of the function that creates the inputs for the neural network based on a field, the coordinate of the entity and the coordinate the entity wants to get to. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_a8cccc15cae5bde8bc732a67f0ebebe48}{destruct\+Input} (\hyperlink{structInputNeuralNetwork}{Input\+Neural\+Network} $\ast$$\ast$input)
+\begin{DoxyCompactList}\small\item\em Frees a structure \hyperlink{structInputNeuralNetwork}{Input\+Neural\+Network} from the memory. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_ae58ce0eb3db0d163c8ba5cbe05f99479}{update\+Interest\+Field} (\hyperlink{structInterestField}{Interest\+Field} $\ast$interest\+Field, \hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network, \hyperlink{structField}{Field} $\ast$mental\+Map, int x\+End, int y\+End, int vision\+Range)
+\begin{DoxyCompactList}\small\item\em Function that changes the values in an interest field according to the output of a trained neural network will be used for labelisation. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_ab5a18aa609e2811f4839bd01256395ef}{update\+Interest\+Field2} (\hyperlink{structInterestField}{Interest\+Field} $\ast$interest\+Field, int x\+End, int y\+End, \hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Function that changes the values in an interest field according to the labelisation function. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_addb7a8e577f406c360886db8a3c285b2}{update\+Interest\+Field3} (\hyperlink{structInterestField}{Interest\+Field} $\ast$interest\+Field, \hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Function that changes the values in an interest field according to the labelisation function. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_a1eb30208926ca8c2e6420be155ebd27f}{update\+Best\+Wanted\+Position} (\hyperlink{structnode}{node} $\ast$wanted\+Position, \hyperlink{structInterestField}{Interest\+Field} $\ast$interest\+Field)
+\begin{DoxyCompactList}\small\item\em Function that changes the coordinate of a node to the best coordinate on the interest field. This is use to get the position where our entity will go next. Each time this function is called, the choosen position will be set to 0 (no interest) will be used for labelisation. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{entity_8h_ac21238d8865601d9614ecc7c5b069970}{find\+Next\+Path\+NN} (\hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structnode}{node} $\ast$end\+Node, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network)
+\begin{DoxyCompactList}\small\item\em Returns the next path chosen by a given neural network. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{entity_8h_aff0af9e51fd18c761e6c3dd1ca7b299c}{find\+Next\+Path\+N\+N2} (\hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structdataType}{data\+Type} $\ast$data, float $\ast$output)
+\begin{DoxyCompactList}\small\item\em returns the next path chosen by a given neural network \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{entity_8h_ad4703962e461d4f3fcf944d39985c767}{find\+Next\+Path\+GN} (\hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structnode}{node} $\ast$end\+Node, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Returns the next path chosen by a given neural network. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{entity_8h_a2913e03af7cecc42e30fc0c8a5fae627}{find\+Next\+Path\+G\+N2} (\hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Returns the next path chosen by a given neural network. \end{DoxyCompactList}\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{entity_8h_a071d97542f31db9918cf784ad66ecfe7}{labeling2} (\hyperlink{structEntity}{Entity} $\ast$entity, int x\+End, int y\+End, \hyperlink{structField}{Field} $\ast$field, \hyperlink{structdataType}{data\+Type} $\ast$data)
+\begin{DoxyCompactList}\small\item\em Function that returns the expected choice for the neural network. \end{DoxyCompactList}\item 
+float \hyperlink{entity_8h_a2f1af674e7c571a895cd7a4126e3a6be}{labeling3} (\hyperlink{structField}{Field} $\ast$field\+Of\+View, int x\+Position, int y\+Position, int x\+Final\+Position, int y\+Final\+Position, \hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Function that returns the labeling of the points, will be used for labelisation. \end{DoxyCompactList}\item 
+float \hyperlink{entity_8h_a2c919c106e13a3ffa21bf1c06dd2f72f}{labeling4} (\hyperlink{structField}{Field} $\ast$field\+Of\+View, int x\+Position, int y\+Position, \hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Function that returns the labeling of the points, will be used for labelisation. \end{DoxyCompactList}\item 
+float $\ast$ \hyperlink{entity_8h_a10dfea6eca2618010de5a8e07891ba73}{convert\+Labeling2} (int field\+Width, int field\+Height, \hyperlink{structnode}{node} $\ast$label)
+\begin{DoxyCompactList}\small\item\em Function that converts a label2 into a valid output of neural network. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Prototype of functions in \hyperlink{entity_8c}{entity.\+c}. 
+
+\begin{DoxyAuthor}{Author}
+Louis Schuck 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+30/11/2018
+\end{DoxyDate}
+Module that contain the functions and the structure used by the neural network to navigate in the \hyperlink{structField}{Field} 
+
+\subsection{Function Documentation}
+\index{entity.\+h@{entity.\+h}!convert\+Labeling2@{convert\+Labeling2}}
+\index{convert\+Labeling2@{convert\+Labeling2}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{convert\+Labeling2(int field\+Width, int field\+Height, node $\ast$label)}{convertLabeling2(int fieldWidth, int fieldHeight, node *label)}}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$ convert\+Labeling2 (
+\begin{DoxyParamCaption}
+\item[{int}]{field\+Width, }
+\item[{int}]{field\+Height, }
+\item[{{\bf node} $\ast$}]{label}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a10dfea6eca2618010de5a8e07891ba73}{}\label{entity_8h_a10dfea6eca2618010de5a8e07891ba73}
+
+
+Function that converts a label2 into a valid output of neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+Width,field\+Height} & \+: dimensions of the field \\
+\hline
+{\em label} & \+: node found by function labeling2\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float$\ast$ \+: Transformed label 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!create\+Input@{create\+Input}}
+\index{create\+Input@{create\+Input}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{create\+Input(\+Field $\ast$field\+Of\+View, int x, int y, int x\+End, int y\+End)}{createInput(Field *fieldOfView, int x, int y, int xEnd, int yEnd)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Input\+Neural\+Network}$\ast$ create\+Input (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field\+Of\+View, }
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{x\+End, }
+\item[{int}]{y\+End}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a6001b2904dc9c995ecd7b9d001df0e42}{}\label{entity_8h_a6001b2904dc9c995ecd7b9d001df0e42}
+
+
+Function that creates the inputs for the neural network based on the mental map, the vision range, the coordinate of the point we want to test and the coordinate the entity wants to get to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mental\+Map$\ast$} & \+: A pointer to the mental map of the entity \\
+\hline
+{\em vision\+Range} & \+: the vision range of the entity \\
+\hline
+{\em x,y} & \+: the coordinate of the point we want to test in the neural network \\
+\hline
+{\em x\+End,y\+End} & \+: the coordinate the entity wants to get to\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Input\+Neural\+Network$\ast$ \+: The created input for the neural network 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!create\+Input\+N\+N2@{create\+Input\+N\+N2}}
+\index{create\+Input\+N\+N2@{create\+Input\+N\+N2}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{create\+Input\+N\+N2(\+Field $\ast$field, int entity\+X, int entity\+Y, int x\+End, int y\+End)}{createInputNN2(Field *field, int entityX, int entityY, int xEnd, int yEnd)}}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$ create\+Input\+N\+N2 (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field, }
+\item[{int}]{entityX, }
+\item[{int}]{entityY, }
+\item[{int}]{x\+End, }
+\item[{int}]{y\+End}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a9b869cd549e906a4217d333b4fc7b2f7}{}\label{entity_8h_a9b869cd549e906a4217d333b4fc7b2f7}
+
+
+Second version of the function that creates the inputs for the neural network based on a field, the coordinate of the entity and the coordinate the entity wants to get to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field} & \+: A pointer to the field we want to convert \\
+\hline
+{\em vision\+Range} & \+: the vision range of the entity \\
+\hline
+{\em entityX,entityY} & \+: the coordinate of the entity \\
+\hline
+{\em x\+End,y\+End} & \+: the coordinate the entity wants to get to\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Input\+Neural\+Network$\ast$ \+: The created input for the neural network 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!destruct\+Entity@{destruct\+Entity}}
+\index{destruct\+Entity@{destruct\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Entity(\+Entity $\ast$$\ast$entity)}{destructEntity(Entity **entity)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Entity (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$$\ast$}]{entity}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a12f508ab0c773f2c826911f5fcd9ec34}{}\label{entity_8h_a12f508ab0c773f2c826911f5fcd9ec34}
+
+
+Function used to free an \hyperlink{structEntity}{Entity}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: the \hyperlink{structEntity}{Entity} to free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!destruct\+Field\+Of\+View\+Entity@{destruct\+Field\+Of\+View\+Entity}}
+\index{destruct\+Field\+Of\+View\+Entity@{destruct\+Field\+Of\+View\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Field\+Of\+View\+Entity(\+Entity $\ast$entity)}{destructFieldOfViewEntity(Entity *entity)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Field\+Of\+View\+Entity (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a7819c48c497b7977d4ebefc3d0dcce17}{}\label{entity_8h_a7819c48c497b7977d4ebefc3d0dcce17}
+
+
+Function used to free a field of view of an \hyperlink{structEntity}{Entity}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: the \hyperlink{structEntity}{Entity} that contains the field of view we want to free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!destruct\+Input@{destruct\+Input}}
+\index{destruct\+Input@{destruct\+Input}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Input(\+Input\+Neural\+Network $\ast$$\ast$input)}{destructInput(InputNeuralNetwork **input)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Input (
+\begin{DoxyParamCaption}
+\item[{{\bf Input\+Neural\+Network} $\ast$$\ast$}]{input}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a8cccc15cae5bde8bc732a67f0ebebe48}{}\label{entity_8h_a8cccc15cae5bde8bc732a67f0ebebe48}
+
+
+Frees a structure \hyperlink{structInputNeuralNetwork}{Input\+Neural\+Network} from the memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Input\+Neural\+Network$\ast$$\ast$} & input \+: a double pointer to the structure wwe want to free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!find\+Next\+Path\+GN@{find\+Next\+Path\+GN}}
+\index{find\+Next\+Path\+GN@{find\+Next\+Path\+GN}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{find\+Next\+Path\+G\+N(\+Entity $\ast$entity, node $\ast$end\+Node, data\+Type $\ast$data, Labeling\+Weights $\ast$labeling\+Weights)}{findNextPathGN(Entity *entity, node *endNode, dataType *data, LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ find\+Next\+Path\+GN (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf node} $\ast$}]{end\+Node, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_ad4703962e461d4f3fcf944d39985c767}{}\label{entity_8h_ad4703962e461d4f3fcf944d39985c767}
+
+
+Returns the next path chosen by a given neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: entity to move \\
+\hline
+{\em end\+Node} & \+: position of destination \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption  \+: genetic network used to take the decision\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The chosen path 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!find\+Next\+Path\+G\+N2@{find\+Next\+Path\+G\+N2}}
+\index{find\+Next\+Path\+G\+N2@{find\+Next\+Path\+G\+N2}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{find\+Next\+Path\+G\+N2(\+Entity $\ast$entity, data\+Type $\ast$data, Labeling\+Weights $\ast$labeling\+Weights)}{findNextPathGN2(Entity *entity, dataType *data, LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ find\+Next\+Path\+G\+N2 (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a2913e03af7cecc42e30fc0c8a5fae627}{}\label{entity_8h_a2913e03af7cecc42e30fc0c8a5fae627}
+
+
+Returns the next path chosen by a given neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: entity to move \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption  \+: genetic network used to take the decision\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The chosen path 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!find\+Next\+Path\+NN@{find\+Next\+Path\+NN}}
+\index{find\+Next\+Path\+NN@{find\+Next\+Path\+NN}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{find\+Next\+Path\+N\+N(\+Entity $\ast$entity, node $\ast$end\+Node, data\+Type $\ast$data, Neural\+Network $\ast$neural\+Network)}{findNextPathNN(Entity *entity, node *endNode, dataType *data, NeuralNetwork *neuralNetwork)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ find\+Next\+Path\+NN (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf node} $\ast$}]{end\+Node, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_ac21238d8865601d9614ecc7c5b069970}{}\label{entity_8h_ac21238d8865601d9614ecc7c5b069970}
+
+
+Returns the next path chosen by a given neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: entity to move \\
+\hline
+{\em end\+Node} & \+: position of destination \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption  \+: neural network used to take the decision\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The chosen path 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!find\+Next\+Path\+N\+N2@{find\+Next\+Path\+N\+N2}}
+\index{find\+Next\+Path\+N\+N2@{find\+Next\+Path\+N\+N2}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{find\+Next\+Path\+N\+N2(\+Entity $\ast$entity, data\+Type $\ast$data, float $\ast$output)}{findNextPathNN2(Entity *entity, dataType *data, float *output)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ find\+Next\+Path\+N\+N2 (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{float $\ast$}]{output}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_aff0af9e51fd18c761e6c3dd1ca7b299c}{}\label{entity_8h_aff0af9e51fd18c761e6c3dd1ca7b299c}
+
+
+returns the next path chosen by a given neural network 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: entity to move \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em output} & \+: output of the neural\+Network\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The chosen path 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!get\+Field\+Of\+View\+From\+Map@{get\+Field\+Of\+View\+From\+Map}}
+\index{get\+Field\+Of\+View\+From\+Map@{get\+Field\+Of\+View\+From\+Map}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{get\+Field\+Of\+View\+From\+Map(\+Field $\ast$map, int x, int y, int vision\+Range)}{getFieldOfViewFromMap(Field *map, int x, int y, int visionRange)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Field}$\ast$ get\+Field\+Of\+View\+From\+Map (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{map, }
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{vision\+Range}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_acd1b3a631ba8eda2832c135521e64c53}{}\label{entity_8h_acd1b3a631ba8eda2832c135521e64c53}
+
+
+Function that returns the field of view from a map on a given coordinate. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$mental\+Map} & \+: a pointer to the map from which we want to extrat the field of view \\
+\hline
+{\em x,y} & \+: the coordinates in the map from wihc we will extract the field of view \\
+\hline
+{\em vision\+Range} & \+: the radius of the field of view\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Field$\ast$ \+: The field of view 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!initialise\+Entity@{initialise\+Entity}}
+\index{initialise\+Entity@{initialise\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{initialise\+Entity(int x, int y, int vision\+Range, int field\+Width, int field\+Height)}{initialiseEntity(int x, int y, int visionRange, int fieldWidth, int fieldHeight)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Entity}$\ast$ initialise\+Entity (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{vision\+Range, }
+\item[{int}]{field\+Width, }
+\item[{int}]{field\+Height}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a0808190d8157acdbbd105bb00f8009f8}{}\label{entity_8h_a0808190d8157acdbbd105bb00f8009f8}
+
+
+Function that initialize an \hyperlink{structEntity}{Entity}. An \hyperlink{structEntity}{Entity} is used by the neural network to navigate in a \hyperlink{structField}{Field}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x,y} & \+: the coordinates of the \hyperlink{structEntity}{Entity} \\
+\hline
+{\em vision\+Range} & \+: the maximum distance at which the entity can see the \hyperlink{structField}{Field} \\
+\hline
+{\em field\+Width,field\+Height} & \+: dimention of the field of the environment\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Entity$\ast$ \+: The initialized \hyperlink{structEntity}{Entity} 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!initialise\+Field\+Of\+View\+Entity@{initialise\+Field\+Of\+View\+Entity}}
+\index{initialise\+Field\+Of\+View\+Entity@{initialise\+Field\+Of\+View\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{initialise\+Field\+Of\+View\+Entity(\+Entity $\ast$entity)}{initialiseFieldOfViewEntity(Entity *entity)}}]{\setlength{\rightskip}{0pt plus 5cm}void initialise\+Field\+Of\+View\+Entity (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a31be7cf5b7e8a5f2beee242b8f1d5b2b}{}\label{entity_8h_a31be7cf5b7e8a5f2beee242b8f1d5b2b}
+
+
+Function that initializes the field of view of an entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$entity} & \+: the entity which have the field of view we want to update\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!initialize\+Mental\+Map\+Entity@{initialize\+Mental\+Map\+Entity}}
+\index{initialize\+Mental\+Map\+Entity@{initialize\+Mental\+Map\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{initialize\+Mental\+Map\+Entity(\+Entity $\ast$entity, int width, int height)}{initializeMentalMapEntity(Entity *entity, int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}void initialize\+Mental\+Map\+Entity (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_ad365f40f19565307aaeeb4d741211e91}{}\label{entity_8h_ad365f40f19565307aaeeb4d741211e91}
+
+
+Function that initialize the mental map of a given entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$entity} & \+: the entity which have the mental map to be updated \\
+\hline
+{\em width} & \+: width of the mental map we want to initialize \\
+\hline
+{\em height} & \+: height of the mental map we want to initialize\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!labeling2@{labeling2}}
+\index{labeling2@{labeling2}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{labeling2(\+Entity $\ast$entity, int x\+End, int y\+End, Field $\ast$field, data\+Type $\ast$data)}{labeling2(Entity *entity, int xEnd, int yEnd, Field *field, dataType *data)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node}$\ast$ labeling2 (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{int}]{x\+End, }
+\item[{int}]{y\+End, }
+\item[{{\bf Field} $\ast$}]{field, }
+\item[{{\bf data\+Type} $\ast$}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a071d97542f31db9918cf784ad66ecfe7}{}\label{entity_8h_a071d97542f31db9918cf784ad66ecfe7}
+
+
+Function that returns the expected choice for the neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: entity that is moving \\
+\hline
+{\em x\+End,y\+End} & \+: coordinates of the destination \\
+\hline
+{\em field} & \+: the complete field for the supervised learning \\
+\hline
+{\em data} & \+: the structure we use to raise a flag for interruption\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+node$\ast$ \+: The expected path 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!labeling3@{labeling3}}
+\index{labeling3@{labeling3}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{labeling3(\+Field $\ast$field\+Of\+View, int x\+Position, int y\+Position, int x\+Final\+Position, int y\+Final\+Position, Entity $\ast$entity, Labeling\+Weights $\ast$labeling\+Weights)}{labeling3(Field *fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition, Entity *entity, LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}float labeling3 (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field\+Of\+View, }
+\item[{int}]{x\+Position, }
+\item[{int}]{y\+Position, }
+\item[{int}]{x\+Final\+Position, }
+\item[{int}]{y\+Final\+Position, }
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a2f1af674e7c571a895cd7a4126e3a6be}{}\label{entity_8h_a2f1af674e7c571a895cd7a4126e3a6be}
+
+
+Function that returns the labeling of the points, will be used for labelisation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Field$\ast$} & field\+Of\+View \+: a field of view \\
+\hline
+{\em int} & x\+Position \+: x coordinate of the center of the field of view \\
+\hline
+{\em int} & y\+Position \+: y coordinate of the center of the field of view \\
+\hline
+{\em int} & x\+Final\+Position \+: x coordinate of the end point \\
+\hline
+{\em int} & y\+Final\+Position \+: y coordinate of the end point \\
+\hline
+{\em Entity$\ast$} & entity \+: the entity which uses the function to navigate (only use his coordiantes) \\
+\hline
+{\em Labeling\+Weights$\ast$} & labeling\+Weights \+: Ze labeling weights\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: The labels of each point 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!labeling4@{labeling4}}
+\index{labeling4@{labeling4}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{labeling4(\+Field $\ast$field\+Of\+View, int x\+Position, int y\+Position, Entity $\ast$entity, Labeling\+Weights $\ast$labeling\+Weights)}{labeling4(Field *fieldOfView, int xPosition, int yPosition, Entity *entity, LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}float labeling4 (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field\+Of\+View, }
+\item[{int}]{x\+Position, }
+\item[{int}]{y\+Position, }
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a2c919c106e13a3ffa21bf1c06dd2f72f}{}\label{entity_8h_a2c919c106e13a3ffa21bf1c06dd2f72f}
+
+
+Function that returns the labeling of the points, will be used for labelisation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Field$\ast$} & field\+Of\+View \+: a field of view \\
+\hline
+{\em int} & x\+Position \+: x coordinate of the center of the field of view \\
+\hline
+{\em int} & y\+Position \+: y coordinate of the center of the field of view \\
+\hline
+{\em Entity$\ast$} & entity \+: the entity which uses the function to navigate (only use his coordiantes) \\
+\hline
+{\em Labeling\+Weights$\ast$} & labeling\+Weights \+: Ze labeling weights\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: the labels of each point 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!show\+Entity@{show\+Entity}}
+\index{show\+Entity@{show\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{show\+Entity(\+Entity $\ast$entity, S\+D\+L\+\_\+\+Renderer $\ast$renderer, S\+D\+L\+\_\+\+Color color, int tile\+Size)}{showEntity(Entity *entity, SDL_Renderer *renderer, SDL_Color color, int tileSize)}}]{\setlength{\rightskip}{0pt plus 5cm}void show\+Entity (
+\begin{DoxyParamCaption}
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{S\+D\+L\+\_\+\+Color}]{color, }
+\item[{int}]{tile\+Size}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a86a4192e59777f598b2bb2620e3a8d96}{}\label{entity_8h_a86a4192e59777f598b2bb2620e3a8d96}
+
+
+Function used to display an \hyperlink{structEntity}{Entity}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: the \hyperlink{structEntity}{Entity} to display \\
+\hline
+{\em renderer} & \+: the renderer used with the window. The renderer must have been set using S\+DL functions \\
+\hline
+{\em color} & \+: the color which will be used to display the entity \\
+\hline
+{\em tile\+Size} & \+: the size of one tile in the window\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!update\+Best\+Wanted\+Position@{update\+Best\+Wanted\+Position}}
+\index{update\+Best\+Wanted\+Position@{update\+Best\+Wanted\+Position}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{update\+Best\+Wanted\+Position(node $\ast$wanted\+Position, Interest\+Field $\ast$interest\+Field)}{updateBestWantedPosition(node *wantedPosition, InterestField *interestField)}}]{\setlength{\rightskip}{0pt plus 5cm}void update\+Best\+Wanted\+Position (
+\begin{DoxyParamCaption}
+\item[{{\bf node} $\ast$}]{wanted\+Position, }
+\item[{{\bf Interest\+Field} $\ast$}]{interest\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a1eb30208926ca8c2e6420be155ebd27f}{}\label{entity_8h_a1eb30208926ca8c2e6420be155ebd27f}
+
+
+Function that changes the coordinate of a node to the best coordinate on the interest field. This is use to get the position where our entity will go next. Each time this function is called, the choosen position will be set to 0 (no interest) will be used for labelisation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node$\ast$} & wanted\+Position \+: the node which will be updated to the best position on the interest field \\
+\hline
+{\em Interest\+Field$\ast$} & interest\+Field \+: the interest field that will be used to get the best position\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!update\+Field\+Of\+View\+Entity@{update\+Field\+Of\+View\+Entity}}
+\index{update\+Field\+Of\+View\+Entity@{update\+Field\+Of\+View\+Entity}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{update\+Field\+Of\+View\+Entity(\+Field $\ast$a\+Field, Entity $\ast$entity)}{updateFieldOfViewEntity(Field *aField, Entity *entity)}}]{\setlength{\rightskip}{0pt plus 5cm}void update\+Field\+Of\+View\+Entity (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{a\+Field, }
+\item[{{\bf Entity} $\ast$}]{entity}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_a20a77bde97a825a799c7aea8b205b1c4}{}\label{entity_8h_a20a77bde97a825a799c7aea8b205b1c4}
+
+
+Function that updates the field of view of an entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & \+: the \hyperlink{structEntity}{Entity} to update \\
+\hline
+{\em field$\ast$} & \+: A pointer to the field on which we are based\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!update\+Interest\+Field@{update\+Interest\+Field}}
+\index{update\+Interest\+Field@{update\+Interest\+Field}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{update\+Interest\+Field(\+Interest\+Field $\ast$interest\+Field, Neural\+Network $\ast$neural\+Network, Field $\ast$mental\+Map, int x\+End, int y\+End, int vision\+Range)}{updateInterestField(InterestField *interestField, NeuralNetwork *neuralNetwork, Field *mentalMap, int xEnd, int yEnd, int visionRange)}}]{\setlength{\rightskip}{0pt plus 5cm}void update\+Interest\+Field (
+\begin{DoxyParamCaption}
+\item[{{\bf Interest\+Field} $\ast$}]{interest\+Field, }
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network, }
+\item[{{\bf Field} $\ast$}]{mental\+Map, }
+\item[{int}]{x\+End, }
+\item[{int}]{y\+End, }
+\item[{int}]{vision\+Range}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_ae58ce0eb3db0d163c8ba5cbe05f99479}{}\label{entity_8h_ae58ce0eb3db0d163c8ba5cbe05f99479}
+
+
+Function that changes the values in an interest field according to the output of a trained neural network will be used for labelisation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Interest\+Field$\ast$} & interest\+Field \+: the interest field that will be update \\
+\hline
+{\em Neural\+Network$\ast$} & neural\+Network \+: the neural network that will give their values to the point in the interest field \\
+\hline
+{\em Field$\ast$} & mental\+Map \+: the mental map on wich the updated values will be based on \\
+\hline
+{\em int} & x\+End \+: x coordinate of the ending point \\
+\hline
+{\em int} & y\+End \+: y coordinate of the ending point\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!update\+Interest\+Field2@{update\+Interest\+Field2}}
+\index{update\+Interest\+Field2@{update\+Interest\+Field2}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{update\+Interest\+Field2(\+Interest\+Field $\ast$interest\+Field, int x\+End, int y\+End, Entity $\ast$entity, Labeling\+Weights $\ast$labeling\+Weights)}{updateInterestField2(InterestField *interestField, int xEnd, int yEnd, Entity *entity, LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}void update\+Interest\+Field2 (
+\begin{DoxyParamCaption}
+\item[{{\bf Interest\+Field} $\ast$}]{interest\+Field, }
+\item[{int}]{x\+End, }
+\item[{int}]{y\+End, }
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_ab5a18aa609e2811f4839bd01256395ef}{}\label{entity_8h_ab5a18aa609e2811f4839bd01256395ef}
+
+
+Function that changes the values in an interest field according to the labelisation function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Interest\+Field$\ast$} & interest\+Field \+: the interest field that will be update \\
+\hline
+{\em int} & x\+End \+: x coordinate of the ending point \\
+\hline
+{\em int} & y\+End \+: y coordinate of the ending point \\
+\hline
+{\em Entity$\ast$} & entity \+: the entity on which we base the update of the interest field \\
+\hline
+{\em Labeling\+Weights$\ast$} & labeling\+Weights \+: Ze labeling weights\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{entity.\+h@{entity.\+h}!update\+Interest\+Field3@{update\+Interest\+Field3}}
+\index{update\+Interest\+Field3@{update\+Interest\+Field3}!entity.\+h@{entity.\+h}}
+\subsubsection[{\texorpdfstring{update\+Interest\+Field3(\+Interest\+Field $\ast$interest\+Field, Entity $\ast$entity, Labeling\+Weights $\ast$labeling\+Weights)}{updateInterestField3(InterestField *interestField, Entity *entity, LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}void update\+Interest\+Field3 (
+\begin{DoxyParamCaption}
+\item[{{\bf Interest\+Field} $\ast$}]{interest\+Field, }
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{entity_8h_addb7a8e577f406c360886db8a3c285b2}{}\label{entity_8h_addb7a8e577f406c360886db8a3c285b2}
+
+
+Function that changes the values in an interest field according to the labelisation function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Interest\+Field$\ast$} & interest\+Field \+: the interest field that will be update \\
+\hline
+{\em Entity$\ast$} & entity \+: the entity on which we base the update of the interest field \\
+\hline
+{\em Labeling\+Weights$\ast$} & labeling\+Weights \+: Ze labeling weights\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}

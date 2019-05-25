@@ -1,0 +1,355 @@
+\hypertarget{wrapper_8c}{}\section{code/wrapper.c File Reference}
+\label{wrapper_8c}\index{code/wrapper.\+c@{code/wrapper.\+c}}
+
+
+Wrapper functions.  
+
+
+{\ttfamily \#include \char`\"{}wrapper.\+h\char`\"{}}\\*
+Include dependency graph for wrapper.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$ \hyperlink{wrapper_8c_a98907239f8604757ddc150df79b83636}{training\+N\+N1} (int vision\+Range, \hyperlink{structdataType}{data\+Type} $\ast$data, int field\+Height, int field\+Width, char $\ast$saving\+Path\+NN)
+\begin{DoxyCompactList}\small\item\em Creates a neural network and trains it on randomly generated fields of view, then saves it. \end{DoxyCompactList}\item 
+\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$ \hyperlink{wrapper_8c_a0b052ca1a0e735bf7481feb5813f5f37}{training\+G\+N1} (\hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structField}{Field} $\ast$the\+Field, char $\ast$saving\+Path\+GN, char $\ast$base\+Path\+GN, int nb\+Generation, int nb\+Member)
+\begin{DoxyCompactList}\small\item\em Creates a neural network and trains it on randomly generated fields of view, then saves it. \end{DoxyCompactList}\item 
+\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$ \hyperlink{wrapper_8c_a0e65ce6a8e1af7834e5aa01983f2925e}{training\+G\+N2} (\hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structField}{Field} $\ast$the\+Field, char $\ast$saving\+Path\+GN, char $\ast$base\+Path\+GN, int nb\+Generation, int nb\+Member, float percent\+Reveal)
+\begin{DoxyCompactList}\small\item\em Creates a neural network and trains it on randomly generated fields of view, then saves it. \end{DoxyCompactList}\item 
+void \hyperlink{wrapper_8c_a2ebe914f22383b4f84487a27a90a2b6c}{move\+Entity\+Along\+Path} (\hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structEntity}{Entity} $\ast$entity, \hyperlink{structnode}{node} $\ast$path\+To\+Follow, \hyperlink{structField}{Field} $\ast$the\+Field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, int tile\+Size, int animation\+Delay, \hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em Make an entity follow a path and update its mental map. \end{DoxyCompactList}\item 
+void \hyperlink{wrapper_8c_a43f370e9bbbff674ab26ec6a99752957}{wait\+For\+Instruction} (\hyperlink{structdataType}{data\+Type} $\ast$data)
+\begin{DoxyCompactList}\small\item\em Wait until the repeat key is pressed (R) or the quit key is pressed (Q) \end{DoxyCompactList}\item 
+\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$ \hyperlink{wrapper_8c_a83f5cdeb5d069782e26598b3157d85d5}{training\+N\+N2} (int field\+Width, int field\+Height, \hyperlink{structdataType}{data\+Type} $\ast$data, char $\ast$saving\+Path\+NN, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size)
+\begin{DoxyCompactList}\small\item\em Creates a neural network and trains it on random fields, then saves it. \end{DoxyCompactList}\item 
+void \hyperlink{wrapper_8c_a7ab86627eda7d5b40c3eee439aa52c72}{train\+N\+N2on\+Field} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structField}{Field} $\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size)
+\begin{DoxyCompactList}\small\item\em Trains a neural network on a single field. \end{DoxyCompactList}\item 
+void \hyperlink{wrapper_8c_adee6b228e3e3c531cc7c752b1d79013c}{search\+For\+End\+Point\+NN} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structField}{Field} $\ast$$\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size, bool field\+Is\+From\+Image, \hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em Shows the entity, starting in the top left corner, trying to go to the bottom right corner on the given field by using a neural network. \end{DoxyCompactList}\item 
+void {\bfseries search\+For\+End\+Point\+GN} (\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structField}{Field} $\ast$$\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size, bool field\+Is\+From\+Image, \hyperlink{structStatistics}{Statistics} $\ast$stats)\hypertarget{wrapper_8c_a7f761ad3c15d30efd0fdd01ebf8f420a}{}\label{wrapper_8c_a7f761ad3c15d30efd0fdd01ebf8f420a}
+
+\item 
+void \hyperlink{wrapper_8c_a8692800af5b137581bb50c5932e273b9}{explore\+GN} (\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights, \hyperlink{structdataType}{data\+Type} $\ast$data, \hyperlink{structField}{Field} $\ast$$\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size, bool field\+Is\+From\+Image, int max\+Decisions, float percent\+Reveal, \hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em Shows the entity, starting in the top left corner, trying to explore as much of the given field as possible by using a genetic algorithm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Wrapper functions. 
+
+\begin{DoxyAuthor}{Author}
+Théo Hipault 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+30/04/2019
+\end{DoxyDate}
+Module that contain all the functions to do the final steps of the program 
+
+\subsection{Function Documentation}
+\index{wrapper.\+c@{wrapper.\+c}!explore\+GN@{explore\+GN}}
+\index{explore\+GN@{explore\+GN}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{explore\+G\+N(\+Labeling\+Weights $\ast$labeling\+Weights, data\+Type $\ast$data, Field $\ast$$\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size, bool field\+Is\+From\+Image, int max\+Decisions, float percent\+Reveal, Statistics $\ast$stats)}{exploreGN(LabelingWeights *labelingWeights, dataType *data, Field **field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, int maxDecisions, float percentReveal, Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void explore\+GN (
+\begin{DoxyParamCaption}
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Field} $\ast$$\ast$}]{field, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{const int}]{tile\+Size, }
+\item[{bool}]{field\+Is\+From\+Image, }
+\item[{int}]{max\+Decisions, }
+\item[{float}]{percent\+Reveal, }
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a8692800af5b137581bb50c5932e273b9}{}\label{wrapper_8c_a8692800af5b137581bb50c5932e273b9}
+
+
+Shows the entity, starting in the top left corner, trying to explore as much of the given field as possible by using a genetic algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em labeling\+Weights} & \+: the genetic algorithm to use to take decisions \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em field} & \+: the field where the entity will move \\
+\hline
+{\em renderer} & \+: renderer used to draw with the S\+DL \\
+\hline
+{\em tile\+Size} & \+: size of a tile for display \\
+\hline
+{\em field\+Is\+From\+Image} & \+: to know if the field as been loaded from an image. If it is set to true, the map will not be update each loop \\
+\hline
+{\em max\+Decisions} & \+: the maximum number of moves that the entity is allow to do before ending a loop \\
+\hline
+{\em percent\+Reveal} & \+: the percentage of map revealed at which we concider that the entity finished his job \\
+\hline
+{\em stats} & \+: the structure used to store the stats\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!move\+Entity\+Along\+Path@{move\+Entity\+Along\+Path}}
+\index{move\+Entity\+Along\+Path@{move\+Entity\+Along\+Path}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{move\+Entity\+Along\+Path(data\+Type $\ast$data, Entity $\ast$entity, node $\ast$path\+To\+Follow, Field $\ast$the\+Field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, int tile\+Size, int animation\+Delay, Statistics $\ast$stats)}{moveEntityAlongPath(dataType *data, Entity *entity, node *pathToFollow, Field *theField, SDL_Renderer *renderer, int tileSize, int animationDelay, Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void move\+Entity\+Along\+Path (
+\begin{DoxyParamCaption}
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Entity} $\ast$}]{entity, }
+\item[{{\bf node} $\ast$}]{path\+To\+Follow, }
+\item[{{\bf Field} $\ast$}]{the\+Field, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{int}]{tile\+Size, }
+\item[{int}]{animation\+Delay, }
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a2ebe914f22383b4f84487a27a90a2b6c}{}\label{wrapper_8c_a2ebe914f22383b4f84487a27a90a2b6c}
+
+
+Make an entity follow a path and update its mental map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em entity} & \+: the entity that wil follow the path and wil update its mental map \\
+\hline
+{\em path\+To\+Follow} & \+: the path that the entity will follow \\
+\hline
+{\em the\+Field} & \+: the field where the entity is moving \\
+\hline
+{\em renderer} & \+: the S\+DL renderer, use to visualize the entity on the map \\
+\hline
+{\em tile\+Size} & \+: the size of one tile on the map \\
+\hline
+{\em animation\+Delay} & \+: the amount of milliseconds the function will wait before each step of the entity \\
+\hline
+{\em stats} & \+: the structure used to store statistics\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!search\+For\+End\+Point\+NN@{search\+For\+End\+Point\+NN}}
+\index{search\+For\+End\+Point\+NN@{search\+For\+End\+Point\+NN}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{search\+For\+End\+Point\+N\+N(\+Neural\+Network $\ast$neural\+Network, data\+Type $\ast$data, Field $\ast$$\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size, bool field\+Is\+From\+Image, Statistics $\ast$stats)}{searchForEndPointNN(NeuralNetwork *neuralNetwork, dataType *data, Field **field, SDL_Renderer *renderer, const int tileSize, bool fieldIsFromImage, Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void search\+For\+End\+Point\+NN (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Field} $\ast$$\ast$}]{field, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{const int}]{tile\+Size, }
+\item[{bool}]{field\+Is\+From\+Image, }
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_adee6b228e3e3c531cc7c752b1d79013c}{}\label{wrapper_8c_adee6b228e3e3c531cc7c752b1d79013c}
+
+
+Shows the entity, starting in the top left corner, trying to go to the bottom right corner on the given field by using a neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the neural network to use to take decisions \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em field} & \+: the field where the entity will move \\
+\hline
+{\em renderer} & \+: renderer used to draw with the S\+DL \\
+\hline
+{\em tile\+Size} & \+: size of a tile for display \\
+\hline
+{\em field\+Is\+From\+Image} & \+: to know if the field as been loaded from an image. If it is set to true, the map will not be update each loop \\
+\hline
+{\em stats} & \+: the structure used to store the stats\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!training\+G\+N1@{training\+G\+N1}}
+\index{training\+G\+N1@{training\+G\+N1}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{training\+G\+N1(data\+Type $\ast$data, Field $\ast$the\+Field, char $\ast$saving\+Path\+G\+N, char $\ast$base\+Path\+G\+N, int nb\+Generation, int nb\+Member)}{trainingGN1(dataType *data, Field *theField, char *savingPathGN, char *basePathGN, int nbGeneration, int nbMember)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neural\+Network} $\ast$ training\+G\+N1 (
+\begin{DoxyParamCaption}
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Field} $\ast$}]{the\+Field, }
+\item[{char $\ast$}]{saving\+Path\+GN, }
+\item[{char $\ast$}]{base\+Path\+GN, }
+\item[{int}]{nb\+Generation, }
+\item[{int}]{nb\+Member}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a0b052ca1a0e735bf7481feb5813f5f37}{}\label{wrapper_8c_a0b052ca1a0e735bf7481feb5813f5f37}
+
+
+Creates a neural network and trains it on randomly generated fields of view, then saves it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em the\+Field} & \+: the field on which the genetic network will be trained \\
+\hline
+{\em saving\+Path\+GN} & \+: path where to save the genetic network \\
+\hline
+{\em base\+Path\+GN} & \+: path to a genetic network from which the first generation will be based on. If N\+U\+LL, then a default first generation will be created \\
+\hline
+{\em nb\+Generation} & \+: the number of generations the training will go through \\
+\hline
+{\em nb\+Member} & \+: the number of members tested by generation\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Labeling\+Weights$\ast$ \+: The weights of the created and trained genetic network 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!training\+G\+N2@{training\+G\+N2}}
+\index{training\+G\+N2@{training\+G\+N2}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{training\+G\+N2(data\+Type $\ast$data, Field $\ast$the\+Field, char $\ast$saving\+Path\+G\+N, char $\ast$base\+Path\+G\+N, int nb\+Generation, int nb\+Member, float percent\+Reveal)}{trainingGN2(dataType *data, Field *theField, char *savingPathGN, char *basePathGN, int nbGeneration, int nbMember, float percentReveal)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neural\+Network} $\ast$ training\+G\+N2 (
+\begin{DoxyParamCaption}
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Field} $\ast$}]{the\+Field, }
+\item[{char $\ast$}]{saving\+Path\+GN, }
+\item[{char $\ast$}]{base\+Path\+GN, }
+\item[{int}]{nb\+Generation, }
+\item[{int}]{nb\+Member, }
+\item[{float}]{percent\+Reveal}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a0e65ce6a8e1af7834e5aa01983f2925e}{}\label{wrapper_8c_a0e65ce6a8e1af7834e5aa01983f2925e}
+
+
+Creates a neural network and trains it on randomly generated fields of view, then saves it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em the\+Field} & \+: the field on which the genetic network will be trained \\
+\hline
+{\em saving\+Path\+GN} & \+: path where to save the genetic network \\
+\hline
+{\em base\+Path\+GN} & \+: path to a genetic network from which the first generation will be based on. If N\+U\+LL, then a default first generation will be created \\
+\hline
+{\em nb\+Generation} & \+: the number of generations the training will go through \\
+\hline
+{\em nb\+Member} & \+: the number of members tested by generation \\
+\hline
+{\em percent\+Reveal} & \+: the percentage of maps revealed at which we concider that the entity finished his job\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Labeling\+Weights$\ast$ \+: The weights of the created and trained genetic network 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!training\+N\+N1@{training\+N\+N1}}
+\index{training\+N\+N1@{training\+N\+N1}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{training\+N\+N1(int vision\+Range, data\+Type $\ast$data, int field\+Height, int field\+Width, char $\ast$saving\+Path\+N\+N)}{trainingNN1(int visionRange, dataType *data, int fieldHeight, int fieldWidth, char *savingPathNN)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neural\+Network} $\ast$ training\+N\+N1 (
+\begin{DoxyParamCaption}
+\item[{int}]{vision\+Range, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{int}]{field\+Height, }
+\item[{int}]{field\+Width, }
+\item[{char $\ast$}]{saving\+Path\+NN}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a98907239f8604757ddc150df79b83636}{}\label{wrapper_8c_a98907239f8604757ddc150df79b83636}
+
+
+Creates a neural network and trains it on randomly generated fields of view, then saves it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Range} & \+: size of the field of view used by the IA \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em field\+Height} & \+: height of the field \\
+\hline
+{\em field\+Width} & \+: width of the field \\
+\hline
+{\em saving\+Path\+NN} & \+: path where to save the neural network\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Neural\+Network$\ast$ \+: The created and trained neural network 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!training\+N\+N2@{training\+N\+N2}}
+\index{training\+N\+N2@{training\+N\+N2}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{training\+N\+N2(int field\+Width, int field\+Height, data\+Type $\ast$data, char $\ast$saving\+Path\+N\+N, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size)}{trainingNN2(int fieldWidth, int fieldHeight, dataType *data, char *savingPathNN, SDL_Renderer *renderer, const int tileSize)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neural\+Network} $\ast$ training\+N\+N2 (
+\begin{DoxyParamCaption}
+\item[{int}]{field\+Width, }
+\item[{int}]{field\+Height, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{char $\ast$}]{saving\+Path\+NN, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{const int}]{tile\+Size}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a83f5cdeb5d069782e26598b3157d85d5}{}\label{wrapper_8c_a83f5cdeb5d069782e26598b3157d85d5}
+
+
+Creates a neural network and trains it on random fields, then saves it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+Width,field\+Height} & \+: dimensions of the random fields \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em saving\+Path\+NN} & \+: path where to save the neural network \\
+\hline
+{\em renderer} & \+: renderer used to draw with the S\+DL \\
+\hline
+{\em tile\+Size} & \+: size of a tile for display\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Neural\+Network$\ast$ \+: The created and trained neural network 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!train\+N\+N2on\+Field@{train\+N\+N2on\+Field}}
+\index{train\+N\+N2on\+Field@{train\+N\+N2on\+Field}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{train\+N\+N2on\+Field(\+Neural\+Network $\ast$neural\+Network, data\+Type $\ast$data, Field $\ast$field, S\+D\+L\+\_\+\+Renderer $\ast$renderer, const int tile\+Size)}{trainNN2onField(NeuralNetwork *neuralNetwork, dataType *data, Field *field, SDL_Renderer *renderer, const int tileSize)}}]{\setlength{\rightskip}{0pt plus 5cm}void train\+N\+N2on\+Field (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network, }
+\item[{{\bf data\+Type} $\ast$}]{data, }
+\item[{{\bf Field} $\ast$}]{field, }
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{const int}]{tile\+Size}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a7ab86627eda7d5b40c3eee439aa52c72}{}\label{wrapper_8c_a7ab86627eda7d5b40c3eee439aa52c72}
+
+
+Trains a neural network on a single field. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the neural network to train \\
+\hline
+{\em data} & \+: structure which define the kind of event we have to raise for interruption \\
+\hline
+{\em field} & \+: the field where to train the neural network \\
+\hline
+{\em renderer} & \+: renderer used to draw with the S\+DL \\
+\hline
+{\em tile\+Size} & \+: size of a tile for display\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{wrapper.\+c@{wrapper.\+c}!wait\+For\+Instruction@{wait\+For\+Instruction}}
+\index{wait\+For\+Instruction@{wait\+For\+Instruction}!wrapper.\+c@{wrapper.\+c}}
+\subsubsection[{\texorpdfstring{wait\+For\+Instruction(data\+Type $\ast$data)}{waitForInstruction(dataType *data)}}]{\setlength{\rightskip}{0pt plus 5cm}void wait\+For\+Instruction (
+\begin{DoxyParamCaption}
+\item[{{\bf data\+Type} $\ast$}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{wrapper_8c_a43f370e9bbbff674ab26ec6a99752957}{}\label{wrapper_8c_a43f370e9bbbff674ab26ec6a99752957}
+
+
+Wait until the repeat key is pressed (R) or the quit key is pressed (Q) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & \+: structure which defines the kind of event we have to raise for interruption\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}

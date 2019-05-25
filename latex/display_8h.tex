@@ -1,0 +1,112 @@
+\hypertarget{display_8h}{}\section{code/display.h File Reference}
+\label{display_8h}\index{code/display.\+h@{code/display.\+h}}
+
+
+Prototypes of the functions in \hyperlink{display_8c}{display.\+c}.  
+
+
+{\ttfamily \#include $<$S\+D\+L2/\+S\+D\+L.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}prototype.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}entity.\+h\char`\"{}}\\*
+Include dependency graph for display.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{display_8h_ade9302d570191385f468aed10b9ea76a}{draw\+Field} (S\+D\+L\+\_\+\+Renderer $\ast$renderer, \hyperlink{structField}{Field} $\ast$one\+Field, int size)
+\begin{DoxyCompactList}\small\item\em Function that draw our field in a graphical display. \end{DoxyCompactList}\item 
+int \hyperlink{display_8h_a449602a517bbf377356ed48913df0181}{draw\+Field\+Of\+View\+Entity} (S\+D\+L\+\_\+\+Renderer $\ast$renderer, \hyperlink{structEntity}{Entity} $\ast$one\+Entity, \hyperlink{structField}{Field} $\ast$the\+Field, int size)
+\begin{DoxyCompactList}\small\item\em Function that draw the field of view of an entity in a graphical display. \end{DoxyCompactList}\item 
+int \hyperlink{display_8h_a44c7ce60aeb673485c86104bccf3959a}{draw} (S\+D\+L\+\_\+\+Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Function that makes a drawing test. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Prototypes of the functions in \hyperlink{display_8c}{display.\+c}. 
+
+\begin{DoxyAuthor}{Author}
+Romain Jacquiez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+2 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+09/10/2018
+\end{DoxyDate}
+Module that contain all prototypes of function in \hyperlink{display_8c}{display.\+c} 
+
+\subsection{Function Documentation}
+\index{display.\+h@{display.\+h}!draw@{draw}}
+\index{draw@{draw}!display.\+h@{display.\+h}}
+\subsubsection[{\texorpdfstring{draw(\+S\+D\+L\+\_\+\+Renderer $\ast$renderer)}{draw(SDL_Renderer *renderer)}}]{\setlength{\rightskip}{0pt plus 5cm}int draw (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}\hypertarget{display_8h_a44c7ce60aeb673485c86104bccf3959a}{}\label{display_8h_a44c7ce60aeb673485c86104bccf3959a}
+
+
+Function that makes a drawing test. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & \+: renderer displayed by the graphical window using S\+DL\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: -\/1 if there was an error during display, 0 otherwise 
+\end{DoxyReturn}
+\index{display.\+h@{display.\+h}!draw\+Field@{draw\+Field}}
+\index{draw\+Field@{draw\+Field}!display.\+h@{display.\+h}}
+\subsubsection[{\texorpdfstring{draw\+Field(\+S\+D\+L\+\_\+\+Renderer $\ast$renderer, Field $\ast$one\+Field, int size)}{drawField(SDL_Renderer *renderer, Field *oneField, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}int draw\+Field (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{{\bf Field} $\ast$}]{one\+Field, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{display_8h_ade9302d570191385f468aed10b9ea76a}{}\label{display_8h_ade9302d570191385f468aed10b9ea76a}
+
+
+Function that draw our field in a graphical display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & \+: renderer displayed by our graphical window using S\+DL \\
+\hline
+{\em one\+Field} & \+: \hyperlink{structField}{Field} to display \\
+\hline
+{\em size} & \+: the size of a single unique obstacle\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: -\/1 if there was an error during display, 0 otherwise 
+\end{DoxyReturn}
+\index{display.\+h@{display.\+h}!draw\+Field\+Of\+View\+Entity@{draw\+Field\+Of\+View\+Entity}}
+\index{draw\+Field\+Of\+View\+Entity@{draw\+Field\+Of\+View\+Entity}!display.\+h@{display.\+h}}
+\subsubsection[{\texorpdfstring{draw\+Field\+Of\+View\+Entity(\+S\+D\+L\+\_\+\+Renderer $\ast$renderer, Entity $\ast$one\+Entity, Field $\ast$the\+Field, int size)}{drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theField, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}int draw\+Field\+Of\+View\+Entity (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer, }
+\item[{{\bf Entity} $\ast$}]{one\+Entity, }
+\item[{{\bf Field} $\ast$}]{the\+Field, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{display_8h_a449602a517bbf377356ed48913df0181}{}\label{display_8h_a449602a517bbf377356ed48913df0181}
+
+
+Function that draw the field of view of an entity in a graphical display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & \+: renderer displayed by our graphical window using S\+DL \\
+\hline
+{\em one\+Entity} & \+: Pointer to a field of view of an entity \\
+\hline
+{\em the\+Field} & \+: Pointer to a field \\
+\hline
+{\em size} & \+: the size of a single unique obstacle\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: -\/1 if there was an error during display, 0 otherwise 
+\end{DoxyReturn}

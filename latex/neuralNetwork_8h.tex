@@ -1,0 +1,422 @@
+\hypertarget{neuralNetwork_8h}{}\section{code/neural\+Network.h File Reference}
+\label{neuralNetwork_8h}\index{code/neural\+Network.\+h@{code/neural\+Network.\+h}}
+
+
+Prototypes of the neural network functions.  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}rio\+Function.\+h\char`\"{}}\\*
+Include dependency graph for neural\+Network.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structNeurone}{Neurone}
+\item 
+struct \hyperlink{structLayer}{Layer}
+\item 
+struct \hyperlink{structNeuralNetwork}{Neural\+Network}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structNeurone}{Neurone} {\bfseries Neurone}\hypertarget{neuralNetwork_8h_a9b19ea53b79a611c18ea41914b2681fe}{}\label{neuralNetwork_8h_a9b19ea53b79a611c18ea41914b2681fe}
+
+\item 
+typedef struct \hyperlink{structLayer}{Layer} {\bfseries Layer}\hypertarget{neuralNetwork_8h_a0a0b68a32dcbcdb0bdcdfc430c27732a}{}\label{neuralNetwork_8h_a0a0b68a32dcbcdb0bdcdfc430c27732a}
+
+\item 
+typedef struct \hyperlink{structNeuralNetwork}{Neural\+Network} {\bfseries Neural\+Network}\hypertarget{neuralNetwork_8h_aa672fa950517c5dd400fc6d585752893}{}\label{neuralNetwork_8h_aa672fa950517c5dd400fc6d585752893}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$ \hyperlink{neuralNetwork_8h_ac0ff8f8bfd9ed5daab1ae12fbf595781}{create\+Neural\+Network} (int nb\+Layer, int $\ast$neurons\+Per\+Layers, float min\+Weight, float max\+Weight)
+\begin{DoxyCompactList}\small\item\em Initializes a \hyperlink{structNeuralNetwork}{Neural\+Network} with random weigths. \end{DoxyCompactList}\item 
+\hyperlink{structLayer}{Layer} $\ast$ \hyperlink{neuralNetwork_8h_a3b4fcfaa1e7ae909687364c01046036b}{create\+Layer} (int nb\+Neurone, int nb\+Neurone\+Of\+Previous\+Layer, float min\+Weight, float max\+Weight)
+\begin{DoxyCompactList}\small\item\em Initializes a \hyperlink{structLayer}{Layer} of a neural network. \end{DoxyCompactList}\item 
+\hyperlink{structNeurone}{Neurone} $\ast$ \hyperlink{neuralNetwork_8h_aa504cf8e02b04acfaa4f010b7f83d638}{create\+Neurone} (int nb\+Input, float min\+Weight, float max\+Weight)
+\begin{DoxyCompactList}\small\item\em Initialize a \hyperlink{structNeurone}{Neurone}. \end{DoxyCompactList}\item 
+void \hyperlink{neuralNetwork_8h_a073a762e658d951f5784aef18250ad11}{destruct\+Neural\+Network} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$$\ast$neural\+Network)
+\begin{DoxyCompactList}\small\item\em Frees a \hyperlink{structNeuralNetwork}{Neural\+Network} from the memory. \end{DoxyCompactList}\item 
+void \hyperlink{neuralNetwork_8h_a81c232854567192668b6bad5297557d9}{destruct\+Layer} (\hyperlink{structLayer}{Layer} $\ast$$\ast$layer)
+\begin{DoxyCompactList}\small\item\em Frees a \hyperlink{structLayer}{Layer} from the memory. \end{DoxyCompactList}\item 
+void \hyperlink{neuralNetwork_8h_ac04e862919601fb259cda489dd193903}{destruct\+Neurone} (\hyperlink{structNeurone}{Neurone} $\ast$$\ast$neurone)
+\begin{DoxyCompactList}\small\item\em Frees a \hyperlink{structNeurone}{Neurone} from the memory. \end{DoxyCompactList}\item 
+void \hyperlink{neuralNetwork_8h_aec0957f195298c1462a03c790e964704}{print\+Neural\+Network} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network)
+\begin{DoxyCompactList}\small\item\em Display a neural network in the terminal. \end{DoxyCompactList}\item 
+float $\ast$ \hyperlink{neuralNetwork_8h_a8b8458514ad76c6a694849b81f3ebce8}{get\+Output\+Of\+Neural\+Network} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network, float $\ast$inputs)
+\begin{DoxyCompactList}\small\item\em Get the output of a neural network. Their is as much outputs as neurons of the last layer of the neural network. \end{DoxyCompactList}\item 
+float $\ast$ \hyperlink{neuralNetwork_8h_a4834c516e8f17b2c48c66ada8189e949}{get\+Output\+Of\+Layer} (\hyperlink{structLayer}{Layer} $\ast$layer, float $\ast$inputs)
+\begin{DoxyCompactList}\small\item\em Get the output of a \hyperlink{structLayer}{Layer}. Their is as much output as neurons on the layer. \end{DoxyCompactList}\item 
+float \hyperlink{neuralNetwork_8h_a188e820a58bbcc861b7313673157b664}{get\+Output\+Of\+Neurone} (\hyperlink{structNeurone}{Neurone} $\ast$neurone, float $\ast$inputs)
+\begin{DoxyCompactList}\small\item\em Get the output of a neurone. \end{DoxyCompactList}\item 
+float \hyperlink{neuralNetwork_8h_a88ac93772aba2da56e601d8daf116042}{neurone\+Transfer\+Function} (float x)
+\begin{DoxyCompactList}\small\item\em Use after each neurones to transform the output. It is the transfer function of each neurons. \end{DoxyCompactList}\item 
+float \hyperlink{neuralNetwork_8h_a0e8c455e593d64b9414b19e7aea22ffc}{neurone\+Derivate\+Transfer\+Function} (float x)
+\begin{DoxyCompactList}\small\item\em Work the same as neurone\+Transfer\+Function but it is the derivative of the transfer function. \end{DoxyCompactList}\item 
+bool \hyperlink{neuralNetwork_8h_a1dbbb66e6f7a458eb4d301e33937f14f}{supervise\+Learning\+Neural\+Network} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network, float $\ast$inputs, float $\ast$reference\+Outputs, float learning\+Speed, float error\+Margin)
+\begin{DoxyCompactList}\small\item\em Check if the neural network return the reference output if you give it specific inputs. if it doesn\textquotesingle{}t, correct the weights of each neurons with the retropropagation technique. \end{DoxyCompactList}\item 
+bool \hyperlink{neuralNetwork_8h_a394d382b85c3d873fd1fb401fd9a5540}{save\+Neural\+Network} (\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$neural\+Network, const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Save a neural network in a file. \end{DoxyCompactList}\item 
+\hyperlink{structNeuralNetwork}{Neural\+Network} $\ast$ \hyperlink{neuralNetwork_8h_a36eb33ae3f75e8d34ed605f02f0659f9}{load\+Neural\+Network} (const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Load a neural network from a file. If the function can\textquotesingle{}t read it, return N\+U\+LL. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Prototypes of the neural network functions. 
+
+\begin{DoxyAuthor}{Author}
+Louis Schuck 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+18/02/2019
+\end{DoxyDate}
+Module that contain all the prototypes of functions in \hyperlink{neuralNetwork_8c}{neural\+Network.\+c} 
+
+\subsection{Function Documentation}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!create\+Layer@{create\+Layer}}
+\index{create\+Layer@{create\+Layer}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{create\+Layer(int nb\+Neurone, int nb\+Neurone\+Of\+Previous\+Layer, float min\+Weight, float max\+Weight)}{createLayer(int nbNeurone, int nbNeuroneOfPreviousLayer, float minWeight, float maxWeight)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Layer}$\ast$ create\+Layer (
+\begin{DoxyParamCaption}
+\item[{int}]{nb\+Neurone, }
+\item[{int}]{nb\+Neurone\+Of\+Previous\+Layer, }
+\item[{float}]{min\+Weight, }
+\item[{float}]{max\+Weight}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a3b4fcfaa1e7ae909687364c01046036b}{}\label{neuralNetwork_8h_a3b4fcfaa1e7ae909687364c01046036b}
+
+
+Initializes a \hyperlink{structLayer}{Layer} of a neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+Neurone} & \+: the number of neurone on the layer \\
+\hline
+{\em nb\+Neurone\+Of\+Previous\+Layer} & \+: the number of neurone on the previous layer \\
+\hline
+{\em min\+Weight} & \+: the minimum value for each weight of each neurone \\
+\hline
+{\em maw\+Weight} & \+: the maximum value for each weight of each neurone\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Layer$\ast$ \+: The created layer 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!create\+Neural\+Network@{create\+Neural\+Network}}
+\index{create\+Neural\+Network@{create\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{create\+Neural\+Network(int nb\+Layer, int $\ast$neurons\+Per\+Layers, float min\+Weight, float max\+Weight)}{createNeuralNetwork(int nbLayer, int *neuronsPerLayers, float minWeight, float maxWeight)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neural\+Network}$\ast$ create\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{int}]{nb\+Layer, }
+\item[{int $\ast$}]{neurons\+Per\+Layers, }
+\item[{float}]{min\+Weight, }
+\item[{float}]{max\+Weight}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_ac0ff8f8bfd9ed5daab1ae12fbf595781}{}\label{neuralNetwork_8h_ac0ff8f8bfd9ed5daab1ae12fbf595781}
+
+
+Initializes a \hyperlink{structNeuralNetwork}{Neural\+Network} with random weigths. 
+
+Initialize a \hyperlink{structNeuralNetwork}{Neural\+Network} with random weigths.
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+Layer} & \+: the number of layer in your neural network. Must be at least 2 \\
+\hline
+{\em neurons\+Per\+Layers} & \+: a list of integer which indicate the number of neurones on each layers the first layer indicate the number of inputs the neural network takes \\
+\hline
+{\em min\+Weight} & \+: the minimum value for each weight of each neurone \\
+\hline
+{\em maw\+Weight} & \+: the maximum value for each weight of each neurone\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Neural\+Network$\ast$ \+: The initialized \hyperlink{structNeuralNetwork}{Neural\+Network} 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!create\+Neurone@{create\+Neurone}}
+\index{create\+Neurone@{create\+Neurone}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{create\+Neurone(int nb\+Input, float min\+Weight, float max\+Weight)}{createNeurone(int nbInput, float minWeight, float maxWeight)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neurone}$\ast$ create\+Neurone (
+\begin{DoxyParamCaption}
+\item[{int}]{nb\+Input, }
+\item[{float}]{min\+Weight, }
+\item[{float}]{max\+Weight}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_aa504cf8e02b04acfaa4f010b7f83d638}{}\label{neuralNetwork_8h_aa504cf8e02b04acfaa4f010b7f83d638}
+
+
+Initialize a \hyperlink{structNeurone}{Neurone}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nb\+Input} & \+: the number of input the neurone wil take (the number of neurone on the previous layer) \\
+\hline
+{\em min\+Weight} & \+: the minimum value for each weight of each neurone \\
+\hline
+{\em maw\+Weight} & \+: the maximum value for each weight of each neurone\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Neurone$\ast$ \+: The created neurone 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!destruct\+Layer@{destruct\+Layer}}
+\index{destruct\+Layer@{destruct\+Layer}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Layer(\+Layer $\ast$$\ast$layer)}{destructLayer(Layer **layer)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Layer (
+\begin{DoxyParamCaption}
+\item[{{\bf Layer} $\ast$$\ast$}]{layer}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a81c232854567192668b6bad5297557d9}{}\label{neuralNetwork_8h_a81c232854567192668b6bad5297557d9}
+
+
+Frees a \hyperlink{structLayer}{Layer} from the memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em layer} & \+: the \hyperlink{structLayer}{Layer} to be free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!destruct\+Neural\+Network@{destruct\+Neural\+Network}}
+\index{destruct\+Neural\+Network@{destruct\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Neural\+Network(\+Neural\+Network $\ast$$\ast$neural\+Network)}{destructNeuralNetwork(NeuralNetwork **neuralNetwork)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$$\ast$}]{neural\+Network}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a073a762e658d951f5784aef18250ad11}{}\label{neuralNetwork_8h_a073a762e658d951f5784aef18250ad11}
+
+
+Frees a \hyperlink{structNeuralNetwork}{Neural\+Network} from the memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the \hyperlink{structNeuralNetwork}{Neural\+Network} to be free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!destruct\+Neurone@{destruct\+Neurone}}
+\index{destruct\+Neurone@{destruct\+Neurone}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Neurone(\+Neurone $\ast$$\ast$neurone)}{destructNeurone(Neurone **neurone)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Neurone (
+\begin{DoxyParamCaption}
+\item[{{\bf Neurone} $\ast$$\ast$}]{neurone}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_ac04e862919601fb259cda489dd193903}{}\label{neuralNetwork_8h_ac04e862919601fb259cda489dd193903}
+
+
+Frees a \hyperlink{structNeurone}{Neurone} from the memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neurone} & \+: address of the \hyperlink{structNeurone}{Neurone} to free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!get\+Output\+Of\+Layer@{get\+Output\+Of\+Layer}}
+\index{get\+Output\+Of\+Layer@{get\+Output\+Of\+Layer}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{get\+Output\+Of\+Layer(\+Layer $\ast$layer, float $\ast$inputs)}{getOutputOfLayer(Layer *layer, float *inputs)}}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$ get\+Output\+Of\+Layer (
+\begin{DoxyParamCaption}
+\item[{{\bf Layer} $\ast$}]{layer, }
+\item[{float $\ast$}]{inputs}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a4834c516e8f17b2c48c66ada8189e949}{}\label{neuralNetwork_8h_a4834c516e8f17b2c48c66ada8189e949}
+
+
+Get the output of a \hyperlink{structLayer}{Layer}. Their is as much output as neurons on the layer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em layer} & \+: the layer that will compute the inputs into outputs \\
+\hline
+{\em inputs} & \+: a list containing the inputs we will put into each neurons of the layer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float$\ast$ \+: Output of the layer 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!get\+Output\+Of\+Neural\+Network@{get\+Output\+Of\+Neural\+Network}}
+\index{get\+Output\+Of\+Neural\+Network@{get\+Output\+Of\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{get\+Output\+Of\+Neural\+Network(\+Neural\+Network $\ast$neural\+Network, float $\ast$inputs)}{getOutputOfNeuralNetwork(NeuralNetwork *neuralNetwork, float *inputs)}}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$ get\+Output\+Of\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network, }
+\item[{float $\ast$}]{inputs}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a8b8458514ad76c6a694849b81f3ebce8}{}\label{neuralNetwork_8h_a8b8458514ad76c6a694849b81f3ebce8}
+
+
+Get the output of a neural network. Their is as much outputs as neurons of the last layer of the neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the neural network that will compute the inputs into outputs \\
+\hline
+{\em inputs} & \+: a list containing the inputs we will put into the neural network their is as many input as the number of neurons in the first layer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float$\ast$ \+: Output of the neural network 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!get\+Output\+Of\+Neurone@{get\+Output\+Of\+Neurone}}
+\index{get\+Output\+Of\+Neurone@{get\+Output\+Of\+Neurone}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{get\+Output\+Of\+Neurone(\+Neurone $\ast$neurone, float $\ast$inputs)}{getOutputOfNeurone(Neurone *neurone, float *inputs)}}]{\setlength{\rightskip}{0pt plus 5cm}float get\+Output\+Of\+Neurone (
+\begin{DoxyParamCaption}
+\item[{{\bf Neurone} $\ast$}]{neurone, }
+\item[{float $\ast$}]{inputs}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a188e820a58bbcc861b7313673157b664}{}\label{neuralNetwork_8h_a188e820a58bbcc861b7313673157b664}
+
+
+Get the output of a neurone. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neurone} & \+: the neurone that will compute the inputs into a single output \\
+\hline
+{\em inputs} & \+: a list containing the inputs we will put into the neurone there is as many input as indicated in the neurone (nb\+Input)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: Output of the neurone 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!load\+Neural\+Network@{load\+Neural\+Network}}
+\index{load\+Neural\+Network@{load\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{load\+Neural\+Network(const char $\ast$path)}{loadNeuralNetwork(const char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Neural\+Network}$\ast$ load\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a36eb33ae3f75e8d34ed605f02f0659f9}{}\label{neuralNetwork_8h_a36eb33ae3f75e8d34ed605f02f0659f9}
+
+
+Load a neural network from a file. If the function can\textquotesingle{}t read it, return N\+U\+LL. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \+: the path to the file where we\textquotesingle{}ll load the neural network\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Neural\+Network$\ast$ \+: The loaded network 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!neurone\+Derivate\+Transfer\+Function@{neurone\+Derivate\+Transfer\+Function}}
+\index{neurone\+Derivate\+Transfer\+Function@{neurone\+Derivate\+Transfer\+Function}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{neurone\+Derivate\+Transfer\+Function(float x)}{neuroneDerivateTransferFunction(float x)}}]{\setlength{\rightskip}{0pt plus 5cm}float neurone\+Derivate\+Transfer\+Function (
+\begin{DoxyParamCaption}
+\item[{float}]{x}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a0e8c455e593d64b9414b19e7aea22ffc}{}\label{neuralNetwork_8h_a0e8c455e593d64b9414b19e7aea22ffc}
+
+
+Work the same as neurone\+Transfer\+Function but it is the derivative of the transfer function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & \+: the input given to the function. it must be an ouput of the transfer function\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: Output of the derivate tranfer function 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!neurone\+Transfer\+Function@{neurone\+Transfer\+Function}}
+\index{neurone\+Transfer\+Function@{neurone\+Transfer\+Function}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{neurone\+Transfer\+Function(float x)}{neuroneTransferFunction(float x)}}]{\setlength{\rightskip}{0pt plus 5cm}float neurone\+Transfer\+Function (
+\begin{DoxyParamCaption}
+\item[{float}]{x}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a88ac93772aba2da56e601d8daf116042}{}\label{neuralNetwork_8h_a88ac93772aba2da56e601d8daf116042}
+
+
+Use after each neurones to transform the output. It is the transfer function of each neurons. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & \+: the input given to the function\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: Output of the transfer function 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!print\+Neural\+Network@{print\+Neural\+Network}}
+\index{print\+Neural\+Network@{print\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{print\+Neural\+Network(\+Neural\+Network $\ast$neural\+Network)}{printNeuralNetwork(NeuralNetwork *neuralNetwork)}}]{\setlength{\rightskip}{0pt plus 5cm}void print\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_aec0957f195298c1462a03c790e964704}{}\label{neuralNetwork_8h_aec0957f195298c1462a03c790e964704}
+
+
+Display a neural network in the terminal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the \hyperlink{structNeuralNetwork}{Neural\+Network} to be shown\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!save\+Neural\+Network@{save\+Neural\+Network}}
+\index{save\+Neural\+Network@{save\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{save\+Neural\+Network(\+Neural\+Network $\ast$neural\+Network, const char $\ast$path)}{saveNeuralNetwork(NeuralNetwork *neuralNetwork, const char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}bool save\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network, }
+\item[{const char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a394d382b85c3d873fd1fb401fd9a5540}{}\label{neuralNetwork_8h_a394d382b85c3d873fd1fb401fd9a5540}
+
+
+Save a neural network in a file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the neural network we will save \\
+\hline
+{\em path} & \+: the path to the file where we\textquotesingle{}ll save the neural network\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: Returns true if the file has correctly been saved, false otherwise 
+\end{DoxyReturn}
+\index{neural\+Network.\+h@{neural\+Network.\+h}!supervise\+Learning\+Neural\+Network@{supervise\+Learning\+Neural\+Network}}
+\index{supervise\+Learning\+Neural\+Network@{supervise\+Learning\+Neural\+Network}!neural\+Network.\+h@{neural\+Network.\+h}}
+\subsubsection[{\texorpdfstring{supervise\+Learning\+Neural\+Network(\+Neural\+Network $\ast$neural\+Network, float $\ast$inputs, float $\ast$reference\+Outputs, float learning\+Speed, float error\+Margin)}{superviseLearningNeuralNetwork(NeuralNetwork *neuralNetwork, float *inputs, float *referenceOutputs, float learningSpeed, float errorMargin)}}]{\setlength{\rightskip}{0pt plus 5cm}bool supervise\+Learning\+Neural\+Network (
+\begin{DoxyParamCaption}
+\item[{{\bf Neural\+Network} $\ast$}]{neural\+Network, }
+\item[{float $\ast$}]{inputs, }
+\item[{float $\ast$}]{reference\+Outputs, }
+\item[{float}]{learning\+Speed, }
+\item[{float}]{error\+Margin}
+\end{DoxyParamCaption}
+)}\hypertarget{neuralNetwork_8h_a1dbbb66e6f7a458eb4d301e33937f14f}{}\label{neuralNetwork_8h_a1dbbb66e6f7a458eb4d301e33937f14f}
+
+
+Check if the neural network return the reference output if you give it specific inputs. if it doesn\textquotesingle{}t, correct the weights of each neurons with the retropropagation technique. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neural\+Network} & \+: the neural network we will check and correct \\
+\hline
+{\em inputs} & \+: the inputs we will give to the neural network \\
+\hline
+{\em reference\+Outputs} & \+: the output the neural network is suppose to give from the given inputs \\
+\hline
+{\em learning\+Speed} & \+: the amount of wich we will modify each weight when we correct them. the higher it is, the faster the neural network learn but the less it is precise \\
+\hline
+{\em error\+Margin} & \+: the error the neural network is allowd to do. it is basicly the maximum difference between the outputs of the neural network and the reference\+Outputs\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: True if the outputs of the neural network from the given inputs is close enought to the reference\+Outputs false if not, and if correction has been done 
+\end{DoxyReturn}

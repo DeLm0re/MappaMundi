@@ -1,0 +1,373 @@
+\hypertarget{geneticAlgorithm_8h}{}\section{code/genetic\+Algorithm.h File Reference}
+\label{geneticAlgorithm_8h}\index{code/genetic\+Algorithm.\+h@{code/genetic\+Algorithm.\+h}}
+
+
+Prototypes of the genetic Algorithm.  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}prototype.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}core.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}rio\+Function.\+h\char`\"{}}\\*
+Include dependency graph for genetic\+Algorithm.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structInterestField}{Interest\+Field}
+\item 
+struct \hyperlink{structLabelingWeights}{Labeling\+Weights}
+\item 
+struct \hyperlink{structGeneticNetworks}{Genetic\+Networks}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structInterestField}{Interest\+Field} {\bfseries Interest\+Field}\hypertarget{geneticAlgorithm_8h_afe374cf5c1eeb478dafa733f800cd388}{}\label{geneticAlgorithm_8h_afe374cf5c1eeb478dafa733f800cd388}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+float $\ast$$\ast$ \hyperlink{geneticAlgorithm_8h_a1b470ebaed238740e47b61c7aa029de4}{create2\+D\+Float\+Array} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Function that creates a 2 dimension array of float. \end{DoxyCompactList}\item 
+\hyperlink{structInterestField}{Interest\+Field} $\ast$ \hyperlink{geneticAlgorithm_8h_ae6cde1d5bb4905f5cc28f7faaafeb718}{initialise\+Interest\+Field} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Function that initializes our field to make our environment. \end{DoxyCompactList}\item 
+void \hyperlink{geneticAlgorithm_8h_ae9fb7f55adb3651023ac9ff8c12a91a8}{destruct2\+D\+Float\+Array} (float $\ast$$\ast$array, int width)
+\begin{DoxyCompactList}\small\item\em Function that free the 2D array out of memory. \end{DoxyCompactList}\item 
+void \hyperlink{geneticAlgorithm_8h_a3c2e90f0b4d52f2790588b7ca82b2c6c}{destruct\+Interest\+Field} (\hyperlink{structInterestField}{Interest\+Field} $\ast$$\ast$one\+Field)
+\begin{DoxyCompactList}\small\item\em Function that frees an \hyperlink{structInterestField}{Interest\+Field} out of memory. \end{DoxyCompactList}\item 
+float \hyperlink{geneticAlgorithm_8h_a9183d84d7e217233067269913c6b404f}{labeling1} (\hyperlink{structField}{Field} $\ast$field\+Of\+View, int x\+Position, int y\+Position, int x\+Final\+Position, int y\+Final\+Position)
+\begin{DoxyCompactList}\small\item\em Function that returns the labeling of the points, will be used for labelisation. \end{DoxyCompactList}\item 
+\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$ \hyperlink{geneticAlgorithm_8h_acf1ac981441653ae3b8a6ad1e8528e41}{initialise\+Labeling\+Weights} (void)
+\begin{DoxyCompactList}\small\item\em Function that returns the initialized labeling weights structure. \end{DoxyCompactList}\item 
+\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$ \hyperlink{geneticAlgorithm_8h_a09b866f0aa6efc43624ba70d76e1638b}{copy\+Labeling\+Weights} (\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Function that returns the copy of the given labeling Weights. \end{DoxyCompactList}\item 
+void \hyperlink{geneticAlgorithm_8h_aeb4edf88ad0553bbce7a127669736982}{destruct\+Labeling\+Weights} (\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$$\ast$labeling\+Weights)
+\begin{DoxyCompactList}\small\item\em Function that frees the labeling weight structure out of memory. \end{DoxyCompactList}\item 
+\hyperlink{structGeneticNetworks}{Genetic\+Networks} $\ast$ \hyperlink{geneticAlgorithm_8h_a6a741acc15adad45deb1ced1fb4c12dc}{initialise\+Genetic\+Networks} (int size)
+\begin{DoxyCompactList}\small\item\em Function that initializes a list of genetic networks (presented as \hyperlink{structLabelingWeights}{Labeling\+Weights} structures) \end{DoxyCompactList}\item 
+\hyperlink{structGeneticNetworks}{Genetic\+Networks} $\ast$ {\bfseries initialise\+Genetic\+Networks\+From} (int size, char $\ast$path\+Of\+Genetic\+Network, float variation)\hypertarget{geneticAlgorithm_8h_a46f9769653c2010acc86616ddeada3e9}{}\label{geneticAlgorithm_8h_a46f9769653c2010acc86616ddeada3e9}
+
+\item 
+\hyperlink{structGeneticNetworks}{Genetic\+Networks} $\ast$ \hyperlink{geneticAlgorithm_8h_ae0477b4353c3a2dd2ca415cb96a087d7}{create\+New\+Generation} (\hyperlink{structGeneticNetworks}{Genetic\+Networks} $\ast$genetic\+Networks, int number\+Of\+Breeder, float mutation\+Chance)
+\begin{DoxyCompactList}\small\item\em Function that create a new list of genetic network based on a previous one. \end{DoxyCompactList}\item 
+void \hyperlink{geneticAlgorithm_8h_a401a3e4d5e3ed820c5b287b5e3bf05b1}{destruct\+Genetic\+Networks} (\hyperlink{structGeneticNetworks}{Genetic\+Networks} $\ast$$\ast$genetic\+Networks)
+\begin{DoxyCompactList}\small\item\em Function that free a list of genetic network. \end{DoxyCompactList}\item 
+void \hyperlink{geneticAlgorithm_8h_a62309e9ddabeb1bd6a02396dd6a6d77b}{sort\+Genetic\+Networks} (\hyperlink{structGeneticNetworks}{Genetic\+Networks} $\ast$genetic\+Networks)
+\begin{DoxyCompactList}\small\item\em Function that sort genetic networks based on their score. \end{DoxyCompactList}\item 
+bool \hyperlink{geneticAlgorithm_8h_a199c06d4ea7e05e9ef639b46ab714ab1}{save\+Genetic\+Network} (\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$labeling\+Weights, char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Function that save a genetic network. \end{DoxyCompactList}\item 
+\hyperlink{structLabelingWeights}{Labeling\+Weights} $\ast$ \hyperlink{geneticAlgorithm_8h_acdcf23e2259ece7730b7f7171b6766ac}{load\+Genetic\+Network} (char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Function that loads a genetic network. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Prototypes of the genetic Algorithm. 
+
+\begin{DoxyAuthor}{Author}
+Antoine Poirier-\/\+Rouillard 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+04/04/2019
+\end{DoxyDate}
+Module that contain all prototypes of function in \hyperlink{geneticAlgorithm_8c}{genetic\+Algorithm.\+c} 
+
+\subsection{Function Documentation}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!copy\+Labeling\+Weights@{copy\+Labeling\+Weights}}
+\index{copy\+Labeling\+Weights@{copy\+Labeling\+Weights}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{copy\+Labeling\+Weights(\+Labeling\+Weights $\ast$labeling\+Weights)}{copyLabelingWeights(LabelingWeights *labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Labeling\+Weights}$\ast$ copy\+Labeling\+Weights (
+\begin{DoxyParamCaption}
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a09b866f0aa6efc43624ba70d76e1638b}{}\label{geneticAlgorithm_8h_a09b866f0aa6efc43624ba70d76e1638b}
+
+
+Function that returns the copy of the given labeling Weights. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$labeling\+Weights} & \+: A pointer on the \hyperlink{structLabelingWeights}{Labeling\+Weights} to copy\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Labeling\+Weights$\ast$ \+: The copy of the weights 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!create2\+D\+Float\+Array@{create2\+D\+Float\+Array}}
+\index{create2\+D\+Float\+Array@{create2\+D\+Float\+Array}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{create2\+D\+Float\+Array(int width, int height)}{create2DFloatArray(int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$$\ast$ create2\+D\+Float\+Array (
+\begin{DoxyParamCaption}
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a1b470ebaed238740e47b61c7aa029de4}{}\label{geneticAlgorithm_8h_a1b470ebaed238740e47b61c7aa029de4}
+
+
+Function that creates a 2 dimension array of float. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & \+: width of the array \\
+\hline
+{\em height} & \+: height of the array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float$\ast$$\ast$ \+: A pointer to the created array 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!create\+New\+Generation@{create\+New\+Generation}}
+\index{create\+New\+Generation@{create\+New\+Generation}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{create\+New\+Generation(\+Genetic\+Networks $\ast$genetic\+Networks, int number\+Of\+Breeder, float mutation\+Chance)}{createNewGeneration(GeneticNetworks *geneticNetworks, int numberOfBreeder, float mutationChance)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Genetic\+Networks}$\ast$ create\+New\+Generation (
+\begin{DoxyParamCaption}
+\item[{{\bf Genetic\+Networks} $\ast$}]{genetic\+Networks, }
+\item[{int}]{number\+Of\+Breeder, }
+\item[{float}]{mutation\+Chance}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_ae0477b4353c3a2dd2ca415cb96a087d7}{}\label{geneticAlgorithm_8h_ae0477b4353c3a2dd2ca415cb96a087d7}
+
+
+Function that create a new list of genetic network based on a previous one. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em number\+Of\+Breeder} & \+: the number of genetic networks that will be selected to reproduce among the best \\
+\hline
+{\em mutation\+Chance} & \+: the mutation chance of each member of the new generation\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{structGeneticNetworks}{Genetic\+Networks} \+: Created \hyperlink{structGeneticNetworks}{Genetic\+Networks} 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!destruct2\+D\+Float\+Array@{destruct2\+D\+Float\+Array}}
+\index{destruct2\+D\+Float\+Array@{destruct2\+D\+Float\+Array}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{destruct2\+D\+Float\+Array(float $\ast$$\ast$array, int width)}{destruct2DFloatArray(float **array, int width)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct2\+D\+Float\+Array (
+\begin{DoxyParamCaption}
+\item[{float $\ast$$\ast$}]{array, }
+\item[{int}]{width}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_ae9fb7f55adb3651023ac9ff8c12a91a8}{}\label{geneticAlgorithm_8h_ae9fb7f55adb3651023ac9ff8c12a91a8}
+
+
+Function that free the 2D array out of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$array} & \+: The array to free \\
+\hline
+{\em width} & \+: width of the array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!destruct\+Genetic\+Networks@{destruct\+Genetic\+Networks}}
+\index{destruct\+Genetic\+Networks@{destruct\+Genetic\+Networks}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Genetic\+Networks(\+Genetic\+Networks $\ast$$\ast$genetic\+Networks)}{destructGeneticNetworks(GeneticNetworks **geneticNetworks)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Genetic\+Networks (
+\begin{DoxyParamCaption}
+\item[{{\bf Genetic\+Networks} $\ast$$\ast$}]{genetic\+Networks}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a401a3e4d5e3ed820c5b287b5e3bf05b1}{}\label{geneticAlgorithm_8h_a401a3e4d5e3ed820c5b287b5e3bf05b1}
+
+
+Function that free a list of genetic network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$genetic\+Networks} & \+: address of the \hyperlink{structGeneticNetworks}{Genetic\+Networks} to free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!destruct\+Interest\+Field@{destruct\+Interest\+Field}}
+\index{destruct\+Interest\+Field@{destruct\+Interest\+Field}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Interest\+Field(\+Interest\+Field $\ast$$\ast$one\+Field)}{destructInterestField(InterestField **oneField)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Interest\+Field (
+\begin{DoxyParamCaption}
+\item[{{\bf Interest\+Field} $\ast$$\ast$}]{one\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a3c2e90f0b4d52f2790588b7ca82b2c6c}{}\label{geneticAlgorithm_8h_a3c2e90f0b4d52f2790588b7ca82b2c6c}
+
+
+Function that frees an \hyperlink{structInterestField}{Interest\+Field} out of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$one\+Field} & \+: address of the \hyperlink{structInterestField}{Interest\+Field} to free\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!destruct\+Labeling\+Weights@{destruct\+Labeling\+Weights}}
+\index{destruct\+Labeling\+Weights@{destruct\+Labeling\+Weights}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Labeling\+Weights(\+Labeling\+Weights $\ast$$\ast$labeling\+Weights)}{destructLabelingWeights(LabelingWeights **labelingWeights)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Labeling\+Weights (
+\begin{DoxyParamCaption}
+\item[{{\bf Labeling\+Weights} $\ast$$\ast$}]{labeling\+Weights}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_aeb4edf88ad0553bbce7a127669736982}{}\label{geneticAlgorithm_8h_aeb4edf88ad0553bbce7a127669736982}
+
+
+Function that frees the labeling weight structure out of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$labeling\+Weights} & \+: address of the labeling\+Weights to destruct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!initialise\+Genetic\+Networks@{initialise\+Genetic\+Networks}}
+\index{initialise\+Genetic\+Networks@{initialise\+Genetic\+Networks}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{initialise\+Genetic\+Networks(int size)}{initialiseGeneticNetworks(int size)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Genetic\+Networks}$\ast$ initialise\+Genetic\+Networks (
+\begin{DoxyParamCaption}
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a6a741acc15adad45deb1ced1fb4c12dc}{}\label{geneticAlgorithm_8h_a6a741acc15adad45deb1ced1fb4c12dc}
+
+
+Function that initializes a list of genetic networks (presented as \hyperlink{structLabelingWeights}{Labeling\+Weights} structures) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & \+: the number of genetic networks to load in the structure\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{structGeneticNetworks}{Genetic\+Networks} \+: List of genetic networks initilized 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!initialise\+Interest\+Field@{initialise\+Interest\+Field}}
+\index{initialise\+Interest\+Field@{initialise\+Interest\+Field}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{initialise\+Interest\+Field(int width, int height)}{initialiseInterestField(int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Interest\+Field}$\ast$ initialise\+Interest\+Field (
+\begin{DoxyParamCaption}
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_ae6cde1d5bb4905f5cc28f7faaafeb718}{}\label{geneticAlgorithm_8h_ae6cde1d5bb4905f5cc28f7faaafeb718}
+
+
+Function that initializes our field to make our environment. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & \+: width of the interest field \\
+\hline
+{\em height} & \+: height of the interest field\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{structInterestField}{Interest\+Field} \+: The created \hyperlink{structInterestField}{Interest\+Field} 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!initialise\+Labeling\+Weights@{initialise\+Labeling\+Weights}}
+\index{initialise\+Labeling\+Weights@{initialise\+Labeling\+Weights}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{initialise\+Labeling\+Weights(void)}{initialiseLabelingWeights(void)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Labeling\+Weights}$\ast$ initialise\+Labeling\+Weights (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_acf1ac981441653ae3b8a6ad1e8528e41}{}\label{geneticAlgorithm_8h_acf1ac981441653ae3b8a6ad1e8528e41}
+
+
+Function that returns the initialized labeling weights structure. 
+
+\begin{DoxyReturn}{Returns}
+Labeling\+Weights$\ast$ \+: The initilized weights 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!labeling1@{labeling1}}
+\index{labeling1@{labeling1}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{labeling1(\+Field $\ast$field\+Of\+View, int x\+Position, int y\+Position, int x\+Final\+Position, int y\+Final\+Position)}{labeling1(Field *fieldOfView, int xPosition, int yPosition, int xFinalPosition, int yFinalPosition)}}]{\setlength{\rightskip}{0pt plus 5cm}float labeling1 (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field\+Of\+View, }
+\item[{int}]{x\+Position, }
+\item[{int}]{y\+Position, }
+\item[{int}]{x\+Final\+Position, }
+\item[{int}]{y\+Final\+Position}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a9183d84d7e217233067269913c6b404f}{}\label{geneticAlgorithm_8h_a9183d84d7e217233067269913c6b404f}
+
+
+Function that returns the labeling of the points, will be used for labelisation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Field$\ast$} & field\+Of\+View \+: a field of view \\
+\hline
+{\em int} & x\+Position \+: x coordinate of the entity \\
+\hline
+{\em int} & y\+Position \+: y coordinate of the entity \\
+\hline
+{\em int} & x\+Final\+Position \+: x coordinate of the end point \\
+\hline
+{\em int} & y\+Final\+Position \+: y coordinate of the end point\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: The labels of each point 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!load\+Genetic\+Network@{load\+Genetic\+Network}}
+\index{load\+Genetic\+Network@{load\+Genetic\+Network}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{load\+Genetic\+Network(char $\ast$path)}{loadGeneticNetwork(char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Labeling\+Weights}$\ast$ load\+Genetic\+Network (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_acdcf23e2259ece7730b7f7171b6766ac}{}\label{geneticAlgorithm_8h_acdcf23e2259ece7730b7f7171b6766ac}
+
+
+Function that loads a genetic network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$path} & \+: the path to the file\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Labeling\+Weights$\ast$ \+: The loaded weights 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!save\+Genetic\+Network@{save\+Genetic\+Network}}
+\index{save\+Genetic\+Network@{save\+Genetic\+Network}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{save\+Genetic\+Network(\+Labeling\+Weights $\ast$labeling\+Weights, char $\ast$path)}{saveGeneticNetwork(LabelingWeights *labelingWeights, char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}bool save\+Genetic\+Network (
+\begin{DoxyParamCaption}
+\item[{{\bf Labeling\+Weights} $\ast$}]{labeling\+Weights, }
+\item[{char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a199c06d4ea7e05e9ef639b46ab714ab1}{}\label{geneticAlgorithm_8h_a199c06d4ea7e05e9ef639b46ab714ab1}
+
+
+Function that save a genetic network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$\+Labeling\+Weights} & \+: A pointer on the \hyperlink{structLabelingWeights}{Labeling\+Weights} (genetic network) we want to save \\
+\hline
+{\em $\ast$path} & \+: The path to the save file\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}!sort\+Genetic\+Networks@{sort\+Genetic\+Networks}}
+\index{sort\+Genetic\+Networks@{sort\+Genetic\+Networks}!genetic\+Algorithm.\+h@{genetic\+Algorithm.\+h}}
+\subsubsection[{\texorpdfstring{sort\+Genetic\+Networks(\+Genetic\+Networks $\ast$genetic\+Networks)}{sortGeneticNetworks(GeneticNetworks *geneticNetworks)}}]{\setlength{\rightskip}{0pt plus 5cm}void sort\+Genetic\+Networks (
+\begin{DoxyParamCaption}
+\item[{{\bf Genetic\+Networks} $\ast$}]{genetic\+Networks}
+\end{DoxyParamCaption}
+)}\hypertarget{geneticAlgorithm_8h_a62309e9ddabeb1bd6a02396dd6a6d77b}{}\label{geneticAlgorithm_8h_a62309e9ddabeb1bd6a02396dd6a6d77b}
+
+
+Function that sort genetic networks based on their score. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$genetic\+Networks} & \+: address the \hyperlink{structGeneticNetworks}{Genetic\+Networks} we want to sort\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}

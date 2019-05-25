@@ -1,0 +1,240 @@
+\hypertarget{stats_8h}{}\section{code/stats.h File Reference}
+\label{stats_8h}\index{code/stats.\+h@{code/stats.\+h}}
+
+
+functions to gather statistics on the NN and GN performances, and to parse this data into files  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$time.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}rio\+Function.\+h\char`\"{}}\\*
+Include dependency graph for stats.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structStatistics}{Statistics}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structStatistics}{Statistics} {\bfseries Statistics}\hypertarget{stats_8h_a248be7147df364a5783eb3f70b76b466}{}\label{stats_8h_a248be7147df364a5783eb3f70b76b466}
+
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries Stat\+Index} \{ \\*
+{\bfseries N\+B\+\_\+\+S\+T\+E\+PS} = 0, 
+{\bfseries N\+B\+\_\+\+F\+O\+G\+\_\+\+R\+E\+V\+E\+A\+L\+ED}, 
+{\bfseries N\+B\+\_\+\+D\+E\+C\+I\+S\+I\+O\+NS}, 
+{\bfseries A\+V\+G\+\_\+\+E\+X\+E\+C\+U\+T\+I\+O\+N\+\_\+\+T\+I\+ME}, 
+\\*
+{\bfseries S\+I\+Z\+E\+O\+F\+S\+T\+AT}
+ \}\hypertarget{stats_8h_a583d50a80fa8d7b8cc0ed97fde242c78}{}\label{stats_8h_a583d50a80fa8d7b8cc0ed97fde242c78}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{stats_8h_a6efc72436c0c633114d8e16cf2154646}{file\+Exists} (const char $\ast$file\+Path)
+\begin{DoxyCompactList}\small\item\em Verify if a file exists or not given its path. \end{DoxyCompactList}\item 
+bool \hyperlink{stats_8h_a9f1208d957e3953c2dafd9cc690d66c4}{write\+Stats\+Into\+File} (\hyperlink{structStatistics}{Statistics} $\ast$stats, char $\ast$folder\+Path)
+\begin{DoxyCompactList}\small\item\em Writes given statistics in a file in the folder specified in parameter, then prompts a message. The file name is generated with the statistics informations. \end{DoxyCompactList}\item 
+void \hyperlink{stats_8h_ac82eacb8718356df3af2717a7bd5ec4a}{start\+Decision\+Clock} (\hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em Start the clock used to measure execution time of a neural network. \end{DoxyCompactList}\item 
+void \hyperlink{stats_8h_a7017baf0d8d7f2a9d722ff974764b46d}{end\+Decision\+Clock} (\hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em End the clock used to measure execution time of a neural network and add it the the stat structure. Must call end\+Stats\+Computations function at the end of the statistics gathering to compute the average execution time. \end{DoxyCompactList}\item 
+void \hyperlink{stats_8h_a3b8bbd83855ae6b9f5145b05cda3030c}{init\+Stats} (\hyperlink{structStatistics}{Statistics} $\ast$stats, char $\ast$map\+Path, char $\ast$network\+Path)
+\begin{DoxyCompactList}\small\item\em Initializes a strucutre statistics with default values and the name of the map and neural network used. \end{DoxyCompactList}\item 
+void \hyperlink{stats_8h_a4059aa9df3964d1c64c558c14e2a7d59}{reset\+Stats} (\hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em Reset a strucutre statistics with default values. \end{DoxyCompactList}\item 
+void \hyperlink{stats_8h_a4c048b7fb25bf53b563df32d9be4a904}{end\+Stats\+Computations} (\hyperlink{structStatistics}{Statistics} $\ast$stats)
+\begin{DoxyCompactList}\small\item\em Computes the final values of the statistics, like averages. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{stats_8h_a8971f24a9640ec2863b84180a34d1eef}{get\+Last\+Element\+Of\+String} (char $\ast$str, const char delimiters)
+\begin{DoxyCompactList}\small\item\em Returns the last element of a string, given the delimiters between elements and the number of elements. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+functions to gather statistics on the NN and GN performances, and to parse this data into files 
+
+\begin{DoxyAuthor}{Author}
+Théo Hipault 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+10/05/2019
+\end{DoxyDate}
+Module that contain all the prototypes of functions in \hyperlink{stats_8c}{stats.\+c} 
+
+\subsection{Function Documentation}
+\index{stats.\+h@{stats.\+h}!end\+Decision\+Clock@{end\+Decision\+Clock}}
+\index{end\+Decision\+Clock@{end\+Decision\+Clock}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{end\+Decision\+Clock(\+Statistics $\ast$stats)}{endDecisionClock(Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void end\+Decision\+Clock (
+\begin{DoxyParamCaption}
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a7017baf0d8d7f2a9d722ff974764b46d}{}\label{stats_8h_a7017baf0d8d7f2a9d722ff974764b46d}
+
+
+End the clock used to measure execution time of a neural network and add it the the stat structure. Must call end\+Stats\+Computations function at the end of the statistics gathering to compute the average execution time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & \+: structure used to store statistics \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!end\+Stats\+Computations@{end\+Stats\+Computations}}
+\index{end\+Stats\+Computations@{end\+Stats\+Computations}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{end\+Stats\+Computations(\+Statistics $\ast$stats)}{endStatsComputations(Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void end\+Stats\+Computations (
+\begin{DoxyParamCaption}
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a4c048b7fb25bf53b563df32d9be4a904}{}\label{stats_8h_a4c048b7fb25bf53b563df32d9be4a904}
+
+
+Computes the final values of the statistics, like averages. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & \+: statistics to finalize\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!file\+Exists@{file\+Exists}}
+\index{file\+Exists@{file\+Exists}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{file\+Exists(const char $\ast$file\+Path)}{fileExists(const char *filePath)}}]{\setlength{\rightskip}{0pt plus 5cm}bool file\+Exists (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{file\+Path}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a6efc72436c0c633114d8e16cf2154646}{}\label{stats_8h_a6efc72436c0c633114d8e16cf2154646}
+
+
+Verify if a file exists or not given its path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Path} & \+: path to the file to verify\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: True if it exists, False otherwise 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!get\+Last\+Element\+Of\+String@{get\+Last\+Element\+Of\+String}}
+\index{get\+Last\+Element\+Of\+String@{get\+Last\+Element\+Of\+String}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{get\+Last\+Element\+Of\+String(char $\ast$str, const char delimiters)}{getLastElementOfString(char *str, const char delimiters)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ get\+Last\+Element\+Of\+String (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str, }
+\item[{const char}]{delimiters}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a8971f24a9640ec2863b84180a34d1eef}{}\label{stats_8h_a8971f24a9640ec2863b84180a34d1eef}
+
+
+Returns the last element of a string, given the delimiters between elements and the number of elements. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & \+: string to split \\
+\hline
+{\em delimiters} & \+: delimiters between each element\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char$\ast$ \+: The last element of the string 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!init\+Stats@{init\+Stats}}
+\index{init\+Stats@{init\+Stats}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{init\+Stats(\+Statistics $\ast$stats, char $\ast$map\+Path, char $\ast$network\+Path)}{initStats(Statistics *stats, char *mapPath, char *networkPath)}}]{\setlength{\rightskip}{0pt plus 5cm}void init\+Stats (
+\begin{DoxyParamCaption}
+\item[{{\bf Statistics} $\ast$}]{stats, }
+\item[{char $\ast$}]{map\+Path, }
+\item[{char $\ast$}]{network\+Path}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a3b8bbd83855ae6b9f5145b05cda3030c}{}\label{stats_8h_a3b8bbd83855ae6b9f5145b05cda3030c}
+
+
+Initializes a strucutre statistics with default values and the name of the map and neural network used. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & \+: structure to initialize \\
+\hline
+{\em map\+Path} & \+: path of the map used in this simulation \\
+\hline
+{\em network\+Path} & \+: path of the neural network used on this map\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!reset\+Stats@{reset\+Stats}}
+\index{reset\+Stats@{reset\+Stats}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{reset\+Stats(\+Statistics $\ast$stats)}{resetStats(Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void reset\+Stats (
+\begin{DoxyParamCaption}
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a4059aa9df3964d1c64c558c14e2a7d59}{}\label{stats_8h_a4059aa9df3964d1c64c558c14e2a7d59}
+
+
+Reset a strucutre statistics with default values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & \+: structure to reset\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!start\+Decision\+Clock@{start\+Decision\+Clock}}
+\index{start\+Decision\+Clock@{start\+Decision\+Clock}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{start\+Decision\+Clock(\+Statistics $\ast$stats)}{startDecisionClock(Statistics *stats)}}]{\setlength{\rightskip}{0pt plus 5cm}void start\+Decision\+Clock (
+\begin{DoxyParamCaption}
+\item[{{\bf Statistics} $\ast$}]{stats}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_ac82eacb8718356df3af2717a7bd5ec4a}{}\label{stats_8h_ac82eacb8718356df3af2717a7bd5ec4a}
+
+
+Start the clock used to measure execution time of a neural network. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & \+: structure used to store statistics\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{stats.\+h@{stats.\+h}!write\+Stats\+Into\+File@{write\+Stats\+Into\+File}}
+\index{write\+Stats\+Into\+File@{write\+Stats\+Into\+File}!stats.\+h@{stats.\+h}}
+\subsubsection[{\texorpdfstring{write\+Stats\+Into\+File(\+Statistics $\ast$stats, char $\ast$folder\+Path)}{writeStatsIntoFile(Statistics *stats, char *folderPath)}}]{\setlength{\rightskip}{0pt plus 5cm}bool write\+Stats\+Into\+File (
+\begin{DoxyParamCaption}
+\item[{{\bf Statistics} $\ast$}]{stats, }
+\item[{char $\ast$}]{folder\+Path}
+\end{DoxyParamCaption}
+)}\hypertarget{stats_8h_a9f1208d957e3953c2dafd9cc690d66c4}{}\label{stats_8h_a9f1208d957e3953c2dafd9cc690d66c4}
+
+
+Writes given statistics in a file in the folder specified in parameter, then prompts a message. The file name is generated with the statistics informations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & \+: statistics to save \\
+\hline
+{\em folder\+Path} & \+: path where to save the statistics\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: True if successfully saves, False otherwise. 
+\end{DoxyReturn}

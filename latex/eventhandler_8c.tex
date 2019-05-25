@@ -1,0 +1,72 @@
+\hypertarget{eventhandler_8c}{}\section{code/eventhandler.c File Reference}
+\label{eventhandler_8c}\index{code/eventhandler.\+c@{code/eventhandler.\+c}}
+
+
+Functions that are used to deal with user interactions at any moment.  
+
+
+{\ttfamily \#include \char`\"{}eventhandler.\+h\char`\"{}}\\*
+Include dependency graph for eventhandler.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{eventhandler_8c_a39d3de6a18705b29fbb8eca987e05b21}{event\+Handler\+Function} (void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Function that raises an event. \end{DoxyCompactList}\item 
+\hyperlink{structdataType}{data\+Type} $\ast$ \hyperlink{eventhandler_8c_a974f204705b80cbef43ffd60634547e8}{init\+Data} (S\+D\+L\+\_\+\+Event $\ast$event)
+\begin{DoxyCompactList}\small\item\em Function that initializes a structure \hyperlink{structdataType}{data\+Type} with a event and returns it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions that are used to deal with user interactions at any moment. 
+
+\begin{DoxyAuthor}{Author}
+Louis Schuck 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+22/11/2018
+\end{DoxyDate}
+Module that contain the functions that are used to deal with user interactions at any moment 
+
+\subsection{Function Documentation}
+\index{eventhandler.\+c@{eventhandler.\+c}!event\+Handler\+Function@{event\+Handler\+Function}}
+\index{event\+Handler\+Function@{event\+Handler\+Function}!eventhandler.\+c@{eventhandler.\+c}}
+\subsubsection[{\texorpdfstring{event\+Handler\+Function(void $\ast$data)}{eventHandlerFunction(void *data)}}]{\setlength{\rightskip}{0pt plus 5cm}void $\ast$ event\+Handler\+Function (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{eventhandler_8c_a39d3de6a18705b29fbb8eca987e05b21}{}\label{eventhandler_8c_a39d3de6a18705b29fbb8eca987e05b21}
+
+
+Function that raises an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & \+: data which define the kind of event we have to raise\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void$\ast$ 
+\end{DoxyReturn}
+\index{eventhandler.\+c@{eventhandler.\+c}!init\+Data@{init\+Data}}
+\index{init\+Data@{init\+Data}!eventhandler.\+c@{eventhandler.\+c}}
+\subsubsection[{\texorpdfstring{init\+Data(\+S\+D\+L\+\_\+\+Event $\ast$event)}{initData(SDL_Event *event)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf data\+Type} $\ast$ init\+Data (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Event $\ast$}]{event}
+\end{DoxyParamCaption}
+)}\hypertarget{eventhandler_8c_a974f204705b80cbef43ffd60634547e8}{}\label{eventhandler_8c_a974f204705b80cbef43ffd60634547e8}
+
+
+Function that initializes a structure \hyperlink{structdataType}{data\+Type} with a event and returns it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & \+: event which will be stored in the new \hyperlink{structdataType}{data\+Type} structure we want to return\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+data\+Type$\ast$ \+: The new structure \hyperlink{structdataType}{data\+Type} initialized with our event 
+\end{DoxyReturn}

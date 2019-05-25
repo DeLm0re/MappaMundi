@@ -1,0 +1,177 @@
+\hypertarget{rioFunction_8c}{}\section{code/rio\+Function.c File Reference}
+\label{rioFunction_8c}\index{code/rio\+Function.\+c@{code/rio\+Function.\+c}}
+
+
+Processing functions.  
+
+
+{\ttfamily \#include \char`\"{}rio\+Function.\+h\char`\"{}}\\*
+Include dependency graph for rio\+Function.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+float \hyperlink{rioFunction_8c_a02f60ca054c95032fb071083e1ae6926}{nmap} (float value, float vmin, float vmax, float min, float max)
+\begin{DoxyCompactList}\small\item\em Function that transforms a value which vary between vmin and vmax, to an other one that vary between min and max. \end{DoxyCompactList}\item 
+float $\ast$ \hyperlink{rioFunction_8c_aba4bf68498c3339edb0bc3a3ca27352d}{cpy\+List} (float $\ast$list, int size)
+\begin{DoxyCompactList}\small\item\em Function that copies an existing list of float. \end{DoxyCompactList}\item 
+void \hyperlink{rioFunction_8c_adac272480c04350f1e65530247db1875}{destruct\+Matrice2D} (void $\ast$$\ast$matrice, int size)
+\begin{DoxyCompactList}\small\item\em Function that frees a 2D matrice from the memory. \end{DoxyCompactList}\item 
+void \hyperlink{rioFunction_8c_aab3c18bda340517e68aea109ca25abbb}{shuffle\+List} (float $\ast$list, int size)
+\begin{DoxyCompactList}\small\item\em Function that shuffles the values in a given list of floats. \end{DoxyCompactList}\item 
+int \hyperlink{rioFunction_8c_a10beb961558d2a59fe8b4c41cb84f00d}{get\+Number\+Of\+Files\+In\+Directory} (char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Function that gets the number of files in a given directory. \end{DoxyCompactList}\item 
+char $\ast$$\ast$ \hyperlink{rioFunction_8c_ab6bd9443d00c500f2c0cd058531a35ab}{get\+All\+File\+Name\+In\+Directory} (char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Function that gets the name of each files in the given directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Processing functions. 
+
+\begin{DoxyAuthor}{Author}
+Louis Schuck 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+2 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+18/02/2019
+\end{DoxyDate}
+Module that contains multiple processing functions 
+
+\subsection{Function Documentation}
+\index{rio\+Function.\+c@{rio\+Function.\+c}!cpy\+List@{cpy\+List}}
+\index{cpy\+List@{cpy\+List}!rio\+Function.\+c@{rio\+Function.\+c}}
+\subsubsection[{\texorpdfstring{cpy\+List(float $\ast$list, int size)}{cpyList(float *list, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}cpy\+List (
+\begin{DoxyParamCaption}
+\item[{float $\ast$}]{list, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{rioFunction_8c_aba4bf68498c3339edb0bc3a3ca27352d}{}\label{rioFunction_8c_aba4bf68498c3339edb0bc3a3ca27352d}
+
+
+Function that copies an existing list of float. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & \+: the original list we want to copy \\
+\hline
+{\em size} & \+: the size of the list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float$\ast$ \+: the copy of the list 
+\end{DoxyReturn}
+\index{rio\+Function.\+c@{rio\+Function.\+c}!destruct\+Matrice2D@{destruct\+Matrice2D}}
+\index{destruct\+Matrice2D@{destruct\+Matrice2D}!rio\+Function.\+c@{rio\+Function.\+c}}
+\subsubsection[{\texorpdfstring{destruct\+Matrice2\+D(void $\ast$$\ast$matrice, int size)}{destructMatrice2D(void **matrice, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}destruct\+Matrice2D (
+\begin{DoxyParamCaption}
+\item[{void $\ast$$\ast$}]{matrice, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{rioFunction_8c_adac272480c04350f1e65530247db1875}{}\label{rioFunction_8c_adac272480c04350f1e65530247db1875}
+
+
+Function that frees a 2D matrice from the memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrice} & \+: the matrice we want to free from the memory \\
+\hline
+{\em size} & \+: the size of the first dimmension of the list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{rio\+Function.\+c@{rio\+Function.\+c}!get\+All\+File\+Name\+In\+Directory@{get\+All\+File\+Name\+In\+Directory}}
+\index{get\+All\+File\+Name\+In\+Directory@{get\+All\+File\+Name\+In\+Directory}!rio\+Function.\+c@{rio\+Function.\+c}}
+\subsubsection[{\texorpdfstring{get\+All\+File\+Name\+In\+Directory(char $\ast$path)}{getAllFileNameInDirectory(char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}get\+All\+File\+Name\+In\+Directory (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{rioFunction_8c_ab6bd9443d00c500f2c0cd058531a35ab}{}\label{rioFunction_8c_ab6bd9443d00c500f2c0cd058531a35ab}
+
+
+Function that gets the name of each files in the given directory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \+: the path of the directory\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char$\ast$ \+: A list of string containing the names of each files 
+\end{DoxyReturn}
+\index{rio\+Function.\+c@{rio\+Function.\+c}!get\+Number\+Of\+Files\+In\+Directory@{get\+Number\+Of\+Files\+In\+Directory}}
+\index{get\+Number\+Of\+Files\+In\+Directory@{get\+Number\+Of\+Files\+In\+Directory}!rio\+Function.\+c@{rio\+Function.\+c}}
+\subsubsection[{\texorpdfstring{get\+Number\+Of\+Files\+In\+Directory(char $\ast$path)}{getNumberOfFilesInDirectory(char *path)}}]{\setlength{\rightskip}{0pt plus 5cm}get\+Number\+Of\+Files\+In\+Directory (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{rioFunction_8c_a10beb961558d2a59fe8b4c41cb84f00d}{}\label{rioFunction_8c_a10beb961558d2a59fe8b4c41cb84f00d}
+
+
+Function that gets the number of files in a given directory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \+: the path of the directory\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: The number of files in the given directory 
+\end{DoxyReturn}
+\index{rio\+Function.\+c@{rio\+Function.\+c}!nmap@{nmap}}
+\index{nmap@{nmap}!rio\+Function.\+c@{rio\+Function.\+c}}
+\subsubsection[{\texorpdfstring{nmap(float value, float vmin, float vmax, float min, float max)}{nmap(float value, float vmin, float vmax, float min, float max)}}]{\setlength{\rightskip}{0pt plus 5cm}nmap (
+\begin{DoxyParamCaption}
+\item[{float}]{value, }
+\item[{float}]{vmin, }
+\item[{float}]{vmax, }
+\item[{float}]{min, }
+\item[{float}]{max}
+\end{DoxyParamCaption}
+)}\hypertarget{rioFunction_8c_a02f60ca054c95032fb071083e1ae6926}{}\label{rioFunction_8c_a02f60ca054c95032fb071083e1ae6926}
+
+
+Function that transforms a value which vary between vmin and vmax, to an other one that vary between min and max. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & \+: the reference value that we want to transform \\
+\hline
+{\em vmin} & \+: the minimum the value can get \\
+\hline
+{\em vmax} & \+: the maximum the value can get \\
+\hline
+{\em min} & \+: the new minimum we want to set the value to \\
+\hline
+{\em max} & \+: the new maximum we want to set the value to\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float \+: Transformed value between min and max 
+\end{DoxyReturn}
+\index{rio\+Function.\+c@{rio\+Function.\+c}!shuffle\+List@{shuffle\+List}}
+\index{shuffle\+List@{shuffle\+List}!rio\+Function.\+c@{rio\+Function.\+c}}
+\subsubsection[{\texorpdfstring{shuffle\+List(float $\ast$list, int size)}{shuffleList(float *list, int size)}}]{\setlength{\rightskip}{0pt plus 5cm}shuffle\+List (
+\begin{DoxyParamCaption}
+\item[{float $\ast$}]{list, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{rioFunction_8c_aab3c18bda340517e68aea109ca25abbb}{}\label{rioFunction_8c_aab3c18bda340517e68aea109ca25abbb}
+
+
+Function that shuffles the values in a given list of floats. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & \+: the list we want to shuffle \\
+\hline
+{\em size} & \+: the size of the list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}

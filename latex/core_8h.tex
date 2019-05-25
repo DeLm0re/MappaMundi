@@ -1,0 +1,275 @@
+\hypertarget{core_8h}{}\section{code/core.h File Reference}
+\label{core_8h}\index{code/core.\+h@{code/core.\+h}}
+
+
+Prototypes of the core project.  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}Bmp\+Lib.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}prototype.\+h\char`\"{}}\\*
+Include dependency graph for core.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int $\ast$$\ast$ \hyperlink{core_8h_a44ffce3720f28dd725bb488460b593e5}{create2\+D\+Int\+Array} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Function that creates a 2 dimension array of int. \end{DoxyCompactList}\item 
+\hyperlink{structField}{Field} $\ast$ \hyperlink{core_8h_a0b26c0b19157986ea4ecd4666a41cac5}{initialise\+Field} (int width, int height, point\+Enum default\+Value)
+\begin{DoxyCompactList}\small\item\em Function that initialise a field with a specified value. \end{DoxyCompactList}\item 
+\hyperlink{structField}{Field} $\ast$ \hyperlink{core_8h_a37da584f74f5773c0da963ba1e7f9a7d}{create\+Custom\+Field} (char $\ast$path\+Image\+Field)
+\begin{DoxyCompactList}\small\item\em Function that creates a field using a custom image. \end{DoxyCompactList}\item 
+void \hyperlink{core_8h_aad963a776d41ae4107620843c5cd2776}{generate\+Env} (\hyperlink{structField}{Field} $\ast$one\+Field)
+\begin{DoxyCompactList}\small\item\em Function that generates a random \hyperlink{structField}{Field}. \end{DoxyCompactList}\item 
+void \hyperlink{core_8h_a544636281345bc96152066efed641b78}{destruct2\+D\+Int\+Array} (int $\ast$$\ast$array, int width)
+\begin{DoxyCompactList}\small\item\em Function that frees a 2D array out of memory. \end{DoxyCompactList}\item 
+void \hyperlink{core_8h_a2a3359574b5342d25ab2a4e9b809dc87}{destruct\+Field} (\hyperlink{structField}{Field} $\ast$$\ast$one\+Field)
+\begin{DoxyCompactList}\small\item\em Function that frees a field out of memory. \end{DoxyCompactList}\item 
+int \hyperlink{core_8h_a905c5d6f41def25625b2f23f51c7caea}{surface2\+D\+Circle} (int radius)
+\begin{DoxyCompactList}\small\item\em Function that computes the number of 1 by 1 squares in a 2D circle. \end{DoxyCompactList}\item 
+\hyperlink{structField}{Field} $\ast$ \hyperlink{core_8h_ac60fa02d3d0ee798eea80bc06f2b1657}{generate\+Random\+Field\+Of\+View} (int vision\+Range, bool is\+Valid)
+\begin{DoxyCompactList}\small\item\em Function that returns a random field of view that will be used for labelization. \end{DoxyCompactList}\item 
+bool \hyperlink{core_8h_aeed6f5149c90c4501401157fc723edc1}{is\+Visible\+From} (\hyperlink{structField}{Field} $\ast$field\+Of\+View, int x\+Origin, int y\+Origin, int x\+Position, int y\+Position)
+\begin{DoxyCompactList}\small\item\em Function that computes if a given position is visible from actual position in a field of view. \end{DoxyCompactList}\item 
+int \hyperlink{core_8h_a148d68c372eb5a377ee302005dffbab9}{get\+Nb\+Fog} (\hyperlink{structField}{Field} $\ast$field)
+\begin{DoxyCompactList}\small\item\em Function that computes the number of fog tile in a given field. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Prototypes of the core project. 
+
+\begin{DoxyAuthor}{Author}
+Romain Jacquiez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+2 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+09/10/2018
+\end{DoxyDate}
+Module that contain all prototypes of function in \hyperlink{core_8c}{core.\+c} 
+
+\subsection{Function Documentation}
+\index{core.\+h@{core.\+h}!create2\+D\+Int\+Array@{create2\+D\+Int\+Array}}
+\index{create2\+D\+Int\+Array@{create2\+D\+Int\+Array}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{create2\+D\+Int\+Array(int width, int height)}{create2DIntArray(int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$$\ast$ create2\+D\+Int\+Array (
+\begin{DoxyParamCaption}
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a44ffce3720f28dd725bb488460b593e5}{}\label{core_8h_a44ffce3720f28dd725bb488460b593e5}
+
+
+Function that creates a 2 dimension array of int. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & \+: width of the array \\
+\hline
+{\em height} & \+: height of the array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int$\ast$$\ast$ \+: A pointer to the created array 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!create\+Custom\+Field@{create\+Custom\+Field}}
+\index{create\+Custom\+Field@{create\+Custom\+Field}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{create\+Custom\+Field(char $\ast$path\+Image\+Field)}{createCustomField(char *pathImageField)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Field}$\ast$ create\+Custom\+Field (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{path\+Image\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a37da584f74f5773c0da963ba1e7f9a7d}{}\label{core_8h_a37da584f74f5773c0da963ba1e7f9a7d}
+
+
+Function that creates a field using a custom image. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em char} & $\ast$path\+Image\+Field \+: the path for the bmp image of the custom field\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Field$\ast$ \+: Pointer to the created \hyperlink{structField}{Field} 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!destruct2\+D\+Int\+Array@{destruct2\+D\+Int\+Array}}
+\index{destruct2\+D\+Int\+Array@{destruct2\+D\+Int\+Array}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{destruct2\+D\+Int\+Array(int $\ast$$\ast$array, int width)}{destruct2DIntArray(int **array, int width)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct2\+D\+Int\+Array (
+\begin{DoxyParamCaption}
+\item[{int $\ast$$\ast$}]{array, }
+\item[{int}]{width}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a544636281345bc96152066efed641b78}{}\label{core_8h_a544636281345bc96152066efed641b78}
+
+
+Function that frees a 2D array out of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$array} & \+: the array to free \\
+\hline
+{\em width} & \+: width of the array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!destruct\+Field@{destruct\+Field}}
+\index{destruct\+Field@{destruct\+Field}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{destruct\+Field(\+Field $\ast$$\ast$one\+Field)}{destructField(Field **oneField)}}]{\setlength{\rightskip}{0pt plus 5cm}void destruct\+Field (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$$\ast$}]{one\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a2a3359574b5342d25ab2a4e9b809dc87}{}\label{core_8h_a2a3359574b5342d25ab2a4e9b809dc87}
+
+
+Function that frees a field out of memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$$\ast$one\+Field} & \+: address of the \hyperlink{structField}{Field} pointer to free \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!generate\+Env@{generate\+Env}}
+\index{generate\+Env@{generate\+Env}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{generate\+Env(\+Field $\ast$one\+Field)}{generateEnv(Field *oneField)}}]{\setlength{\rightskip}{0pt plus 5cm}void generate\+Env (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{one\+Field}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_aad963a776d41ae4107620843c5cd2776}{}\label{core_8h_aad963a776d41ae4107620843c5cd2776}
+
+
+Function that generates a random \hyperlink{structField}{Field}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em one\+Field} & \+: \hyperlink{structField}{Field} to randomize \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!generate\+Random\+Field\+Of\+View@{generate\+Random\+Field\+Of\+View}}
+\index{generate\+Random\+Field\+Of\+View@{generate\+Random\+Field\+Of\+View}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{generate\+Random\+Field\+Of\+View(int vision\+Range, bool is\+Valid)}{generateRandomFieldOfView(int visionRange, bool isValid)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Field}$\ast$ generate\+Random\+Field\+Of\+View (
+\begin{DoxyParamCaption}
+\item[{int}]{vision\+Range, }
+\item[{bool}]{is\+Valid}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_ac60fa02d3d0ee798eea80bc06f2b1657}{}\label{core_8h_ac60fa02d3d0ee798eea80bc06f2b1657}
+
+
+Function that returns a random field of view that will be used for labelization. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & vision\+Range \+: the vision range, or size of the field of view \\
+\hline
+{\em bool} & is\+Valid \+: if the random field of view is a valid position to move or not \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Field$\ast$ \+: A random field of view 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!get\+Nb\+Fog@{get\+Nb\+Fog}}
+\index{get\+Nb\+Fog@{get\+Nb\+Fog}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{get\+Nb\+Fog(\+Field $\ast$field)}{getNbFog(Field *field)}}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Nb\+Fog (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a148d68c372eb5a377ee302005dffbab9}{}\label{core_8h_a148d68c372eb5a377ee302005dffbab9}
+
+
+Function that computes the number of fog tile in a given field. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Field$\ast$} & field \+: the field where we will count the number of fog tile \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: Number of fog tiles in the field 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!initialise\+Field@{initialise\+Field}}
+\index{initialise\+Field@{initialise\+Field}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{initialise\+Field(int width, int height, point\+Enum default\+Value)}{initialiseField(int width, int height, pointEnum defaultValue)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Field}$\ast$ initialise\+Field (
+\begin{DoxyParamCaption}
+\item[{int}]{width, }
+\item[{int}]{height, }
+\item[{point\+Enum}]{default\+Value}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a0b26c0b19157986ea4ecd4666a41cac5}{}\label{core_8h_a0b26c0b19157986ea4ecd4666a41cac5}
+
+
+Function that initialise a field with a specified value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & \+: width of the field \\
+\hline
+{\em height} & \+: height of the field \\
+\hline
+{\em default\+Value} & \+: the value we initialize each tile of the field with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Field$\ast$ \+: Pointer to a \hyperlink{structField}{Field} 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!is\+Visible\+From@{is\+Visible\+From}}
+\index{is\+Visible\+From@{is\+Visible\+From}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{is\+Visible\+From(\+Field $\ast$field\+Of\+View, int x\+Origin, int y\+Origin, int x\+Position, int y\+Position)}{isVisibleFrom(Field *fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition)}}]{\setlength{\rightskip}{0pt plus 5cm}bool is\+Visible\+From (
+\begin{DoxyParamCaption}
+\item[{{\bf Field} $\ast$}]{field\+Of\+View, }
+\item[{int}]{x\+Origin, }
+\item[{int}]{y\+Origin, }
+\item[{int}]{x\+Position, }
+\item[{int}]{y\+Position}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_aeed6f5149c90c4501401157fc723edc1}{}\label{core_8h_aeed6f5149c90c4501401157fc723edc1}
+
+
+Function that computes if a given position is visible from actual position in a field of view. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Field$\ast$} & field\+Of\+View \+: a field of view \\
+\hline
+{\em int} & x\+Origin \+: x coordinate of actual position \\
+\hline
+{\em int} & y\+Origin \+: y coordinate of actual position \\
+\hline
+{\em int} & x\+Position \+: x coordinate we want to check \\
+\hline
+{\em int} & y\+Position \+: y coordinate we want to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool \+: True if the gieven position is visible, false otherwise 
+\end{DoxyReturn}
+\index{core.\+h@{core.\+h}!surface2\+D\+Circle@{surface2\+D\+Circle}}
+\index{surface2\+D\+Circle@{surface2\+D\+Circle}!core.\+h@{core.\+h}}
+\subsubsection[{\texorpdfstring{surface2\+D\+Circle(int radius)}{surface2DCircle(int radius)}}]{\setlength{\rightskip}{0pt plus 5cm}int surface2\+D\+Circle (
+\begin{DoxyParamCaption}
+\item[{int}]{radius}
+\end{DoxyParamCaption}
+)}\hypertarget{core_8h_a905c5d6f41def25625b2f23f51c7caea}{}\label{core_8h_a905c5d6f41def25625b2f23f51c7caea}
+
+
+Function that computes the number of 1 by 1 squares in a 2D circle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & radius \+: the radius of the circle \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: The surface of the circle 
+\end{DoxyReturn}

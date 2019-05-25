@@ -1,0 +1,41 @@
+digraph "code/rioFunction.h"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="code/rioFunction.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node2 [label="code/stats.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$stats_8h.html",tooltip="functions to gather statistics on the NN and GN performances, and to parse this data into files ..."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node3 [label="code/entity.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$entity_8h.html",tooltip="Prototype of functions in entity.c. "];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node4 [label="code/display.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$display_8h.html",tooltip="Prototypes of the functions in display.c. "];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node5 [label="code/display.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$display_8c.html",tooltip="Functions used to display elements on screen using SDL. "];
+  Node4 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node6 [label="code/wrapper.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$wrapper_8h.html",tooltip="wrapper functions to keep the main.c clear "];
+  Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node7 [label="code/main.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$main_8c.html",tooltip="main of the project "];
+  Node6 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node8 [label="code/wrapper.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$wrapper_8c.html",tooltip="Wrapper functions. "];
+  Node3 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node9 [label="code/entity.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$entity_8c.html",tooltip="Functions and the structure used by the neural network to navigate in the Field. "];
+  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node2 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node2 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node10 [label="code/stats.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$stats_8c.html",tooltip="functions to gather statistics on the NN and GN performances, and to parse this data into files ..."];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node11 [label="code/neuralNetwork.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$neuralNetwork_8h.html",tooltip="Prototypes of the neural network functions. "];
+  Node11 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node11 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node11 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node12 [label="code/neuralNetwork.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$neuralNetwork_8c.html",tooltip="Neural network functions. "];
+  Node1 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node13 [label="code/geneticAlgorithm.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$geneticAlgorithm_8h.html",tooltip="Prototypes of the genetic Algorithm. "];
+  Node13 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node13 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node14 [label="code/geneticAlgorithm.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$geneticAlgorithm_8c.html",tooltip="Functions of the genetic Algorithm. "];
+  Node13 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node1 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node15 [label="code/rioFunction.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$rioFunction_8c.html",tooltip="Processing functions. "];
+}
