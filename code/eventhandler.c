@@ -1,11 +1,11 @@
 /**
  * \file eventhandler.c
- * \brief Functions that are used for dealing with the interactions the user might make
+ * \brief Functions that are used to deal with user interactions at any moment
  * \author Louis Schuck
  * \version 0.1
  * \date 22/11/2018
  *
- * Module that contain the functions that are used for dealing with the interactions the user might make
+ * Module that contain the functions that are used to deal with user interactions at any moment
  *
  */
 
@@ -14,9 +14,10 @@
 
 /**
  * \fn void* eventHandlerFunction(void* data)
- * \brief function that raise a event
+ * \brief Function that raises an event
  *
  * \param data : data which define the kind of event we have to raise
+ * 
  * \return void*
  */
 void* eventHandlerFunction(void* data)
@@ -51,10 +52,11 @@ void* eventHandlerFunction(void* data)
 
 /**
  * \fn dataType* initData(SDL_Event* event)
- * \brief function that initialise a structure dataType with a event and return it
+ * \brief Function that initializes a structure dataType with a event and returns it
  *
- * \param event : event which will be store in the new dataType structure we want to return
- * \return dataType* : the new structure dataType initialise with our event
+ * \param event : event which will be stored in the new dataType structure we want to return
+ * 
+ * \return dataType* : The new structure dataType initialized with our event
  */
 dataType* initData(SDL_Event* event)
 {

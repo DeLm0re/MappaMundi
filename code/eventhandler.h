@@ -1,11 +1,11 @@
 /**
  * \file eventhandler.h
- * \brief Functions prototypes that are used for dealing with the interactions the user might make
+ * \brief Prototypes of functions un eventhandler.c
  * \author Louis Schuck
  * \version 0.1
  * \date 22/11/2018
  *
- * Module that contain the prototypes of functions that are used for dealing with the interactions the user might make
+ * Prototypes of functions un eventhandler.c
  *
  */
 
@@ -26,19 +26,21 @@ typedef struct dataType
 
 /**
  * \fn void* eventHandlerFunction(void* data)
- * \brief function that raise a event
+ * \brief Function that raises an event
  *
  * \param data : data which define the kind of event we have to raise
+ * 
  * \return void*
  */
 void* eventHandlerFunction(void* data);
 
 /**
  * \fn dataType* initData(SDL_Event* event)
- * \brief function that initialise a structure dataType with a event and return it
+ * \brief Function that initializes a structure dataType with a event and returns it
  *
- * \param event : event which will be store in the new dataType structure we want to return
- * \return dataType* : the new structure dataType initialise with our event
+ * \param event : event which will be stored in the new dataType structure we want to return
+ * 
+ * \return dataType* : The new structure dataType initialized with our event
  */
 dataType* initData(SDL_Event* event);
 

@@ -5,7 +5,7 @@
  * \version 0.1
  * \date 11/10/2018
  *
- * Module that contain all the functions to do a A* pathfinding algorithme
+ * Module that contain all the functions to do a A* pathfinding algorithm
  *
  */
 
@@ -14,14 +14,15 @@
 
 /**
  * \fn node* initNode(int x, int y, int cost, int heuristic)
- * \brief function that initialise a node. A node is a structure used in the A* algorithme
+ * \brief Function that initialize a node. A node is a structure used in the A* algorithme
  * A node can be used to create a chain list of node
  *
  * \param x, y : the coordinate of the node
  * \param cost : the number of step since the starting node
  * \param heuristic : the cost + the distance between the ending node and the node initialized
- * the function setHeuristic can calculate and set the heuristic of a node so you can just put 0.
- * \return node*
+ * the function setHeuristic can calculate and set the heuristic of a node so you can just put 0
+ * 
+ * \return node* : The initilized node
  */
 node* initNode(int x, int y, int cost, int heuristic)
 {
@@ -36,13 +37,12 @@ node* initNode(int x, int y, int cost, int heuristic)
 
 /**
  * \fn node* nearestNode(Field *oneField, int x, int y)
- * \brief function that return the nearest and safest node around the node which is used as a starting point for the pathfinding
- * But this node can be a WALL. A node is a structure used in the A* algorithme
- * A node can be used to create a chain list of node
+ * \brief Function that returns the nearest and safest node around the node which is used as a starting point for the pathfinding
  *
  * \param x, y : the coordinates of the node used as a starting point for the pathfinding
  * \param oneField* : poiter to the field in which we search a safe node
- * \return node*
+ * 
+ * \return node* : Nearest node found
  */
 node* nearestNode(Field *oneField, int x, int y)
 {
@@ -86,9 +86,10 @@ node* nearestNode(Field *oneField, int x, int y)
 
 /**
  * \fn void destructNodes(node** frontNode)
- * \brief function used to free all the nodes in a chain list of nodes
+ * \brief Function used to free all the nodes in a chain list of nodes
  *
  * \param frontNode : the top node of a chain list of node
+ * 
  * \return void
  */
 void destructNodes(node** frontNode)
@@ -107,11 +108,12 @@ void destructNodes(node** frontNode)
 
 /**
  * \fn void setHeuristic(node* nodeToSet, node* endNode)
- * \brief function which is used to set the heuristic of a node
+ * \brief Function which is used to set the heuristic of a node
  * 
  * \param nodeToSet : the node you want the heuristic to be set correctly
  * \param endNode : the end node of the A* algorithme
- * \return int
+ * 
+ * \return void
  */
 void setHeuristic(node* nodeToSet, node* endNode)
 {
@@ -121,10 +123,11 @@ void setHeuristic(node* nodeToSet, node* endNode)
 
 /**
  * \fn node* popNode(node** frontNode)
- * \brief function which pop the top node out of a chain list of node and returns it
+ * \brief Function which pop the top node out of a chain list of node and returns it
  *
  * \param frontNode : the top node of a chain list of node
- * \return node*
+ * 
+ * \return node* : The popped node
  */
 node* popNode(node** frontNode)
 {
@@ -146,10 +149,11 @@ node* popNode(node** frontNode)
 
 /**
  * \fn node* getLastNode(node** frontNode)
- * \brief function which return the bottom node of a chain list of node
+ * \brief Function which return the bottom node of a chain list of nodes
  *
  * \param frontNode : the top node of a chain list of node
- * \return node*
+ * 
+ * \return node* : The last node of the list
  */
 node* getLastNode(node** frontNode)
 {
@@ -171,10 +175,11 @@ node* getLastNode(node** frontNode)
 
 /**
  * \fn int getNbNode(node** frontNode)
- * \brief function which return the number of node in the path
+ * \brief Function which returns the number of nodes in the path
  *
  * \param frontNode : the top node of a chain list of node
- * \return int
+ * 
+ * \return int : Number of nodes in the path
  */
 int getNbNode(node** frontNode)
 {
@@ -198,10 +203,11 @@ int getNbNode(node** frontNode)
 
 /**
  * \fn void rmvNode(node** frontNode, node* nodeToRemove)
- * \brief function which pop out a given node from a chain list of node
+ * \brief Function which pops out a given node from a chain list of nodes
  *
  * \param frontNode : the top node of a chain list of node
  * \param nodeToRemove : the node from the list that you want to pop out
+ * 
  * \return void
  */
 void rmvNode(node** frontNode, node* nodeToRemove)
@@ -245,10 +251,11 @@ void rmvNode(node** frontNode, node* nodeToRemove)
 
 /**
  * \fn node* cpyNode(node* nodeToCpy)
- * \brief function which initialize and return a copy of the given node
+ * \brief Function which initializes and returns a copy of the given node
  *
  * \param nodeToCpy : the node wich will be copied
- * \return node*
+ * 
+ * \return node* : The copy of the node
  */
 node* cpyNode(node* nodeToCpy)
 {
@@ -259,10 +266,11 @@ node* cpyNode(node* nodeToCpy)
 
 /**
  * \fn void insertFrontNode(node** frontNode, node* newNode)
- * \brief function which add a node at the top of a chain list of node
+ * \brief Function which adds a node at the top of a chain list of nodes
  *
  * \param frontNode : the top node of a chain list of node
  * \param newNode : the node that you want to add
+ * 
  * \return void
  */
 void insertFrontNode(node** frontNode, node* newNode)
@@ -279,12 +287,13 @@ void insertFrontNode(node** frontNode, node* newNode)
 
 /**
  * \fn void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize)
- * \brief function used to draw a chain list of nodes on the screen using SDL
+ * \brief Function used to draw a chain list of nodes on the screen using SDL
  *
  * \param frontNode : the top node of a chain list of node
  * \param renderer : the renderer used with the window. The renderer must have been set using SDL functions
  * \param color : the color which will be used to display the nodes
  * \param tileSize : the size of one tile in the window
+ * 
  * \return void
  */
 void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int tileSize)
@@ -317,11 +326,11 @@ void viewNodes(node** frontNode, SDL_Renderer* renderer, SDL_Color color, int ti
 
 /**
  * \fn int nodeCmp(node* n1, node* n2)
- * \brief function used to compare the heuristic of two nodes
- * returns 1 if the fisrt one has better heuristic than the second one, 0 if their equals, -1 otherwise
+ * \brief Function used to compare the heuristic of two nodes
  *
  * \param n1, n2 : the two nodes which will be compared
- * \return int
+ * 
+ * \return int : 1 if the fisrt one has better heuristic than the second one, 0 if thei are equals, -1 otherwise
  */
 int nodeCmp(node* n1, node* n2)
 {
@@ -342,10 +351,11 @@ int nodeCmp(node* n1, node* n2)
 
 /**
  * \fn int distNodes(node* n1, node* n2)
- * \brief function which return the square of the distance between the two given nodes
+ * \brief Function which returns the square of the distance between the two given nodes
  * 
  * \param n1, n2 : the two nodes between which we want to know the distance
- * \return int
+ * 
+ * \return int : Square of the distance between the two nodes
  */
 int distNodes(node* n1, node* n2)
 {
@@ -355,12 +365,12 @@ int distNodes(node* n1, node* n2)
 
 /**
  * \fn bool isInSet(node** set, int x, int y)
- * \brief function which check if their is a node at the given coordinates in the given chain list of nodes
- * return true or false
+ * \brief Function which checks if there is a node at the given coordinates in the given chain list of nodes
  * 
  * \param frontNode : the top node of a chain list of node
  * \param x, y : the coordinate to check
- * \return bool
+ * 
+ * \return bool : True if there is a node, false otherwise
  */
 bool isInSet(node** frontNode, int x, int y)
 {
@@ -382,11 +392,12 @@ bool isInSet(node** frontNode, int x, int y)
 
 /**
  * \fn bool isNextTo(node* nodeToCheck, int x, int y)
- * \brief function which check if the given node is next to the given coordinate
+ * \brief Function which check if the given node is next to the given coordinate
  * 
  * \param nodeToCheck : the node which will be checked
  * \param x, y : the reference coordinate
- * \return bool
+ * 
+ * \return bool : True if the node is next to the coordinates, false otherwise
  */
 bool isNextTo(node* nodeToCheck, int x, int y)
 {
@@ -407,10 +418,11 @@ bool isNextTo(node* nodeToCheck, int x, int y)
 
 /**
  * \fn node* getLowestNode(node** openSet)
- * \brief function which returns the node with the best heuristic (the lowest)
+ * \brief Function which returns the node with the best heuristic (the lowest)
  * 
  * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
- * \return node*
+ * 
+ * \return node* : The node with the lowest heuristic
  */
 node* getLowestNode(node** openSet)
 {
@@ -434,12 +446,12 @@ node* getLowestNode(node** openSet)
 
 /**
  * \fn node* getPath(node** closedSet, node* endNode)
- * \brief function which create a chain list of nodes which represent the obtimised path
- * using the closedSet of a A* algorithme
+ * \brief Function which creates a chain list of nodes which represent the optimized path
  * 
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param endNode : the end node of the A* algorithme
- * \return node*
+ * 
+ * \return node* : The optimized path
  */
 node* getPath(node** closedSet, node* endNode)
 {
@@ -502,12 +514,12 @@ node* getPath(node** closedSet, node* endNode)
 
 /**
  * \fn node* getNode(node** path, int index)
- * \brief function which create a chain list of nodes which represent the obtimised path
- * using the closedSet of a A* algorithme
+ * \brief Function to access a node in a given path
  * 
- * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
- * \param endNode : the end node of the A* algorithme
- * \return node*
+ * \param path : the path where to search the node
+ * \param int : the index where to search the node
+ * 
+ * \return node* : The node found in the path
  */
 node* getNode(node** path, int index)
 {
@@ -527,7 +539,7 @@ node* getNode(node** path, int index)
 
 /**
  * \fn void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField)
- * \brief function which adds and create the neighboors of a given node in the openSet of the A* algorithme
+ * \brief Function which adds and creates the neighboors of a given node in the openSet of the A* algorithme
  * It adds neighbors only if they are not in the closedSet or the openSet
  * 
  * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
@@ -535,6 +547,7 @@ node* getNode(node** path, int index)
  * \param currentNode : the reference node used to create the neighbors
  * \param endNode : the end node of the A* algorithme
  * \param theField* : poiter to the field used to see if it is a valid neighbor or not
+ * 
  * \return void
  */
 void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* endNode, Field *theField)
@@ -584,15 +597,15 @@ void addNeighbors(node** openSet, node** closedSet, node* currentNode, node* end
 
 /**
  * \fn node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField)
- * \brief function which do one step of the A* algorithme
- * once the path has been found, returns the complete path. OtherWise return NULL. If no path possible, returns startNode
+ * \brief Function which do one step of the A* algorithme
  * 
  * \param openSet : the chain list of nodes which represent the openSet of the A* algorithme
  * \param closedSet : the chain list of nodes which represent the closeSet of the A* algorithme
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
  * \param theField* : pointer the field used to see where the path can go
- * \return node*
+ * 
+ * \return node* : Once the path has been found, returns the complete path. OtherWise return NULL. If no path possible, returns startNode
  */
 node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Field *theField)
 {
@@ -625,14 +638,14 @@ node* AStar(node** openSet, node** closedSet, node* startNode, node* endNode, Fi
 
 /**
  * \fn findPathFromStartEnd(node* startNode, node* endNode, Field *theField, bool* endEvent)
- * \brief function that finds the path between two points (start, end)
- * returns the complete path. OtherWise return NULL. If no path possible, returns startNode
+ * \brief Function that finds the path between two points (start, end)
  * 
  * \param startNode : the starting node of the A* algorithme
  * \param endNode : the end node of the A* algorithme
  * \param theField* : pointer to the field used to see where the path can go
  * \param endEvent : pointer to boolean that will trigger the end of the function. Put NULL if there is none
- * \return node*
+ * 
+ * \return node* : The complete path. OtherWise return NULL. If no path possible, returns startNode
  */
 node* findPathFromStartEnd(node* startNode, node* endNode, Field *theField, bool* endEvent)
 {

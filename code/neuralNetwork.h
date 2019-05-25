@@ -46,25 +46,24 @@ typedef struct NeuralNetwork
  *
  * \param nbLayer : the number of layer in your neural network. Must be at least 2
  * \param neuronsPerLayers : a list of integer which indicate the number of neurones on each layers
- *          the first layer indicate the number of inputs the neural network takes
+ * the first layer indicate the number of inputs the neural network takes
  * \param minWeight : the minimum value for each weight of each neurone
  * \param mawWeight : the maximum value for each weight of each neurone
  * 
- * \return
- *      NeuralNetwork*
+ * \return NeuralNetwork* : The initialized NeuralNetwork
  */
 NeuralNetwork* createNeuralNetwork(int nbLayer, int* neuronsPerLayers, float minWeight, float maxWeight);
 
 /**
  * \fn Layer* createLayer(int nbNeurone, int nbNeuroneOfPreviousLayer, float minWeight, float maxWeight)
- * \brief Initialize a Layer
+ * \brief Initializes a Layer of a neural network
  *
  * \param nbNeurone : the number of neurone on the layer
  * \param nbNeuroneOfPreviousLayer : the number of neurone on the previous layer
  * \param minWeight : the minimum value for each weight of each neurone
  * \param mawWeight : the maximum value for each weight of each neurone
- * \return
- *		Layer*
+ * 
+ * \return Layer* : The created layer
  */
 Layer* createLayer(int nbNeurone, int nbNeuroneOfPreviousLayer, float minWeight, float maxWeight);
 
@@ -75,151 +74,143 @@ Layer* createLayer(int nbNeurone, int nbNeuroneOfPreviousLayer, float minWeight,
  * \param nbInput : the number of input the neurone wil take (the number of neurone on the previous layer)
  * \param minWeight : the minimum value for each weight of each neurone
  * \param mawWeight : the maximum value for each weight of each neurone
- * \return
- *		Neurone*
+ * 
+ * \return Neurone* : The created neurone
  */
 Neurone* createNeurone(int nbInput, float minWeight, float maxWeight);
 
 /**
  * \fn void destructNeuralNetwork(NeuralNetwork** neuralNetwork)
- * \brief free a NeuralNetwork from the memory
+ * \brief Frees a NeuralNetwork from the memory
  *
- * \param
- *		neuralNetwork : the NeuralNetwork to be free
- * \return
- *      void
+ * \param neuralNetwork : the NeuralNetwork to be free
+ * 
+ * \return void
  */
 void destructNeuralNetwork(NeuralNetwork** neuralNetwork);
 
 /**
  * \fn void destructLayer(Layer** layer)
- * \brief free a Layer from the memory
+ * \brief Frees a Layer from the memory
  *
- * \param
- *		layer : the Layer to be free
- * \return
- *      void
+ * \param layer : the Layer to be free
+ * 
+ * \return void
  */
 void destructLayer(Layer** layer);
 
 /**
  * \fn void destructNeurone(Neurone** neurone)
- * \brief free a Neurone from the memory
+ * \brief Frees a Neurone from the memory
  *
- * \param
- *		neurone : the Neurone to be free
- * \return
- *      void
+ * \param neurone : address of the Neurone to free
+ * 
+ * \return void
  */
 void destructNeurone(Neurone** neurone);
 
 /**
  * \fn void printNeuralNetwork(NeuralNetwork* neuralNetwork)
- * \brief visualize a neural network in the terminal
+ * \brief Display a neural network in the terminal
  *
- * \param
- *		neuralNetwork : the NeuralNetwork to be shown
- * \return
- *      void
+ * \param neuralNetwork : the NeuralNetwork to be shown
+ * 
+ * \return void
  */
 void printNeuralNetwork(NeuralNetwork* neuralNetwork);
 
 /**
  * \fn float* getOutputOfNeuralNetwork(NeuralNetwork* neuralNetwork, float* inputs)
- * \brief get the output of a neural network. Their is as much output as neurons on the last layer of the neural network
+ * \brief Get the output of a neural network. Their is as much outputs as neurons of the last layer of the neural network
  *
  * \param neuralNetwork : the neural network that will compute the inputs into outputs
  * \param inputs : a list containing the inputs we will put into the neural network
- *		    their is as many input as the number of neurons in the first layer
- * \return
- *		float* 
+ * their is as many input as the number of neurons in the first layer
+ * 
+ * \return float* : Output of the neural network
  */
 float* getOutputOfNeuralNetwork(NeuralNetwork* neuralNetwork, float* inputs);
 
 /**
  * \fn float* getOutputOfLayer(Layer* layer, float* inputs)
- * \brief get the output of a Layer. Their is as much output as neurons on the layer
+ * \brief Get the output of a Layer. Their is as much output as neurons on the layer
  *
  * \param layer : the layer that will compute the inputs into outputs
  * \param inputs : a list containing the inputs we will put into each neurons of the layer
- * \return
- *		float*
+ * 
+ * \return float* : Output of the layer
  */
 float* getOutputOfLayer(Layer* layer, float* inputs);
 
 /**
  * \fn float getOutputOfNeurone(Neurone* neurone, float* inputs)
- * \brief get the output of neurone
+ * \brief Get the output of a neurone
  *
  * \param neurone : the neurone that will compute the inputs into a single output
  * \param inputs : a list containing the inputs we will put into the neurone
- *					their is as many input as indicated in the neurone (nbInput)
- * \return
- *		float
+ * there is as many input as indicated in the neurone (nbInput)
+ * 
+ * \return float : Output of the neurone
  */
 float getOutputOfNeurone(Neurone* neurone, float* inputs);
 
 /**
  * \fn float neuroneTransferFunction(float x)
- * \brief use after each neurones to transform the output. It is the transfer function of each neurons
+ * \brief Use after each neurones to transform the output. It is the transfer function of each neurons
  *
- * \param
- *		x : the input given to the function
- * \return
- *		float
+ * \param x : the input given to the function
+ * 
+ * \return float : Output of the transfer function
  */
 float neuroneTransferFunction(float x);
 
 /**
  * \fn float neuroneDerivateTransferFunction(float x)
- * \brief work the same as neuroneTransferFunction but it is the derivative of the transfer function
+ * \brief Work the same as neuroneTransferFunction but it is the derivative of the transfer function
  *
- * \param
- *		x : the input given to the function. it must be an ouput of the transfer function
- * \return
- *		float
+ * \param x : the input given to the function. it must be an ouput of the transfer function
+ * 
+ * \return float : Output of the derivate tranfer function
  */
 float neuroneDerivateTransferFunction(float x);
 
 /**
  * \fn bool superviseLearningNeuralNetwork(NeuralNetwork* neuralNetwork, float* inputs, float* referenceOutputs, float learningSpeed, float errorMargin)
- * \brief check if the neural network return the reference output if you give it specific inputs.
- *		if it doesn't, correct the weights of each neurons with the retropropagation technique
- *      true if the outputs of the neural network from the given inputs is close enought to the referenceOutputs
- *		false if not, and if correction has been done
+ * \brief Check if the neural network return the reference output if you give it specific inputs.
+ * if it doesn't, correct the weights of each neurons with the retropropagation technique
  *
  * \param neuralNetwork : the neural network we will check and correct
  * \param inputs : the inputs we will give to the neural network
  * \param referenceOutputs : the output the neural network is suppose to give from the given inputs
  * \param learningSpeed : the amount of wich we will modify each weight when we correct them.
- *			the higher it is, the faster the neural network learn but the less it is precise
+ * the higher it is, the faster the neural network learn but the less it is precise
  * \param errorMargin : the error the neural network is allowd to do.
- *		    it is basicly the maximum difference between the outputs of the neural network and
- *		    the referenceOutputs
- * \return
- *		bool
+ * it is basicly the maximum difference between the outputs of the neural network and
+ * the referenceOutputs
+
+ * \return bool : True if the outputs of the neural network from the given inputs is close enought to the referenceOutputs
+ * false if not, and if correction has been done
  */
 bool superviseLearningNeuralNetwork(NeuralNetwork* neuralNetwork, float* inputs, float* referenceOutputs, float learningSpeed, float errorMargin);
 
 /**
  * \fn bool saveNeuralNetwork(NeuralNetwork* neuralNetwork, const char* path)
- * \brief save a neural network in a file. return true if the file has correctly been saved, false otherwise
+ * \brief Save a neural network in a file
  *
  * \param neuralNetwork : the neural network we will save
  * \param path : the path to the file where we'll save the neural network
- * \return
- *		bool
+ * 
+ * \return bool : Returns true if the file has correctly been saved, false otherwise
  */
 bool saveNeuralNetwork(NeuralNetwork* neuralNetwork, const char* path);
 
 /**
  * \fn NeuralNetwork* loadNeuralNetwork(const char* path)
- * \brief load a neural network from a file. If the function can't read it, return NULL
+ * \brief Load a neural network from a file. If the function can't read it, return NULL
  *
- * \param
- *		path : the path to the file where we'll load the neural network
- * \return
- *		NeuralNetwork*
+ * \param path : the path to the file where we'll load the neural network
+ * 
+ * \return NeuralNetwork* : The loaded network
  */
 NeuralNetwork* loadNeuralNetwork(const char* path);
 

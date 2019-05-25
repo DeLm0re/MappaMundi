@@ -1,6 +1,6 @@
 /**
  * \file display.h
- * \brief Prototypes of the displayed project
+ * \brief Prototypes of the functions in display.c
  * \author Romain Jacquiez
  * \version 0.2
  * \date 09/10/2018
@@ -18,33 +18,36 @@
 
 /**
  * \fn int drawField(SDL_Renderer *renderer, Field *oneField, int size)
- * \brief function that draw our field in a graphical display
+ * \brief Function that draw our field in a graphical display
  *
- * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \param oneField* : Pointer to a field, which is a tydef declared in core.h (2D array structure)
+ * \param renderer : renderer displayed by our graphical window using SDL
+ * \param oneField : Field to display
  * \param size : the size of a single unique obstacle
- * \return int, can return an error during the drawing
+ * 
+ * \return int : -1 if there was an error during display, 0 otherwise
  */
 int drawField(SDL_Renderer *renderer, Field *oneField, int size);
 
 /**
  * \fn int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theField, int size)
- * \brief function that draw the field of view of an entity in a graphical display
+ * \brief Function that draw the field of view of an entity in a graphical display
  *
- * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \param oneEntity : Pointer to a field of view of an entity, which is a tydef declared in entity.h (2D array structure)
+ * \param renderer : renderer displayed by our graphical window using SDL
+ * \param oneEntity : Pointer to a field of view of an entity
  * \param theField : Pointer to a field
  * \param size : the size of a single unique obstacle
- * \return int, can return an error during the drawing
+ * 
+ * \return int : -1 if there was an error during display, 0 otherwise
  */
 int drawFieldOfViewEntity(SDL_Renderer *renderer, Entity *oneEntity, Field *theField, int size);
 
 /**
  * \fn int draw(SDL_Renderer *renderer)
- * \brief function that make a drawing test
+ * \brief Function that makes a drawing test
  *
- * \param SDL_Renderer *renderer which is our renderer displayed by our graphical window using SDL
- * \return int, can return an error during the drawing
+ * \param renderer : renderer displayed by the graphical window using SDL
+ * 
+ * \return int : -1 if there was an error during display, 0 otherwise
  */
 int draw(SDL_Renderer *renderer);
 

@@ -23,7 +23,7 @@
 
 /**
  * \fn int **create2DIntArray(int width, int height)
- * \brief function that creates a 2 dimension array of int
+ * \brief Function that creates a 2 dimension array of int
  *
  * \param width : width of the array
  * \param height : height of the array
@@ -33,39 +33,39 @@ int **create2DIntArray(int width, int height);
 
 /**
  * \fn Field initialiseField(int width, int height, pointEnum defaultValue)
- * \brief function that initialise our field to make our environment
+ * \brief Function that initialise a field with a specified value
  *
- * \param width : width of the field, must be 1 widen than the original size because the edges is initialized with -1
- * \param height : height of the field, must be 1 widen than the original size because the edges is initialized with -1
+ * \param width : width of the field
+ * \param height : height of the field
  * \param defaultValue : the value we initialize each tile of the field with
- * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
+ * \return Field* : Pointer to a Field
  */
 Field *initialiseField(int width, int height, pointEnum defaultValue);
 
 /**
  * \fn Field *createCustomField(char *pathImageField)
- * \brief function that create a field using a custom field
+ * \brief Function that creates a field using a custom image
  *
  * \param char *pathImageField : the path for the bmp image of the custom field
  * 
- * \return Field : Pointer to a Field, which is a tydef declared in core.h (2D array struct)
+ * \return Field* : Pointer to the created Field
  */
 Field *createCustomField(char *pathImageField);
 
 /**
  * \fn void generateEnv(Field *oneField)
- * \brief function that generate our field to make our environment
+ * \brief Function that generates a random Field
  *
- * \param oneField : Poiter to a field, which is a tydef declared in core.h (2D array structure)
+ * \param oneField : Field to randomize
  * \return void
  */
 void generateEnv(Field *oneField);
 
 /**
  * \fn void destruct2DIntArray(int **array, int width)
- * \brief function that free the 2D array out of memory
+ * \brief Function that frees a 2D array out of memory
  *
- * \param **array : The array to free
+ * \param **array : the array to free
  * \param width : width of the array
  * \return void
  */
@@ -73,52 +73,51 @@ void destruct2DIntArray(int **array, int width);
 
 /**
  * \fn void destructField(Field **oneField)
- * \brief function that free the field out of memory
+ * \brief Function that frees a field out of memory
  *
- * \param **oneField : A double pointer on a field, which is a tydef declared in core.h (2D array structure)
+ * \param **oneField : address of the Field pointer to free
  * \return void
  */
 void destructField(Field **oneField);
 
 /**
  * \fn int surface2DCircle(int radius)
- * \brief function that return the number of 1 by 1 square in a 2D circle
+ * \brief Function that computes the number of 1 by 1 squares in a 2D circle
  *
- * \param radius : the radius of the circle
- * \return int : the surface
+ * \param int radius : the radius of the circle
+ * \return int : The surface of the circle
  */
 int surface2DCircle(int radius);
 
 /**
  * \fn Field* generateRandomFieldOfView(int visionRange, bool isValid)
- * \brief function that returns a random field of view
- * will be used for labelization
+ * \brief Function that returns a random field of view that will be used for labelization
  *
- * \param int visionRange : the vision range
+ * \param int visionRange : the vision range, or size of the field of view
  * \param bool isValid : if the random field of view is a valid position to move or not
- * \return Field*
+ * \return Field* : A random field of view
  */
 Field* generateRandomFieldOfView(int visionRange, bool isValid);
 
 /**
  * \fn bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition)
- * \brief function that returns true if a given position is visible from actual position
+ * \brief Function that computes if a given position is visible from actual position in a field of view
  *
  * \param Field* fieldOfView : a field of view
  * \param int xOrigin : x coordinate of actual position
  * \param int yOrigin : y coordinate of actual position
  * \param int xPosition : x coordinate we want to check
  * \param int yPosition : y coordinate we want to check
- * \return bool
+ * \return bool : True if the gieven position is visible, false otherwise
  */
 bool isVisibleFrom(Field* fieldOfView, int xOrigin, int yOrigin, int xPosition, int yPosition);
 
 /**
  * \fn int getNbFog(Field* field)
- * \brief function that returns the number of fog tile in a field
+ * \brief Function that computes the number of fog tile in a given field
  *
  * \param Field* field : the field where we will count the number of fog tile
- * \return int
+ * \return int : Number of fog tiles in the field
  */
 int getNbFog(Field* field);
 
